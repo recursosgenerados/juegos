@@ -1,74 +1,26 @@
 [ 
     {
-        "titulo": "Himnario Cristiano",
-        "descripcion": "Coleccion de 301 himnos clasicos.",
-        "imagen": "https://i.postimg.cc/C52ZkXZt/Himnario-Cristiano-libro.gif",
-        "url": "https://himnario-cristiano.github.io/himnariocristiano/"
+        "titulo": "LABERINTO",
+        "descripcion": "crea tu laberinto donde tienes que buscar la salida",
+        "imagen": "https://i.postimg.cc/pL4MG9LQ/Laberinto.png",
+        "url": "https://recursosgenerados.github.io/laberinto/"
     },
     {
-        "titulo": "Cantos Del Camino",
-        "descripcion": "Coleccion de 323 himnos clasicos.",
-        "imagen": "https://i.postimg.cc/XvLZ01jF/cantosdelcamino-libro.gif",
-        "url": "https://himnario-cristiano.github.io/cantosdelcamino/"
+        "titulo": "SOPA DE LETRA",
+        "descripcion": "Crea tu propia Pupiletra y Busca las Palabras ocultas ",
+        "imagen": "https://i.postimg.cc/QdwZ4BdJ/sopadeletra.png",
+        "url": "https://recursosgenerados.github.io/sopadeletra/"
     },
     {
-        "titulo": "Cantos Espirituales",
-        "descripcion": "Coleccion de 249 himnos clasicos.",
-        "imagen": "https://i.postimg.cc/0Qyt04XH/cantosespirituales-libro.gif",
-        "url": "https://himnario-cristiano.github.io/cantosespirituales/"
+        "titulo": "CRUCIGRAMA",
+        "descripcion": "Crea tus propias Crucigrama con pistas",
+        "imagen": "https://i.postimg.cc/BnkfY8nc/crucigrama.png",
+        "url": "https://recursosgenerados.github.io/crucigrama/"
     },
     {
-        "titulo": "Canto De Los Santos",
-        "descripcion": "Coleccion de 12 himnos contemporaneo.",
-        "imagen": "https://i.postimg.cc/T1N9myqS/cantosdelossantos-libro.gif",
-        "url": "https://himnario-cristiano.github.io/cantodelossantos/"
-    },
-    {
-        "titulo": "El Me Liberó",
-        "descripcion": "Coleccion de 13 himnos contemporaneo.",
-        "imagen": "https://i.postimg.cc/D0T3fW9R/el-me-libero-libro.gif",
-        "url": "https://himnario-cristiano.github.io/elmelibero/"
-    },
-    {
-        "titulo": "Bienvenido (Remasterizado)",
-        "descripcion": "Coleccion de 10 himnos contemporaneo.",
-        "imagen": "https://i.postimg.cc/44rrZ7z8/bienvenido-cd-libro.gif",
-        "url": "https://himnario-cristiano.github.io/bienvenidoseanhoy/"
-    }, 
-    {
-        "titulo": "Resucitaré",
-        "descripcion": "Coleccion de 12 himnos contemporaneo.",
-        "imagen": "https://i.postimg.cc/1XN2wsZk/resucitare-cd-libro.gif",
-        "url": "https://himnario-cristiano.github.io/resucitare/"
-    },
-    {
-        "titulo": "En Vivo",
-        "descripcion": "Coleccion de 17 himnos contemporaneo.",
-        "imagen": "https://i.postimg.cc/jjcMFpk6/en-vivo-libro.gif",
-        "url": "https://himnario-cristiano.github.io/envivo/"
-    },
-    {
-        "titulo": "Canta y Alegrate Hoy",
-        "descripcion": "Coleccion de 14 himnos contemporaneo.",
-        "imagen": "https://i.postimg.cc/t4qzKSQG/Canta-y-alegrate-libro.gif",
-        "url": "https://himnario-cristiano.github.io/cantayalegrate/"
-    },
-    {
-        "titulo": "Tu Gracia Me Alcanzo",
-        "descripcion": "Coleccion de 9 himnos contemporaneo.",
-        "imagen": "https://i.postimg.cc/NMHkRrXk/tugraciamealcanzo-cd-libro.gif",
-        "url": "https://himnario-cristiano.github.io/tugraciamealcanzo/"
-    },
-    {
-        "titulo": "A Solas Con Jesùs",
-        "descripcion": "Coleccion de 14 himnos contemporaneo.",
-        "imagen": "https://i.postimg.cc/J43VxjW1/asolasconjesus-libro.gif",
-        "url": "https://himnario-cristiano.github.io/asolasconjesus/"
-    },
-    {
-        "titulo": "Union C",
-        "descripcion": "Coleccion de 12 himnos contemporaneo.",
-        "imagen": "https://i.postimg.cc/d0MtYHZq/Union-C-libro.gif",
-        "url": "https://himnario-cristiano.github.io/unionc/"
+        "titulo": "CRIPTOGRAMA",
+        "descripcion": "Crea tu propio Criptograma Letra = Numero",
+        "imagen": "https://i.postimg.cc/YCZBn4C1/criptograma.png",
+        "url": "https://recursosgenerados.github.io/criptograma/"
     }
 ]
