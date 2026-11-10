@@ -1,0 +1,22 @@
+{ 
+  "name": "Himnodix",
+  "short_name": "Himnodix",
+  "description": "Tu colección de Himnarios con Himnos, Cantos y Alabanzas.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "coleccion-himnos.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "coleccion-himnos.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
