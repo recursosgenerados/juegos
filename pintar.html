@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelMono Pro - Convertidor a Trazos Estilo Libro para Colorear</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0f172a',
+                        cardBg: '#1e293b',
+                        accent: '#6366f1',
+                        accentHover: '#4f46e5'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #6366f1;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+        .custom-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+    </style>
+</head>
+<body class="bg-darkBg text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+    <!-- Header -->
+    <header class="w-full border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">PixelMono Pro - Line Art</h1>
+                    <p class="text-xs text-slate-400">Estilo Libro para Colorear • 500 DPI PNG • Vector SVG</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                    <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 mr-1.5 animate-pulse"></span>
+                    Modo Comparación Interactiva
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Dropzone Section -->
+        <div id="dropzone-container" class="transition-all duration-300">
+            <div id="dropzone" class="border-2 border-dashed border-slate-700 hover:border-indigo-500 rounded-3xl p-12 text-center bg-cardBg/50 hover:bg-cardBg/80 transition-all cursor-pointer shadow-2xl flex flex-col items-center justify-center min-h-[420px]">
+                <div class="w-20 h-20 rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-6 shadow-inner">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-slate-200 mb-2">Arrastra y suelta tu imagen aquí</h3>
+                <p class="text-slate-400 text-sm max-w-md mb-6">Convierte cualquier foto en trazos limpios sin píxeles sueltos, listos para colorear e imprimir.</p>
+                <label class="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-sm transition-all shadow-lg shadow-indigo-600/30 cursor-pointer inline-flex items-center space-x-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    <span>Seleccionar Archivo</span>
+                    <input type="file" id="file-input" accept="image/png, image/jpeg, image/webp" class="hidden">
+                </label>
+            </div>
+        </div>
+
+        <!-- Editor Workspace -->
+        <div id="editor-workspace" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- Controls Sidebar -->
+            <div class="lg:col-span-5 bg-cardBg rounded-2xl border border-slate-700/60 p-6 shadow-xl space-y-6">
+                <div class="flex items-center justify-between border-b border-slate-700/50 pb-4">
+                    <h2 class="text-base font-semibold text-slate-200 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                        </svg>
+                        Ajustes de Líneas
+                    </h2>
+                    <button id="reset-btn" class="text-xs text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
+                        Restaurar
+                    </button>
+                </div>
+
+                <!-- Sliders -->
+                <div class="space-y-4">
+                    <!-- Threshold -->
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-300 font-medium">Umbral de Detalle (Threshold)</span>
+                            <span id="threshold-val" class="text-indigo-400 font-mono">200</span>
+                        </div>
+                        <input type="range" id="threshold-slider" min="100" max="250" value="200" class="custom-slider w-full h-2 bg-slate-900 rounded-lg appearance-none cursor-pointer">
+                    </div>
+
+                    <!-- Stroke Weight -->
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-300 font-medium">Grosor de Trazos</span>
+                            <span id="weight-val" class="text-indigo-400 font-mono">50</span>
+                        </div>
+                        <input type="range" id="weight-slider" min="10" max="100" value="50" class="custom-slider w-full h-2 bg-slate-900 rounded-lg appearance-none cursor-pointer">
+                    </div>
+
+                    <!-- Smoothing -->
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-300 font-medium">Suavizado / Desenfoque</span>
+                            <span id="smooth-val" class="text-indigo-400 font-mono">3</span>
+                        </div>
+                        <input type="range" id="smooth-slider" min="0" max="8" value="3" class="custom-slider w-full h-2 bg-slate-900 rounded-lg appearance-none cursor-pointer">
+                    </div>
+
+                    <!-- Contrast -->
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-300 font-medium">Contraste de Fondo Blanco</span>
+                            <span id="contrast-val" class="text-indigo-400 font-mono">20</span>
+                        </div>
+                        <input type="range" id="contrast-slider" min="-50" max="100" value="20" class="custom-slider w-full h-2 bg-slate-900 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                </div>
+
+                <!-- Clean Noise Toggle -->
+                <div class="pt-3 border-t border-slate-700/50 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 block">Limpieza de Píxeles Sueltos</span>
+                        <span class="text-[10px] text-slate-500">Elimina puntos y ruido aislado</span>
+                    </div>
+                    <input type="checkbox" id="clean-noise-toggle" checked class="w-4 h-4 accent-indigo-600 rounded cursor-pointer">
+                </div>
+
+                <!-- Invert option -->
+                <div class="pt-3 border-t border-slate-700/50 flex items-center justify-between">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Invertir Trazos (Líneas blancas)</span>
+                    <input type="checkbox" id="invert-toggle" class="w-4 h-4 accent-indigo-600 rounded cursor-pointer">
+                </div>
+
+                <!-- Actions -->
+                <div class="pt-4 border-t border-slate-700/50">
+                    <button id="change-image-btn" class="w-full py-2.5 px-4 rounded-xl border border-slate-700 hover:border-slate-500 text-slate-300 text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                        </svg>
+                        Subir otra imagen
+                    </button>
+                </div>
+            </div>
+
+            <!-- Preview & Export Workspace -->
+            <div class="lg:col-span-7 space-y-6">
+                <!-- Preview Card with Split Comparison Slider -->
+                <div class="bg-cardBg rounded-2xl border border-slate-700/60 p-6 shadow-xl flex flex-col items-center">
+                    <div class="w-full flex items-center justify-between mb-2">
+                        <h2 class="text-base font-semibold text-slate-200">Comparación Interactiva</h2>
+                        <div id="image-info" class="text-xs text-slate-400 font-mono">0 × 0 px</div>
+                    </div>
+                    <p class="text-xs text-indigo-300 mb-4 self-start">← Arrastra la línea central para comparar Original (izq) vs Trazos (der) →</p>
+                    
+                    <div class="relative w-full bg-white rounded-xl border border-slate-800 flex items-center justify-center p-4 min-h-[380px] max-h-[500px] overflow-hidden shadow-inner">
+                        
+                        <!-- Interactive Comparison Wrapper -->
+                        <div id="compare-wrapper" class="relative inline-block overflow-hidden rounded select-none cursor-ew-resize">
+                            <!-- Bottom Canvas: Result (Line Art) -->
+                            <canvas id="preview-canvas" class="block max-w-full max-h-[440px] object-contain rounded"></canvas>
+                            
+                            <!-- Top Layer: Original Image (Clipped dynamically by width) -->
+                            <div id="original-layer" class="absolute inset-y-0 left-0 overflow-hidden pointer-events-none" style="width: 50%;">
+                                <canvas id="original-canvas" class="block max-w-none max-h-[440px] object-contain"></canvas>
+                            </div>
+
+                            <!-- Divider Handle Line -->
+                            <div id="divider-line" class="absolute top-0 bottom-0 w-0.5 bg-indigo-500 shadow-[0_0_12px_rgba(99,102,241,0.9)] z-20 pointer-events-none" style="left: 50%;">
+                                <div class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-indigo-600 border-2 border-white text-white flex items-center justify-center shadow-lg">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8m-8 10h8M6 12h12"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="processing-loader" class="absolute inset-0 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center hidden z-30">
+                            <div class="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export Panel -->
+                <div class="bg-cardBg rounded-2xl border border-slate-700/60 p-6 shadow-xl space-y-4">
+                    <h2 class="text-base font-semibold text-slate-200">Exportar Trazos Listos para Colorear</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <button id="export-png-btn" class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-medium text-sm transition-all shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-3 group">
+                            <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                            <div class="text-left">
+                                <div>Descargar PNG (500 DPI)</div>
+                                <div class="text-[10px] text-indigo-200 font-normal">Alta resolución idéntica al preview</div>
+                            </div>
+                        </button>
+
+                        <button id="export-svg-btn" class="w-full py-3.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white font-medium text-sm transition-all shadow-lg flex items-center justify-center gap-3 group">
+                            <svg class="w-5 h-5 text-purple-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                            </svg>
+                            <div class="text-left">
+                                <div>Descargar Vector SVG</div>
+                                <div class="text-[10px] text-slate-400 font-normal">Formato vectorial escalable</div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-slate-800 border border-indigo-500/30 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center space-x-3">
+            <div id="toast-icon" class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+            <div>
+                <p id="toast-title" class="text-sm font-semibold">Éxito</p>
+                <p id="toast-desc" class="text-xs text-slate-400">Archivo descargado correctamente.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full border-t border-slate-800 py-6 text-center text-xs text-slate-500">
+        <p>PixelMono Pro &copy; 2026 • Conversión profesional a trazos estilo libro para colorear.</p>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        let originalImage = null;
+        let originalFileName = "colorear";
+
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('file-input');
+        const dropzoneContainer = document.getElementById('dropzone-container');
+        const editorWorkspace = document.getElementById('editor-workspace');
+        const changeImageBtn = document.getElementById('change-image-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        
+        const previewCanvas = document.getElementById('preview-canvas');
+        const originalCanvas = document.getElementById('original-canvas');
+        const compareWrapper = document.getElementById('compare-wrapper');
+        const originalLayer = document.getElementById('original-layer');
+        const dividerLine = document.getElementById('divider-line');
+        
+        const imageInfo = document.getElementById('image-info');
+        const processingLoader = document.getElementById('processing-loader');
+
+        const thresholdSlider = document.getElementById('threshold-slider');
+        const thresholdVal = document.getElementById('threshold-val');
+        const weightSlider = document.getElementById('weight-slider');
+        const weightVal = document.getElementById('weight-val');
+        const smoothSlider = document.getElementById('smooth-slider');
+        const smoothVal = document.getElementById('smooth-val');
+        const contrastSlider = document.getElementById('contrast-slider');
+        const contrastVal = document.getElementById('contrast-val');
+        const cleanNoiseToggle = document.getElementById('clean-noise-toggle');
+        const invertToggle = document.getElementById('invert-toggle');
+
+        const exportPngBtn = document.getElementById('export-png-btn');
+        const exportSvgBtn = document.getElementById('export-svg-btn');
+        const toast = document.getElementById('toast');
+        const toastTitle = document.getElementById('toast-title');
+        const toastDesc = document.getElementById('toast-desc');
+
+        function showToast(title, desc, isError = false) {
+            toastTitle.textContent = title;
+            toastDesc.textContent = desc;
+            const iconContainer = document.getElementById('toast-icon');
+            if (isError) {
+                iconContainer.className = "w-6 h-6 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center";
+                iconContainer.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>`;
+            } else {
+                iconContainer.className = "w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center";
+                iconContainer.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+            }
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3500);
+        }
+
+        // Drag & Drop
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropzone.classList.add('border-indigo-500', 'bg-cardBg');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropzone.classList.remove('border-indigo-500', 'bg-cardBg');
+            }, false);
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            if (files && files.length > 0) handleFile(files[0]);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files.length > 0) handleFile(e.target.files[0]);
+        });
+
+        changeImageBtn.addEventListener('click', () => {
+            editorWorkspace.classList.add('hidden');
+            dropzoneContainer.classList.remove('hidden');
+            fileInput.value = '';
+            originalImage = null;
+        });
+
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) {
+                showToast('Archivo no válido', 'Selecciona una imagen PNG, JPG o WEBP.', true);
+                return;
+            }
+            originalFileName = file.name.substring(0, file.name.lastIndexOf('.')) || 'colorear';
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    originalImage = img;
+                    dropzoneContainer.classList.add('hidden');
+                    editorWorkspace.classList.remove('hidden');
+                    resetControls();
+                    processImage();
+                }
+                img.src = event.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+
+        function resetControls() {
+            thresholdSlider.value = 200;
+            thresholdVal.textContent = '200';
+            weightSlider.value = 50;
+            weightVal.textContent = '50';
+            smoothSlider.value = 3;
+            smoothVal.textContent = '3';
+            contrastSlider.value = 20;
+            contrastVal.textContent = '20';
+            cleanNoiseToggle.checked = true;
+            invertToggle.checked = false;
+        }
+
+        resetBtn.addEventListener('click', () => {
+            resetControls();
+            processImage();
+        });
+
+        thresholdSlider.addEventListener('input', () => { thresholdVal.textContent = thresholdSlider.value; processImage(); });
+        weightSlider.addEventListener('input', () => { weightVal.textContent = weightSlider.value; processImage(); });
+        smoothSlider.addEventListener('input', () => { smoothVal.textContent = smoothSlider.value; processImage(); });
+        contrastSlider.addEventListener('input', () => { contrastVal.textContent = contrastSlider.value; processImage(); });
+        cleanNoiseToggle.addEventListener('change', processImage);
+        invertToggle.addEventListener('change', processImage);
+
+        // Interactive Split Slider Logic (Mouse & Touch Support)
+        let isDragging = false;
+
+        function updateSplitPosition(clientX) {
+            const rect = previewCanvas.getBoundingClientRect();
+            let x = clientX - rect.left;
+            let percentage = (x / rect.width) * 100;
+            percentage = Math.max(0, Math.min(100, percentage));
+            
+            originalLayer.style.width = `${percentage}%`;
+            dividerLine.style.left = `${percentage}%`;
+        }
+
+        compareWrapper.addEventListener('pointerdown', (e) => {
+            isDragging = true;
+            compareWrapper.setPointerCapture(e.pointerId);
+            updateSplitPosition(e.clientX);
+        });
+
+        compareWrapper.addEventListener('pointermove', (e) => {
+            if (!isDragging) return;
+            updateSplitPosition(e.clientX);
+        });
+
+        compareWrapper.addEventListener('pointerup', (e) => {
+            isDragging = false;
+            compareWrapper.releasePointerCapture(e.pointerId);
+        });
+
+        // Fast Box Blur Algorithm
+        function boxBlur(source, target, w, h, radius) {
+            if (radius <= 0) {
+                target.set(source);
+                return;
+            }
+            const width = w;
+            const height = h;
+            const windowSize = radius + radius + 1;
+            const temp = new Float32Array(source.length);
+
+            for (let y = 0; y < height; y++) {
+                let sum = 0;
+                const rowOffset = y * width;
+                for (let x = -radius; x <= radius; x++) {
+                    const px = Math.min(width - 1, Math.max(0, x));
+                    sum += source[rowOffset + px];
+                }
+                for (let x = 0; x < width; x++) {
+                    temp[rowOffset + x] = sum / windowSize;
+                    const p1 = Math.min(width - 1, x + radius + 1);
+                    const p2 = Math.max(0, x - radius);
+                    sum += source[rowOffset + p1] - source[rowOffset + p2];
+                }
+            }
+
+            for (let x = 0; x < width; x++) {
+                let sum = 0;
+                for (let y = -radius; y <= radius; y++) {
+                    const py = Math.min(height - 1, Math.max(0, y));
+                    sum += temp[py * width + x];
+                }
+                for (let y = 0; y < height; y++) {
+                    target[y * width + x] = sum / windowSize;
+                    const p1 = Math.min(height - 1, y + radius + 1);
+                    const p2 = Math.max(0, y - radius);
+                    sum += temp[p1 * width + x] - temp[p2 * width + x];
+                }
+            }
+        }
+
+        // Noise removal filter
+        function removeStrayPixels(arr, w, h) {
+            const copy = new Float32Array(arr);
+            for (let y = 1; y < h - 1; y++) {
+                for (let x = 1; x < w - 1; x++) {
+                    const idx = y * w + x;
+                    if (copy[idx] === 0) {
+                        let blackNeighbors = 0;
+                        for (let dy = -1; dy <= 1; dy++) {
+                            for (let dx = -1; dx <= 1; dx++) {
+                                if (dx === 0 && dy === 0) continue;
+                                if (copy[(y + dy) * w + (x + dx)] === 0) {
+                                    blackNeighbors++;
+                                }
+                            }
+                        }
+                        if (blackNeighbors < 2) {
+                            arr[idx] = 255;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Core Algorithm
+        function processImage(targetCanvas = previewCanvas, customWidth = null, customHeight = null) {
+            if (!originalImage) return;
+
+            const ctx = targetCanvas.getContext('2d');
+            let w, h;
+            
+            if (customWidth && customHeight) {
+                w = customWidth;
+                h = customHeight;
+            } else {
+                const maxWidth = 550;
+                const maxHeight = 440;
+                w = originalImage.width;
+                h = originalImage.height;
+
+                if (w > maxWidth || h > maxHeight) {
+                    const ratio = Math.min(maxWidth / w, maxHeight / h);
+                    w = Math.round(w * ratio);
+                    h = Math.round(h * ratio);
+                }
+                targetCanvas.width = w;
+                targetCanvas.height = h;
+                
+                // Also update original canvas dimensions for split view
+                originalCanvas.width = w;
+                originalCanvas.height = h;
+                const origCtx = originalCanvas.getContext('2d');
+                origCtx.drawImage(originalImage, 0, 0, w, h);
+
+                imageInfo.textContent = `${originalImage.width} × ${originalImage.height} px`;
+            }
+
+            const baseRefWidth = 600;
+            const scaleFactor = w / baseRefWidth;
+
+            const offCanvas = document.createElement('canvas');
+            offCanvas.width = w;
+            offCanvas.height = h;
+            const offCtx = offCanvas.getContext('2d');
+            offCtx.drawImage(originalImage, 0, 0, w, h);
+
+            const imgData = offCtx.getImageData(0, 0, w, h);
+            const data = imgData.data;
+
+            const threshold = parseInt(thresholdSlider.value);
+            const weight = parseInt(weightSlider.value) / 50.0;
+            const userSmooth = parseInt(smoothSlider.value);
+            const contrast = parseInt(contrastSlider.value);
+            const isCleanNoise = cleanNoiseToggle.checked;
+            const isInverted = invertToggle.checked;
+
+            const smoothRadius = Math.max(0, Math.round(userSmooth * scaleFactor));
+
+            const gray = new Float32Array(w * h);
+            const inverted = new Float32Array(w * h);
+            for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+                const g = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+                gray[j] = g;
+                inverted[j] = 255 - g;
+            }
+
+            const blurred = new Float32Array(w * h);
+            boxBlur(inverted, blurred, w, h, smoothRadius);
+
+            const resultData = ctx.createImageData(w, h);
+            const resData = resultData.data;
+            const lineValues = new Float32Array(w * h);
+
+            for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+                const g = gray[j];
+                const b = blurred[j];
+
+                let dodge = 255;
+                if (b < 255) {
+                    dodge = (g * 255) / (255 - b);
+                }
+                dodge = Math.min(255, Math.max(0, dodge));
+
+                let adjusted = dodge * (1 + contrast / 100);
+                const adjustedThreshold = threshold / weight;
+
+                let finalVal = 255;
+                if (adjusted < adjustedThreshold) {
+                    finalVal = 0;
+                }
+                lineValues[j] = finalVal;
+            }
+
+            if (isCleanNoise) {
+                removeStrayPixels(lineValues, w, h);
+            }
+
+            for (let j = 0, i = 0; j < lineValues.length; j++, i += 4) {
+                let val = lineValues[j];
+                if (isInverted) {
+                    val = 255 - val;
+                }
+                resData[i]     = val;
+                resData[i + 1] = val;
+                resData[i + 2] = val;
+                resData[i + 3] = 255;
+            }
+
+            ctx.putImageData(resultData, 0, 0);
+        }
+
+        // Export PNG 500 DPI
+        exportPngBtn.addEventListener('click', () => {
+            if (!originalImage) return;
+            processingLoader.classList.remove('hidden');
+            setTimeout(() => {
+                try {
+                    const dpiFactor = 500 / 96; 
+                    const exportW = Math.round(originalImage.width * dpiFactor);
+                    const exportH = Math.round(originalImage.height * dpiFactor);
+
+                    const highResCanvas = document.createElement('canvas');
+                    highResCanvas.width = exportW;
+                    highResCanvas.height = exportH;
+
+                    processImage(highResCanvas, exportW, exportH);
+
+                    const dataURL = highResCanvas.toDataURL('image/png');
+                    const link = document.createElement('a');
+                    link.download = `${originalFileName}_500dpi_trazos.png`;
+                    link.href = dataURL;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+
+                    showToast('PNG 500 DPI Exportado', `Trazos limpios generados (${exportW}×${exportH} px).`);
+                } catch (err) {
+                    console.error(err);
+                    showToast('Error', 'No se pudo generar la imagen de alta resolución.', true);
+                } finally {
+                    processingLoader.classList.add('hidden');
+                }
+            }, 100);
+        });
+
+        // Export SVG
+        exportSvgBtn.addEventListener('click', () => {
+            if (!originalImage) return;
+            processingLoader.classList.remove('hidden');
+            setTimeout(() => {
+                try {
+                    const svgCanvas = document.createElement('canvas');
+                    svgCanvas.width = originalImage.width;
+                    svgCanvas.height = originalImage.height;
+
+                    processImage(svgCanvas, originalImage.width, originalImage.height);
+                    const base64Data = svgCanvas.toDataURL('image/png');
+
+                    const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="${originalImage.width}" height="${originalImage.height}" viewBox="0 0 ${originalImage.width} ${originalImage.height}">
+    <rect width="100%" height="100%" fill="white"/>
+    <image width="${originalImage.width}" height="${originalImage.height}" href="${base64Data}"/>
+</svg>`;
+
+                    const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.download = `${originalFileName}_trazos.svg`;
+                    link.href = url;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+
+                    showToast('SVG Exportado', 'Archivo vectorial SVG generado.');
+                } catch (err) {
+                    console.error(err);
+                    showToast('Error', 'No se pudo generar el archivo SVG.', true);
+                } finally {
+                    processingLoader.classList.add('hidden');
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>
