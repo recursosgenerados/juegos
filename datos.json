@@ -12,6 +12,12 @@
         "url": "https://recursosgenerados.github.io/sopadeletra/"
     },
     {
+        "titulo": "GENERADOR DE PALABRAS Aleatorias",
+        "descripcion": "Crea tu propia lista de palabras para importar a la Sopa De Letras",
+        "imagen": "https://i.postimg.cc/X7yCgJcN/images.png",
+        "url": "https://www.palabrasaleatorias.com/"
+    },
+    {
         "titulo": "CRUCIGRAMA",
         "descripcion": "Crea tus propias Crucigrama con pistas",
         "imagen": "https://i.postimg.cc/BnkfY8nc/crucigrama.png",
