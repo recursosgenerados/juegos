@@ -33,6 +33,6 @@
         "titulo": "Corvertidor de Imagen",
         "descripcion": "Cambia una imagen a Blanco y Negro para Colorear",
         "imagen": "https://i.postimg.cc/jqZdprvj/image-(4).png",
-        "url": "https://recursosgenerados.github.io/juegos/pintar.html"
+        "url": "/juegos/pintar.html"
     }
 ]
