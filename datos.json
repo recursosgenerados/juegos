@@ -28,5 +28,11 @@
         "descripcion": "Crea tu propio Criptograma Letra = Numero",
         "imagen": "https://i.postimg.cc/YCZBn4C1/criptograma.png",
         "url": "https://recursosgenerados.github.io/criptograma/"
+    },
+    {
+        "titulo": "Corvertidor de Imagen",
+        "descripcion": "Cambia una imagen a Blanco y Negro para Colorear",
+        "imagen": "https://i.postimg.cc/jqZdprvj/image-(4).png",
+        "url": "/pintar.html"
     }
 ]
