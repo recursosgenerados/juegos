@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Anagramas Pro</title>
+    <style>
+        :root {
+            /* Windows 11 Dark Theme Colors */
+            --bg-base: #202020;
+            --bg-card: #2d2d2d;
+            --bg-input: #191919;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-focus: #60cdff;
+            --text-main: #ffffff;
+            --text-muted: #aaaaaa;
+            --accent: #60cdff;
+            --accent-hover: #50b6e6;
+            --danger: #ff99a4;
+            --radius-md: 8px;
+            --radius-sm: 4px;
+            --font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            --shadow-flyout: 0 8px 16px rgba(0,0,0,0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: var(--font-family);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Header */
+        header {
+            padding: 12px 20px;
+            background-color: var(--bg-base);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        header h1 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* Main Layout */
+        .container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            flex-direction: row;
+        }
+
+        /* Sidebar Controls */
+        .sidebar {
+            width: 320px;
+            background-color: var(--bg-card);
+            border-right: 1px solid var(--border-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            overflow-y: auto;
+        }
+
+        /* Input Controls */
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: var(--radius-sm);
+            padding: 8px 12px;
+            font-family: var(--font-family);
+            font-size: 14px;
+            transition: all 0.2s ease;
+            resize: vertical;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: var(--border-focus);
+            border-bottom: 2px solid var(--border-focus);
+            padding-bottom: 7px; /* compensate for border */
+        }
+
+        textarea {
+            min-height: 120px;
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.15s ease;
+        }
+
+        .btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: #000;
+            border: none;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .button-group .btn {
+            flex: 1;
+        }
+
+        /* Icons */
+        svg.icon {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        /* Preview Area */
+        .preview-area {
+            flex: 1;
+            background-color: var(--bg-base);
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            overflow-y: auto;
+        }
+
+        .canvas-wrapper {
+            background-color: white;
+            box-shadow: var(--shadow-flyout);
+            border-radius: 4px;
+            width: 100%;
+            max-width: 794px; /* A4 aspect width approx */
+            aspect-ratio: 3/4;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #svgPreview {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Responsive Mobile & Tablet */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                max-height: 40vh;
+            }
+            .preview-area {
+                padding: 12px;
+            }
+            .btn span.label {
+                display: none;
+            }
+            .btn {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <svg class="icon" viewBox="0 0 24 24" style="color: var(--accent); width: 20px; height: 20px;">
+            <path d="M12 2L2 22h20L12 2zm0 3.8l7.1 14.2H4.9L12 5.8z"/>
+        </svg>
+        <h1>Generador de Anagramas</h1>
+    </header>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="control-group">
+                <label for="docTitle">Título del Documento</label>
+                <input type="text" id="docTitle" value="Ejercicios de Anagramas">
+            </div>
+
+            <div class="control-group">
+                <label for="wordList">Lista de Palabras (una por línea)</label>
+                <textarea id="wordList">MURCIELAGO
+COMPUTADORA
+UNIVERSO
+ELEFANTE
+GUITARRA
+BIBLIOTECA
+MARIPOSA
+ASTRO
+TECLADO
+PANTALLA</textarea>
+            </div>
+
+            <button class="btn btn-primary" onclick="generatePuzzle()">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                <span class="label">Generar Anagramas</span>
+            </button>
+
+            <div class="button-group">
+                <button class="btn" onclick="exportSVG()">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 11h-2v-2h2v2zm0-4h-2V6h2v4zm4 4h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg>
+                    <span class="label">Exportar SVG</span>
+                </button>
+                <button class="btn" onclick="exportPNG()">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+                    <span class="label">Exportar PNG (300 DPI)</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Preview -->
+        <div class="preview-area">
+            <div class="canvas-wrapper" id="canvasWrapper">
+                <!-- SVG Will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Logic Variables
+        const SVG_WIDTH = 794;
+        const SVG_HEIGHT = 1059; // 3:4 aspect roughly A4
+        let currentSVGData = '';
+
+        // Scramble function
+        function scrambleWord(word) {
+            word = word.trim().toUpperCase();
+            if (word.length <= 1) return word;
+            
+            let arr = word.split('');
+            let original = word;
+            let attempts = 0;
+            
+            do {
+                for (let i = arr.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [arr[i], arr[j]] = [arr[j], arr[i]];
+                }
+                attempts++;
+            } while (arr.join('') === original && attempts < 10);
+            
+            return arr.join(' ');
+        }
+
+        // Generate SVG Content
+        function generatePuzzle() {
+            const title = document.getElementById('docTitle').value.trim() || 'Anagramas';
+            const rawText = document.getElementById('wordList').value;
+            const words = rawText.split('\n').map(w => w.trim().toUpperCase()).filter(w => w.length > 0);
+
+            // Start building SVG
+            let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${SVG_WIDTH} ${SVG_HEIGHT}" width="100%" height="100%" style="background-color: white;">
+                <defs>
+                    <style>
+                        .title { font-family: sans-serif; font-size: 32px; font-weight: bold; fill: #000; text-anchor: middle; }
+                        .header-text { font-family: sans-serif; font-size: 16px; fill: #000; }
+                        .anagram-scrambled { font-family: monospace; font-size: 20px; font-weight: bold; fill: #333; letter-spacing: 2px; }
+                        .line { stroke: #000; stroke-width: 1.5; }
+                        .item-number { font-family: sans-serif; font-size: 18px; font-weight: bold; fill: #000; }
+                    </style>
+                </defs>`;
+
+            // Header Elements
+            svg += `<text x="${SVG_WIDTH / 2}" y="60" class="title">${title}</text>`;
+            svg += `<text x="50" y="120" class="header-text">Nombre: ______________________________________</text>`;
+            svg += `<text x="550" y="120" class="header-text">Fecha: _________________</text>`;
+            svg += `<line x1="50" y1="140" x2="${SVG_WIDTH - 50}" y2="140" class="line" />`;
+
+            // Draw Words
+            const startY = 190;
+            const rowHeight = 60;
+            const maxRows = 14; 
+
+            words.forEach((word, index) => {
+                if (index >= maxRows) return; // Prevent overflow
+
+                const yPos = startY + (index * rowHeight);
+                const scrambled = scrambleWord(word);
+                
+                // Number
+                svg += `<text x="50" y="${yPos}" class="item-number">${index + 1}.</text>`;
+                
+                // Scrambled Text
+                svg += `<text x="90" y="${yPos}" class="anagram-scrambled">${scrambled}</text>`;
+                
+                // Blanks for answers based on word length
+                const letterSpacing = 25;
+                const blankStartX = 400;
+                for(let i=0; i<word.length; i++) {
+                    const bx = blankStartX + (i * letterSpacing);
+                    svg += `<line x1="${bx}" y1="${yPos + 5}" x2="${bx + 15}" y2="${yPos + 5}" class="line" />`;
+                }
+            });
+
+            svg += `</svg>`;
+            currentSVGData = svg;
+            document.getElementById('canvasWrapper').innerHTML = svg;
+        }
+
+        // Trigger file download
+        function downloadFile(content, filename, type) {
+            const blob = new Blob([content], { type: type });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function exportSVG() {
+            if (!currentSVGData) return;
+            downloadFile(currentSVGData, 'anagramas.svg', 'image/svg+xml');
+        }
+
+        function exportPNG() {
+            if (!currentSVGData) return;
+            
+            // Render SVG to Canvas for high DPI
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // 300 DPI multiplier (300 / 96 baseline ≈ 3.125)
+            const scale = 3.125;
+            canvas.width = SVG_WIDTH * scale;
+            canvas.height = SVG_HEIGHT * scale;
+            
+            // Force white background on canvas context to ensure transparency is covered
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            const img = new Image();
+            const svgBlob = new Blob([currentSVGData], {type: 'image/svg+xml;charset=utf-8'});
+            const url = URL.createObjectURL(svgBlob);
+            
+            img.onload = function () {
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                URL.revokeObjectURL(url);
+                
+                canvas.toBlob((blob) => {
+                    const pngUrl = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = pngUrl;
+                    a.download = 'anagramas_300dpi.png';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(pngUrl);
+                }, 'image/png', 1.0);
+            };
+            img.src = url;
+        }
+
+        // Initialize on load
+        window.onload = generatePuzzle;
+    </script>
+</body>
+</html>
