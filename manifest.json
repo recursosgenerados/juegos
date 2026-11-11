@@ -1,6 +1,6 @@
 { 
-  "name": "Print Homi",
-  "short_name": "Print Homi",
+  "name": "Homi Print",
+  "short_name": "Homi Print",
   "description": "Biblioteca de juegos y recursos imprimibles a tu medida.",
   "start_url": "./index.html",
   "display": "standalone",
