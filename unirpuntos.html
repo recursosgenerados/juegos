@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Match Generator Avanzado</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .w11-scrollbar::-webkit-scrollbar { width: 6px; }
+    .w11-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .w11-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
+  </style>
+</head>
+<body class="bg-[#111113] text-zinc-200 font-sans selection:bg-blue-500/30 overflow-hidden h-screen">
+  
+  <div class="flex flex-col lg:flex-row h-screen relative overflow-hidden">
+    
+    <!-- Fondo Decorativo -->
+    <div class="absolute top-0 left-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+    <div class="absolute bottom-0 right-0 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[150px] pointer-events-none z-0"></div>
+
+    <!-- Sidebar Controls (Overlay en Móvil) -->
+    <div id="sidebar" class="absolute lg:relative top-0 left-0 w-full lg:w-[420px] bg-[#111113]/95 lg:bg-white/[0.03] backdrop-blur-3xl lg:border-r border-white/10 flex flex-col shrink-0 z-40 shadow-2xl h-auto lg:h-screen max-h-screen transition-all duration-300 border-b lg:border-b-0">
+      
+      <!-- Header -->
+      <div class="p-4 sm:p-5 border-b border-white/10 bg-white/[0.02] shrink-0">
+        <h1 class="text-lg font-semibold text-white flex items-center gap-3">
+          <svg class="w-5 h-5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+          Generador de Pares
+        </h1>
+      </div>
+
+      <!-- Navegación por Tabs (Acordeón) -->
+      <div class="flex border-b border-white/10 bg-black/20 shrink-0">
+        <button id="tab-config" class="flex-1 py-3 px-1 sm:px-2 text-[10px] sm:text-[11px] uppercase tracking-wider font-bold transition-colors flex flex-col sm:flex-row items-center justify-center gap-1 border-b-2 text-blue-400 border-blue-500">
+          <span class="whitespace-nowrap">1. Config<span class="hidden sm:inline">. Hoja</span></span>
+          <svg id="icon-config" class="w-3.5 h-3.5 transform rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg>
+        </button>
+        <button id="tab-items" class="flex-1 py-3 px-1 sm:px-2 text-[10px] sm:text-[11px] uppercase tracking-wider font-bold transition-colors flex flex-col sm:flex-row items-center justify-center gap-1 border-b-2 text-zinc-400 border-transparent hover:text-white">
+          <span class="whitespace-nowrap">2. Ítems</span>
+          <svg id="icon-items" class="w-3.5 h-3.5 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg>
+        </button>
+        <button id="btn-open-modal" class="flex-1 py-3 px-1 sm:px-2 text-[10px] sm:text-[11px] uppercase tracking-wider font-bold transition-colors flex flex-col sm:flex-row items-center justify-center gap-1 border-b-2 text-zinc-400 border-transparent hover:text-white">
+          <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+          <span class="whitespace-nowrap">3. Bajar</span>
+        </button>
+      </div>
+
+      <!-- Panel 1: Configuración de Hoja -->
+      <div id="panel-config" class="p-5 flex-grow overflow-y-auto w11-scrollbar space-y-6">
+        <div class="space-y-4 bg-black/20 p-4 rounded-xl border border-white/5 shadow-inner">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="text-xs text-zinc-400 block mb-1.5 uppercase font-semibold">Formato</label>
+              <select id="format" class="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500 text-white">
+                <option value="3:4" class="bg-zinc-900" selected>3:4</option>
+                <option value="4:3" class="bg-zinc-900">4:3</option>
+                <option value="A4" class="bg-zinc-900">A4</option>
+                <option value="16:9" class="bg-zinc-900">16:9</option>
+                <option value="1:1" class="bg-zinc-900">1:1</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-xs text-zinc-400 block mb-1.5 uppercase font-semibold">Color Temático</label>
+              <input type="color" id="primaryColor" value="#3b82f6" class="w-full h-[38px] rounded-lg cursor-pointer border border-white/10 bg-white/5">
+            </div>
+          </div>
+          
+          <div>
+            <label class="text-xs text-zinc-400 block mb-1.5 uppercase font-semibold">Título (Enter = Nueva línea)</label>
+            <textarea id="title" class="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500 text-white resize-none h-20">Une con flechas según corresponda&#10;(Puedes usar varias líneas)</textarea>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 border-t border-white/5 pt-4">
+            <div>
+              <label class="text-xs text-zinc-400 block mb-1.5 uppercase font-semibold flex justify-between">
+                Fuente Cabecera <span id="headerFontSizeVal">45px</span>
+              </label>
+              <input type="range" id="headerFontSize" min="20" max="100" value="45" class="w-full h-1.5 bg-white/10 rounded-full appearance-none cursor-pointer accent-blue-500">
+            </div>
+            <div>
+              <label class="text-xs text-zinc-400 block mb-1.5 uppercase font-semibold flex justify-between">
+                Espaciado Cabecera <span id="headerSpacingVal">60px</span>
+              </label>
+              <input type="range" id="headerSpacing" min="10" max="250" value="60" class="w-full h-1.5 bg-white/10 rounded-full appearance-none cursor-pointer accent-blue-500">
+            </div>
+          </div>
+
+          <!-- Cabeceras Visibilidad -->
+          <div class="grid grid-cols-2 gap-3 bg-white/5 p-3 rounded-lg border border-white/5">
+            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium hover:text-white transition-colors">
+              <input type="checkbox" id="showTitle" checked class="accent-blue-500 w-4 h-4 rounded"> Título
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium hover:text-white transition-colors">
+              <input type="checkbox" id="showName" checked class="accent-blue-500 w-4 h-4 rounded"> Nombre
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium hover:text-white transition-colors">
+              <input type="checkbox" id="showDate" checked class="accent-blue-500 w-4 h-4 rounded"> Fecha
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium hover:text-white transition-colors">
+              <input type="checkbox" id="showClass" checked class="accent-blue-500 w-4 h-4 rounded"> Aula
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 2: Ítems -->
+      <div id="panel-items" class="hidden p-5 flex-grow overflow-y-auto w11-scrollbar space-y-6">
+        
+        <!-- Toggle de Solución -->
+        <div class="flex items-center justify-between p-4 bg-black/20 rounded-xl border border-white/5 shadow-inner">
+          <div>
+            <p class="text-sm font-semibold text-white">Mostrar Solución (Previo)</p>
+            <p class="text-[11px] text-zinc-400 mt-0.5">Conecta los pares visibles en pantalla</p>
+          </div>
+          <button id="btnToggleSolutions" class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 bg-white/10 hover:bg-white/20">
+            <span id="indicatorToggleSolutions" class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out -translate-x-2.5"></span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 bg-black/20 p-4 rounded-xl border border-white/5 shadow-inner">
+          <div>
+            <label class="text-xs text-zinc-400 block mb-1.5 uppercase font-semibold flex justify-between">
+              Fuente Ítems <span id="itemFontSizeVal">40px</span>
+            </label>
+            <input type="range" id="itemFontSize" min="20" max="100" value="40" class="w-full h-1.5 bg-white/10 rounded-full appearance-none cursor-pointer accent-blue-500">
+          </div>
+          <div>
+            <label class="text-xs text-zinc-400 block mb-1.5 uppercase font-semibold flex justify-between">
+              Separación Columnas <span id="itemSpacingVal">600px</span>
+            </label>
+            <input type="range" id="itemSpacing" min="200" max="960" value="600" class="w-full h-1.5 bg-white/10 rounded-full appearance-none cursor-pointer accent-blue-500">
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <div class="flex justify-between items-center gap-2">
+            <h3 class="text-sm font-semibold text-white">Conceptos a Unir</h3>
+            <div class="flex gap-1.5">
+              <button id="btnReset" class="text-[10px] sm:text-xs bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 px-2 sm:px-3 py-1.5 rounded-md font-medium flex items-center gap-1.5 transition-all border border-white/10">
+                <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                Restablecer
+              </button>
+              <button id="btnMix" class="text-[10px] sm:text-xs bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 px-2 sm:px-3 py-1.5 rounded-md font-medium flex items-center gap-1.5 transition-all border border-blue-500/30">
+                <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2 4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="m18 14 4 4-4 4"/></svg>
+                <span class="hidden sm:inline">Mezclar </span>Derecha
+              </button>
+            </div>
+          </div>
+          
+          <div id="pairsContainer" class="space-y-2">
+            <!-- Pares generados dinámicamente -->
+          </div>
+          
+          <button id="btnAddPair" class="w-full py-2.5 border border-dashed border-white/20 text-zinc-400 rounded-xl hover:border-blue-400/50 hover:text-blue-400 hover:bg-blue-400/5 flex items-center justify-center gap-2 font-medium transition-all text-sm">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            Agregar Nuevo Par
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- WYSIWYG Preview Panel -->
+    <div class="flex-1 w-full h-full flex items-center justify-center p-4 lg:p-8 pt-[130px] lg:pt-8 bg-transparent relative z-0 overflow-hidden">
+      <div id="previewWrapper" class="bg-white shadow-[0_0_50px_rgba(0,0,0,0.4)] relative ring-1 ring-white/10 transition-all duration-300 ease-in-out">
+        <svg id="svgResult" class="w-full h-full block" xmlns="http://www.w3.org/2000/svg" style="background-color: #ffffff;"></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Descargas -->
+  <div id="download-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm opacity-0 hidden transition-opacity duration-300 p-4">
+    <div id="download-modal-inner" class="bg-[#18181b] border border-white/10 rounded-2xl shadow-2xl p-6 w-full max-w-md scale-95 transform transition-transform duration-300">
+      <h2 class="text-xl font-bold text-white mb-5 flex items-center gap-2">
+        <svg class="w-5 h-5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+        Opciones de Exportación
+      </h2>
+      
+      <div class="space-y-4">
+        <!-- Tarjeta de Ejercicio -->
+        <div class="bg-white/[0.03] p-4 rounded-xl border border-white/10 hover:border-white/20 transition-colors">
+          <div class="mb-3">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2">Solo Ejercicio</h3>
+            <p class="text-xs text-zinc-400 mt-1">Hoja en blanco para el estudiante (sin líneas)</p>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="executeDownload('exercise', 'svg')" class="flex-1 bg-white/10 hover:bg-white/20 text-white text-xs font-semibold py-2.5 px-3 rounded-lg transition-colors">
+              Descargar SVG
+            </button>
+            <button onclick="executeDownload('exercise', 'png')" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold py-2.5 px-3 rounded-lg transition-colors shadow-[0_0_10px_rgba(59,130,246,0.3)]">
+              Descargar PNG
+            </button>
+          </div>
+        </div>
+
+        <!-- Tarjeta de Solucionario -->
+        <div class="bg-white/[0.03] p-4 rounded-xl border border-white/10 hover:border-white/20 transition-colors">
+          <div class="mb-3">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2">Solucionario</h3>
+            <p class="text-xs text-zinc-400 mt-1">Hoja resuelta para calificación (con líneas)</p>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="executeDownload('solution', 'svg')" class="flex-1 bg-white/10 hover:bg-white/20 text-white text-xs font-semibold py-2.5 px-3 rounded-lg transition-colors">
+              Descargar SVG
+            </button>
+            <button onclick="executeDownload('solution', 'png')" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold py-2.5 px-3 rounded-lg transition-colors shadow-[0_0_10px_rgba(16,185,129,0.3)]">
+              Descargar PNG
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 flex justify-end pt-4 border-t border-white/10">
+        <button id="btn-close-modal" class="px-5 py-2 bg-white/5 hover:bg-white/10 text-white font-medium text-sm rounded-lg transition-colors">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const formatSizes = {
+      "3:4": { w: 1200, h: 1600 },
+      "4:3": { w: 1600, h: 1200 },
+      "A4": { w: 2480, h: 3508 },
+      "16:9": { w: 1920, h: 1080 },
+      "1:1": { w: 2000, h: 2000 },
+    };
+
+    let state = {
+      format: "3:4",
+      title: "Une con flechas según corresponda\n(Puedes usar varias líneas)",
+      headerFontSize: 45,
+      headerSpacing: 60,
+      itemFontSize: 40,
+      itemSpacing: 600,
+      showSolutions: false,
+      primaryColor: '#3b82f6',
+      showTitle: true,
+      showName: true,
+      showDate: true,
+      showClass: true,
+      pairs: [
+        { id: 1, left: "Computadora y equipo", right: "Herramienta tecnológica fundamental" },
+        { id: 2, left: "Perro", right: "Animal doméstico que ladra mucho" },
+        { id: 3, left: "Sol", right: "Estrella luminosa del sistema solar" },
+        { id: 4, left: "Agua", right: "Líquido vital para todos los seres" },
+      ],
+      rightOrder: [1, 2, 3, 4]
+    };
+
+    // Referencias DOM
+    const $ = id => document.getElementById(id);
+    
+    // --- LÓGICA DE TABS (ACORDEÓN AUTOMÁTICO EN MÓVIL) ---
+    let activeTab = 'config';
+    let isCollapsed = window.innerWidth < 1024; // Oculto por defecto en celular
+
+    function renderTabsUI() {
+      const tabConfig = $('tab-config');
+      const tabItems = $('tab-items');
+      const panelConfig = $('panel-config');
+      const panelItems = $('panel-items');
+      const iconConfig = $('icon-config');
+      const iconItems = $('icon-items');
+
+      const baseClass = "flex-1 py-3 px-1 sm:px-2 text-[10px] sm:text-[11px] uppercase tracking-wider font-bold transition-colors flex flex-col sm:flex-row items-center justify-center gap-1 border-b-2";
+      const inactiveClass = "text-zinc-400 border-transparent hover:text-white";
+      const activeClass = "text-blue-400 border-blue-500";
+
+      tabConfig.className = `${baseClass} ${(!isCollapsed && activeTab === 'config') ? activeClass : inactiveClass}`;
+      tabItems.className = `${baseClass} ${(!isCollapsed && activeTab === 'items') ? activeClass : inactiveClass}`;
+
+      iconConfig.style.transform = (!isCollapsed && activeTab === 'config') ? 'rotate(180deg)' : 'rotate(0deg)';
+      iconItems.style.transform = (!isCollapsed && activeTab === 'items') ? 'rotate(180deg)' : 'rotate(0deg)';
+
+      if (isCollapsed) {
+        panelConfig.classList.add('hidden');
+        panelItems.classList.add('hidden');
+      } else {
+        if (activeTab === 'config') {
+          panelConfig.classList.remove('hidden');
+          panelItems.classList.add('hidden');
+        } else {
+          panelConfig.classList.add('hidden');
+          panelItems.classList.remove('hidden');
+        }
+      }
+    }
+
+    $('tab-config').addEventListener('click', () => {
+      if (activeTab === 'config') isCollapsed = !isCollapsed;
+      else { activeTab = 'config'; isCollapsed = false; }
+      renderTabsUI();
+    });
+
+    $('tab-items').addEventListener('click', () => {
+      if (activeTab === 'items') isCollapsed = !isCollapsed;
+      else { activeTab = 'items'; isCollapsed = false; }
+      renderTabsUI();
+    });
+
+    // Detectar resize para resetear estado si pasa a PC
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 1024 && isCollapsed) {
+        isCollapsed = false;
+        renderTabsUI();
+      }
+    });
+
+    // --- Configuración del Modal ---
+    const modal = $('download-modal');
+    const modalInner = $('download-modal-inner');
+
+    $('btn-open-modal').addEventListener('click', () => {
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        modalInner.classList.remove('scale-95');
+        modalInner.classList.add('scale-100');
+      }, 10);
+    });
+
+    $('btn-close-modal').addEventListener('click', () => {
+      modal.classList.add('opacity-0');
+      modalInner.classList.remove('scale-100');
+      modalInner.classList.add('scale-95');
+      setTimeout(() => modal.classList.add('hidden'), 300);
+    });
+
+    // --- Eventos Básicos de Formularios ---
+    $('format').addEventListener('change', e => { 
+      state.format = e.target.value; 
+      $('itemSpacing').max = Math.floor(formatSizes[state.format].w * 0.8);
+      renderPreview(); 
+    });
+    $('primaryColor').addEventListener('input', e => { state.primaryColor = e.target.value; renderPreview(); });
+    $('title').addEventListener('input', e => { state.title = e.target.value; renderPreview(); });
+    
+    // Controles de Configuración de Hoja
+    $('headerFontSize').addEventListener('input', e => { 
+      state.headerFontSize = Number(e.target.value); 
+      $('headerFontSizeVal').innerText = state.headerFontSize + 'px';
+      renderPreview(); 
+    });
+    $('headerSpacing').addEventListener('input', e => { 
+      state.headerSpacing = Number(e.target.value); 
+      $('headerSpacingVal').innerText = state.headerSpacing + 'px';
+      renderPreview(); 
+    });
+
+    // Controles de Ítems
+    $('itemFontSize').addEventListener('input', e => { 
+      state.itemFontSize = Number(e.target.value); 
+      $('itemFontSizeVal').innerText = state.itemFontSize + 'px';
+      renderPreview(); 
+    });
+    $('itemSpacing').addEventListener('input', e => { 
+      state.itemSpacing = Number(e.target.value); 
+      $('itemSpacingVal').innerText = state.itemSpacing + 'px';
+      renderPreview(); 
+    });
+
+    ['showTitle', 'showName', 'showDate', 'showClass'].forEach(prop => {
+      $(prop).addEventListener('change', e => { state[prop] = e.target.checked; renderPreview(); });
+    });
+
+    // Toggle Solución (Vista previa)
+    $('btnToggleSolutions').addEventListener('click', () => {
+      state.showSolutions = !state.showSolutions;
+      const btn = $('btnToggleSolutions');
+      const span = $('indicatorToggleSolutions');
+      
+      if(state.showSolutions) {
+        btn.classList.remove('bg-white/10', 'hover:bg-white/20');
+        btn.classList.add('bg-blue-500');
+        span.classList.remove('-translate-x-2.5');
+        span.classList.add('translate-x-2.5');
+      } else {
+        btn.classList.remove('bg-blue-500');
+        btn.classList.add('bg-white/10', 'hover:bg-white/20');
+        span.classList.remove('translate-x-2.5');
+        span.classList.add('-translate-x-2.5');
+      }
+      renderPreview();
+    });
+
+    // --- Funciones de Pares ---
+    function syncRightOrder() {
+      const currentIds = state.pairs.map(p => p.id);
+      const missing = currentIds.filter(id => !state.rightOrder.includes(id));
+      const valid = state.rightOrder.filter(id => currentIds.includes(id));
+      if (missing.length > 0 || valid.length !== state.rightOrder.length) {
+        state.rightOrder = [...valid, ...missing];
+      }
+    }
+
+    $('btnReset').addEventListener('click', () => {
+      state.rightOrder = state.pairs.map(p => p.id);
+      renderPreview();
+    });
+
+    $('btnMix').addEventListener('click', () => {
+      state.rightOrder = [...state.rightOrder].sort(() => Math.random() - 0.5);
+      renderPreview();
+    });
+
+    $('btnAddPair').addEventListener('click', () => {
+      state.pairs.push({ id: Date.now(), left: "Nuevo", right: "Descripción" });
+      syncRightOrder();
+      renderPairsUI();
+      renderPreview();
+    });
+
+    window.removePair = (index) => {
+      if (state.pairs.length > 1) {
+        state.pairs.splice(index, 1);
+        syncRightOrder();
+        renderPairsUI();
+        renderPreview();
+      }
+    };
+
+    function renderPairsUI() {
+      const container = $('pairsContainer');
+      container.innerHTML = '';
+      state.pairs.forEach((pair, idx) => {
+        const row = document.createElement('div');
+        row.className = "flex gap-2 items-center bg-white/[0.02] p-2.5 rounded-xl border border-white/5 hover:bg-white/[0.04] transition-colors relative overflow-hidden";
+        row.innerHTML = `
+          <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500/50 to-transparent opacity-50"></div>
+          <span class="text-xs font-bold text-zinc-600 w-3 text-center ml-1">${idx + 1}</span>
+          <textarea data-idx="${idx}" data-side="left" class="pair-input flex-1 w-full bg-black/40 border border-white/10 rounded-md px-2 py-1.5 text-xs outline-none focus:border-blue-500 text-white resize-none h-12" placeholder="Izquierda">${pair.left}</textarea>
+          <div class="w-2 border-t border-dashed border-zinc-600 shrink-0"></div>
+          <textarea data-idx="${idx}" data-side="right" class="pair-input flex-1 w-full bg-black/40 border border-white/10 rounded-md px-2 py-1.5 text-xs outline-none focus:border-blue-500 text-white resize-none h-12" placeholder="Derecha">${pair.right}</textarea>
+          <button onclick="removePair(${idx})" ${state.pairs.length <= 1 ? 'disabled' : ''} class="text-zinc-500 hover:text-red-400 hover:bg-red-400/10 p-1.5 rounded-md transition-all shrink-0">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+          </button>
+        `;
+        container.appendChild(row);
+      });
+
+      document.querySelectorAll('.pair-input').forEach(input => {
+        input.addEventListener('input', (e) => {
+          const idx = parseInt(e.target.dataset.idx);
+          const side = e.target.dataset.side;
+          state.pairs[idx][side] = e.target.value;
+          renderPreview();
+        });
+      });
+    }
+
+    // --- Motor de Texto Multilínea ---
+    const measureCanvas = document.createElement('canvas');
+    const measureCtx = measureCanvas.getContext('2d');
+
+    function getWrappedLines(text, maxWidth, fontSize) {
+      if (!text) return [""];
+      measureCtx.font = `500 ${fontSize}px Arial, sans-serif`;
+      const words = text.split(' ');
+      const lines = [];
+      let currentLine = words[0];
+
+      for (let i = 1; i < words.length; i++) {
+        const word = words[i];
+        const w = measureCtx.measureText(currentLine + " " + word).width;
+        if (w < maxWidth) {
+          currentLine += " " + word;
+        } else {
+          lines.push(currentLine);
+          currentLine = word;
+        }
+      }
+      lines.push(currentLine);
+      return lines;
+    }
+
+    // --- Renderizado SVG ---
+    function renderPreview() {
+      const { w: width, h: height } = formatSizes[state.format];
+      const wrapper = $('previewWrapper');
+      const svg = $('svgResult');
+
+      wrapper.style.aspectRatio = `${width}/${height}`;
+      wrapper.style.maxWidth = "100%";
+      wrapper.style.maxHeight = "100%";
+      wrapper.style.width = width >= height ? "100%" : "auto";
+      wrapper.style.height = height > width ? "100%" : "auto";
+
+      svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+
+      const titleLines = state.title.split("\n");
+      let contentStartY = height * 0.08;
+      
+      // Render Título
+      if (state.showTitle) {
+        contentStartY += titleLines.length * (state.headerFontSize * 1.2) + state.headerFontSize * 1.5;
+      }
+
+      // Render Espaciado + Cabeceras (Nombre, Fecha, Aula)
+      const nameDateClassY = contentStartY + state.headerSpacing; 
+      
+      if (state.showName || state.showDate || state.showClass) {
+        contentStartY += state.headerSpacing + (state.headerFontSize * 1.5);
+      }
+
+      // Espaciado inferior de la cabecera antes de empezar los ítems
+      contentStartY += state.headerSpacing; 
+
+      const contentEndY = height - (height * 0.08);
+      const availableHeight = contentEndY - contentStartY;
+      const rowSpacing = state.pairs.length > 0 ? availableHeight / state.pairs.length : 0;
+
+      let inner = `
+        <defs>
+          <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="${state.primaryColor}" />
+          </marker>
+        </defs>
+        <rect width="100%" height="100%" fill="#ffffff" />
+      `;
+
+      if (state.showTitle) {
+        inner += `<text x="${width / 2}" y="${height * 0.08}" font-family="Arial, sans-serif" font-size="${state.headerFontSize * 1.5}" font-weight="800" fill="#18181b" text-anchor="middle">`;
+        titleLines.forEach((line, i) => {
+          inner += `<tspan x="${width / 2}" dy="${i === 0 ? 0 : state.headerFontSize * 1.8}">${line}</tspan>`;
+        });
+        inner += `</text>`;
+      }
+
+      if (state.showName || state.showDate || state.showClass) {
+        inner += `<g font-family="Arial, sans-serif" font-size="${state.headerFontSize}" fill="#3f3f46" font-weight="600">`;
+        if (state.showName) inner += `<text x="${width * 0.1}" y="${nameDateClassY}">Nombre: ___________________________</text>`;
+        if (state.showDate) inner += `<text x="${width * 0.55}" y="${nameDateClassY}">Fecha: ______________</text>`;
+        if (state.showClass) inner += `<text x="${width * 0.8}" y="${nameDateClassY}">Aula: _______</text>`;
+        inner += `</g>`;
+      }
+
+      // Conectores (Soluciones) basados en Fuente de Ítems
+      if (state.showSolutions) {
+        state.pairs.forEach((pair, idx) => {
+          const rightIdx = state.rightOrder.indexOf(pair.id);
+          if (rightIdx === -1) return;
+          
+          const leftY = contentStartY + (idx + 0.5) * rowSpacing;
+          const rightY = contentStartY + (rightIdx + 0.5) * rowSpacing;
+          const radiusOffset = state.itemFontSize * 0.45;
+          
+          const leftX = (width / 2) - (state.itemSpacing / 2) + radiusOffset;
+          const rightX = (width / 2) + (state.itemSpacing / 2) - radiusOffset - (state.itemFontSize * 0.2);
+
+          inner += `
+            <line x1="${leftX}" y1="${leftY}" x2="${rightX}" y2="${rightY}" 
+                  stroke="${state.primaryColor}" stroke-width="${state.itemFontSize * 0.12}" 
+                  stroke-dasharray="${state.itemFontSize * 0.3},${state.itemFontSize * 0.3}" 
+                  marker-end="url(#arrowhead)" opacity="0.5" />
+          `;
+        });
+      }
+
+      // Nodos Conceptos y Textos Multilínea basados en Fuente de Ítems
+      inner += `<g font-family="Arial, sans-serif" font-size="${state.itemFontSize}" fill="#18181b" font-weight="500">`;
+      state.pairs.forEach((pair, idx) => {
+        const leftY = contentStartY + (idx + 0.5) * rowSpacing;
+        const rightIdx = state.rightOrder.indexOf(pair.id);
+        const rightY = contentStartY + (rightIdx + 0.5) * rowSpacing;
+        
+        const leftX = (width / 2) - (state.itemSpacing / 2);
+        const rightX = (width / 2) + (state.itemSpacing / 2);
+
+        // Márgenes seguros
+        const marginX = width * 0.05;
+        const maxWidthLeft = leftX - (state.itemFontSize * 1.2) - marginX;
+        const maxWidthRight = width - rightX - (state.itemFontSize * 1.2) - marginX;
+        const lh = state.itemFontSize * 1.2;
+
+        // Renderizado Izquierda
+        const leftLines = getWrappedLines(pair.left, maxWidthLeft, state.itemFontSize);
+        const startYLeft = leftY - ((leftLines.length - 1) * lh) / 2;
+
+        inner += `<text x="${leftX - (state.itemFontSize * 1.2)}" y="${startYLeft}" text-anchor="end" dominant-baseline="middle">`;
+        leftLines.forEach((line, i) => {
+          inner += `<tspan x="${leftX - (state.itemFontSize * 1.2)}" dy="${i === 0 ? 0 : lh}">${line}</tspan>`;
+        });
+        inner += `</text>`;
+        inner += `<circle cx="${leftX}" cy="${leftY}" r="${state.itemFontSize * 0.35}" fill="${state.primaryColor}" />`;
+
+        // Renderizado Derecha
+        if (rightIdx !== -1) {
+          const rightText = state.pairs.find(p => p.id === state.rightOrder[rightIdx])?.right || "";
+          const rightLines = getWrappedLines(rightText, maxWidthRight, state.itemFontSize);
+          const startYRight = rightY - ((rightLines.length - 1) * lh) / 2;
+
+          inner += `<circle cx="${rightX}" cy="${rightY}" r="${state.itemFontSize * 0.35}" fill="${state.primaryColor}" />`;
+          inner += `<text x="${rightX + (state.itemFontSize * 1.2)}" y="${startYRight}" text-anchor="start" dominant-baseline="middle">`;
+          rightLines.forEach((line, i) => {
+            inner += `<tspan x="${rightX + (state.itemFontSize * 1.2)}" dy="${i === 0 ? 0 : lh}">${line}</tspan>`;
+          });
+          inner += `</text>`;
+        }
+      });
+      inner += `</g>`;
+
+      svg.innerHTML = inner;
+    }
+
+    // --- Control de Exportación Inteligente ---
+    window.executeDownload = (type, format) => {
+      const originalSolutionState = state.showSolutions;
+      
+      state.showSolutions = (type === 'solution');
+      renderPreview();
+
+      const suffix = type === 'solution' ? '_resuelto' : '';
+      const filename = `ejercicio_${state.format.replace(':', 'x')}${suffix}`;
+
+      setTimeout(() => {
+        if (format === 'svg') {
+          doExportSVG(filename);
+        } else {
+          doExportPNG(filename);
+        }
+        
+        state.showSolutions = originalSolutionState;
+        renderPreview();
+      }, 50);
+    };
+
+    function doExportSVG(filename) {
+      const svg = $('svgResult');
+      let svgString = new XMLSerializer().serializeToString(svg);
+      if (!svgString.includes('xmlns="http://www.w3.org/2000/svg"')) {
+        svgString = svgString.replace("<svg ", '<svg xmlns="http://www.w3.org/2000/svg" ');
+      }
+      const blob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${filename}.svg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function doExportPNG(filename) {
+      const svg = $('svgResult');
+      let svgString = new XMLSerializer().serializeToString(svg);
+      if (!svgString.includes('xmlns="http://www.w3.org/2000/svg"')) {
+        svgString = svgString.replace("<svg ", '<svg xmlns="http://www.w3.org/2000/svg" ');
+      }
+      
+      const { w: width, h: height } = formatSizes[state.format];
+      const scale = 300 / 96; 
+      const canvasWidth = width * scale;
+      const canvasHeight = height * scale;
+
+      const canvas = document.createElement("canvas");
+      canvas.width = canvasWidth;
+      canvas.height = canvasHeight;
+      const ctx = canvas.getContext("2d");
+      
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+      const img = new Image();
+      const blob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+        canvas.toBlob(
+          (b) => {
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(b);
+            a.download = `${filename}_300dpi.png`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          },
+          "image/png",
+          1.0
+        );
+      };
+      img.src = url;
+    }
+
+    // Inicialización
+    renderTabsUI();
+    renderPairsUI();
+    renderPreview();
+  </script>
+</body>
+</html>
