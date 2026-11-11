@@ -33,7 +33,6 @@
     }
   </script>
   <style>
-    /* Estilos personalizados para vista previa del SVG */
     .svg-container svg {
       width: 100%;
       height: auto;
@@ -42,7 +41,6 @@
       border-radius: 8px;
       background-color: #ffffff;
     }
-    /* Estilo de barra de desplazamiento personalizada */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
@@ -92,191 +90,191 @@
   <!-- Contenedor Principal -->
   <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-    <!-- PANEL DE CONFIGURACIÓN (COLUMNA IZQUIERDA) -->
-    <section class="lg:col-span-5 xl:col-span-4 space-y-6">
+    <!-- PANEL DE CONFIGURACIÓN CON PESTAÑAS (COLUMNA IZQUIERDA) -->
+    <section class="lg:col-span-5 xl:col-span-4 flex flex-col space-y-4">
       
-      <!-- Card: Configuración Básica -->
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-xl space-y-4">
-        <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2 border-b border-slate-700 pb-3">
-          <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
-          </svg>
-          Ajustes Principales
-        </h2>
-
-        <!-- Título de la Sopa -->
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Título de la Sopa</label>
-          <input type="text" id="inputTitulo" value="Sopa de Letras: Frutas del Campo" 
-            class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition" 
-            placeholder="Ej: Sopa de Letras - Botánica">
-        </div>
-
-        <!-- Subtítulo / Instrucción -->
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Subtítulo o Indicación</label>
-          <input type="text" id="inputSubtitulo" value="Encuentra las palabras escondidas en la rejilla" 
-            class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition">
-        </div>
-
-        <!-- Texto del Footer -->
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Texto Pie de Página</label>
-          <input type="text" id="inputFooter" value="Generado con SopaDeLetras 300 DPI Pro" oninput="actualizarOpcionesYRenderizar()"
-            class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition">
-        </div>
-
-        <!-- Tamaño del Tablero -->
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Tamaño Rejilla</label>
-            <select id="selectTamano" onchange="generarNuevaSopa()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-              <option value="10">10 x 10 (Fácil)</option>
-              <option value="12">12 x 12 (Medio)</option>
-              <option value="15" selected>15 x 15 (Estándar)</option>
-              <option value="18">18 x 18 (Desafío)</option>
-              <option value="20">20 x 20 (Experto)</option>
-              <option value="25">25 x 25 (Gigante)</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Estilo de Color</label>
-            <select id="selectTema" onchange="actualizarOpcionesYRenderizar()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-              <option value="classic">Clásico (Negro/Blanco)</option>
-              <option value="blue" selected>Azul Educativo</option>
-              <option value="emerald">Verde Esmeralda</option>
-              <option value="purple">Púrpura Creativo</option>
-              <option value="warm">Cálido / Naranja</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- VISIBILIDAD DE ENCABEZADOS Y DATOS -->
-        <div class="pt-2 border-t border-slate-700/60">
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Visibilidad de Encabezado</label>
-          <div class="space-y-1.5 text-xs">
-            <label class="flex items-center justify-between bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
-              <span class="text-slate-200 font-medium">Mostrar Título y Subtítulo</span>
-              <input type="checkbox" id="checkMostrarTitulo" checked onchange="actualizarOpcionesYRenderizar()" class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600 w-4 h-4">
-            </label>
-            <label class="flex items-center justify-between bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
-              <span class="text-slate-200 font-medium">Campo "Nombre: _______"</span>
-              <input type="checkbox" id="checkMostrarNombre" onchange="actualizarOpcionesYRenderizar()" class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600 w-4 h-4">
-            </label>
-            <label class="flex items-center justify-between bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
-              <span class="text-slate-200 font-medium">Campo "Fecha: _______"</span>
-              <input type="checkbox" id="checkMostrarFecha" onchange="actualizarOpcionesYRenderizar()" class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600 w-4 h-4">
-            </label>
-            <label class="flex items-center justify-between bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
-              <span class="text-slate-200 font-medium">Mostrar Pie de Página</span>
-              <input type="checkbox" id="checkMostrarFooter" checked onchange="actualizarOpcionesYRenderizar()" class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600 w-4 h-4">
-            </label>
-          </div>
-        </div>
-
-        <!-- TAMAÑOS DE FUENTE CONFIGURABLES -->
-        <div class="pt-2 border-t border-slate-700/60 space-y-3">
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">Tamaño de Fuente Personalizado</label>
-          
-          <!-- Tamaño de fuente en la Rejilla -->
-          <div>
-            <div class="flex justify-between items-center text-xs mb-1">
-              <span class="text-slate-300">Letras del Tablero</span>
-              <span id="valFontGrid" class="text-cyan-400 font-mono font-bold">Auto</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <input type="range" id="rangeFontGrid" min="0" max="60" step="1" value="0" oninput="actualizarOpcionesYRenderizar()" 
-                class="w-full h-1.5 bg-slate-900 rounded-lg appearance-none cursor-pointer accent-cyan-500">
-            </div>
-            <p class="text-[10px] text-slate-400 mt-0.5">El valor 0 ajusta el tamaño automáticamente según el tamaño de la rejilla.</p>
-          </div>
-
-          <!-- Tamaño de fuente en Lista de Palabras -->
-          <div>
-            <div class="flex justify-between items-center text-xs mb-1">
-              <span class="text-slate-300">Lista de Palabras</span>
-              <span id="valFontWords" class="text-cyan-400 font-mono font-bold">20 px</span>
-            </div>
-            <input type="range" id="rangeFontWords" min="10" max="40" step="1" value="20" oninput="actualizarOpcionesYRenderizar()" 
-              class="w-full h-1.5 bg-slate-900 rounded-lg appearance-none cursor-pointer accent-cyan-500">
-          </div>
-        </div>
-
-        <!-- Direcciones de Palabras -->
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Direcciones Permitidas</label>
-          <div class="grid grid-cols-2 gap-2 text-xs">
-            <label class="flex items-center space-x-2 bg-slate-900/60 p-2 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
-              <input type="checkbox" id="dirH" checked class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600">
-              <span class="text-slate-200">Horizontal ➡️</span>
-            </label>
-            <label class="flex items-center space-x-2 bg-slate-900/60 p-2 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
-              <input type="checkbox" id="dirV" checked class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600">
-              <span class="text-slate-200">Vertical ⬇️</span>
-            </label>
-            <label class="flex items-center space-x-2 bg-slate-900/60 p-2 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
-              <input type="checkbox" id="dirD" checked class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600">
-              <span class="text-slate-200">Diagonal ↘️</span>
-            </label>
-            <label class="flex items-center space-x-2 bg-slate-900/60 p-2 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
-              <input type="checkbox" id="dirRev" class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600">
-              <span class="text-slate-200">Invertidas ⬅️⬆️</span>
-            </label>
-          </div>
-        </div>
-
+      <!-- Navegación por Pestañas Horizontales -->
+      <div class="flex bg-slate-800 p-1.5 rounded-xl border border-slate-700 shadow-md">
+        <button onclick="cambiarPestana(1)" id="tabBtn1" class="flex-1 py-2 text-xs font-semibold rounded-lg transition text-center bg-cyan-600 text-white shadow">
+          1. Estética y Datos
+        </button>
+        <button onclick="cambiarPestana(2)" id="tabBtn2" class="flex-1 py-2 text-xs font-semibold rounded-lg transition text-center text-slate-400 hover:text-white">
+          2. Fuentes y Palabras
+        </button>
+        <button onclick="abrirModalDescarga()" class="flex-1 py-2 text-xs font-semibold rounded-lg transition text-center text-emerald-400 hover:text-emerald-300 flex items-center justify-center gap-1">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+          3. Descargar
+        </button>
       </div>
 
-      <!-- Card: Entrada de Palabras -->
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-xl space-y-4">
-        <div class="flex items-center justify-between border-b border-slate-700 pb-3">
-          <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
+      <!-- PESTAÑA 1: Desde Título de la Sopa hasta Visibilidad de Encabezado -->
+      <div id="pestana1" class="space-y-4">
+        <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-xl space-y-4">
+          <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2 border-b border-slate-700 pb-3">
             <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
             </svg>
-            Lista de Palabras
+            Ajustes Principales
           </h2>
-          <span id="contadorPalabras" class="text-xs bg-slate-700 text-cyan-300 font-semibold px-2.5 py-1 rounded-full">0 palabras</span>
-        </div>
 
-        <!-- Plantillas Rápidas -->
-        <div>
-          <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Plantillas Rápidas (Carga fácil)</label>
-          <div class="flex flex-wrap gap-1.5">
-            <button onclick="cargarPlantilla('frutas')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-2.5 py-1 rounded transition">🍎 Frutas</button>
-            <button onclick="cargarPlantilla('animales')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-2.5 py-1 rounded transition">🐶 Animales</button>
-            <button onclick="cargarPlantilla('paises')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-2.5 py-1 rounded transition">🌍 Países</button>
-            <button onclick="cargarPlantilla('espacio')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-2.5 py-1 rounded transition">🚀 Espacio</button>
-            <button onclick="cargarPlantilla('tecnologia')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-2.5 py-1 rounded transition">💻 Tecnología</button>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Título de la Sopa</label>
+            <input type="text" id="inputTitulo" value="Sopa de Letras: Frutas del Campo" 
+              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition" 
+              placeholder="Ej: Sopa de Letras - Botánica">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Subtítulo o Indicación</label>
+            <input type="text" id="inputSubtitulo" value="Encuentra las palabras escondidas en la rejilla" 
+              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Texto Pie de Página</label>
+            <input type="text" id="inputFooter" value="Generado con SopaDeLetras 300 DPI Pro" oninput="actualizarOpcionesYRenderizar()"
+              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition">
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Tamaño Rejilla</label>
+              <select id="selectTamano" onchange="generarNuevaSopa()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                <option value="10">10 x 10 (Fácil)</option>
+                <option value="12">12 x 12 (Medio)</option>
+                <option value="15" selected>15 x 15 (Estándar)</option>
+                <option value="18">18 x 18 (Desafío)</option>
+                <option value="20">20 x 20 (Experto)</option>
+                <option value="25">25 x 25 (Gigante)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Estilo de Color</label>
+              <select id="selectTema" onchange="actualizarOpcionesYRenderizar()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                <option value="classic">Clásico (Negro/Blanco)</option>
+                <option value="blue" selected>Azul Educativo</option>
+                <option value="emerald">Verde Esmeralda</option>
+                <option value="purple">Púrpura Creativo</option>
+                <option value="warm">Cálido / Naranja</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="pt-2 border-t border-slate-700/60">
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Visibilidad de Encabezado</label>
+            <div class="space-y-1.5 text-xs">
+              <label class="flex items-center justify-between bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
+                <span class="text-slate-200 font-medium">Mostrar Título y Subtítulo</span>
+                <input type="checkbox" id="checkMostrarTitulo" checked onchange="actualizarOpcionesYRenderizar()" class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600 w-4 h-4">
+              </label>
+              <label class="flex items-center justify-between bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
+                <span class="text-slate-200 font-medium">Campo "Nombre: _______"</span>
+                <input type="checkbox" id="checkMostrarNombre" onchange="actualizarOpcionesYRenderizar()" class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600 w-4 h-4">
+              </label>
+              <label class="flex items-center justify-between bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
+                <span class="text-slate-200 font-medium">Campo "Fecha: _______"</span>
+                <input type="checkbox" id="checkMostrarFecha" onchange="actualizarOpcionesYRenderizar()" class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600 w-4 h-4">
+              </label>
+              <label class="flex items-center justify-between bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
+                <span class="text-slate-200 font-medium">Mostrar Pie de Página</span>
+                <input type="checkbox" id="checkMostrarFooter" checked onchange="actualizarOpcionesYRenderizar()" class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600 w-4 h-4">
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PESTAÑA 2: Desde Tamaño de Fuente Personalizado hasta Lista de Palabras -->
+      <div id="pestana2" class="space-y-4 hidden">
+        <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-xl space-y-4">
+          <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2 border-b border-slate-700 pb-3">
+            <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+            </svg>
+            Fuentes y Palabras
+          </h2>
+
+          <div class="space-y-3">
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">Tamaño de Fuente Personalizado</label>
+            
+            <div>
+              <div class="flex justify-between items-center text-xs mb-1">
+                <span class="text-slate-300">Letras del Tablero</span>
+                <span id="valFontGrid" class="text-cyan-400 font-mono font-bold">Auto</span>
+              </div>
+              <input type="range" id="rangeFontGrid" min="0" max="60" step="1" value="0" oninput="actualizarOpcionesYRenderizar()" 
+                class="w-full h-1.5 bg-slate-900 rounded-lg appearance-none cursor-pointer accent-cyan-500">
+              <p class="text-[10px] text-slate-400 mt-0.5">El valor 0 ajusta el tamaño automáticamente.</p>
+            </div>
+
+            <div>
+              <div class="flex justify-between items-center text-xs mb-1">
+                <span class="text-slate-300">Lista de Palabras</span>
+                <span id="valFontWords" class="text-cyan-400 font-mono font-bold">20 px</span>
+              </div>
+              <input type="range" id="rangeFontWords" min="10" max="40" step="1" value="20" oninput="actualizarOpcionesYRenderizar()" 
+                class="w-full h-1.5 bg-slate-900 rounded-lg appearance-none cursor-pointer accent-cyan-500">
+            </div>
+          </div>
+
+          <div class="pt-2 border-t border-slate-700/60">
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Direcciones Permitidas</label>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <label class="flex items-center space-x-2 bg-slate-900/60 p-2 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
+                <input type="checkbox" id="dirH" checked class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600">
+                <span class="text-slate-200">Horizontal ➡️</span>
+              </label>
+              <label class="flex items-center space-x-2 bg-slate-900/60 p-2 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
+                <input type="checkbox" id="dirV" checked class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600">
+                <span class="text-slate-200">Vertical ⬇️</span>
+              </label>
+              <label class="flex items-center space-x-2 bg-slate-900/60 p-2 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
+                <input type="checkbox" id="dirD" checked class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600">
+                <span class="text-slate-200">Diagonal ↘️</span>
+              </label>
+              <label class="flex items-center space-x-2 bg-slate-900/60 p-2 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
+                <input type="checkbox" id="dirRev" class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600">
+                <span class="text-slate-200">Invertidas ⬅️⬆️</span>
+              </label>
+            </div>
           </div>
         </div>
 
-        <!-- Área de Texto -->
-        <div>
-          <textarea id="inputPalabras" rows="7" 
-            class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 font-mono" 
-            placeholder="Escribe palabras separadas por comas o saltos de línea...&#10;Ejemplo:&#10;MANZANA&#10;PLÁTANO&#10;NARANJA&#10;SANDÍA"></textarea>
-          <p class="text-xs text-slate-400 mt-1">Los acentos se adaptarán automáticamente. La letra **Ñ** está completamente soportada.</p>
+        <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-xl space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-700 pb-3">
+            <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">Lista de Palabras</h2>
+            <span id="contadorPalabras" class="text-xs bg-slate-700 text-cyan-300 font-semibold px-2.5 py-1 rounded-full">0 palabras</span>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Plantillas Rápidas</label>
+            <div class="flex flex-wrap gap-1.5">
+              <button onclick="cargarPlantilla('frutas')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-2.5 py-1 rounded transition">🍎 Frutas</button>
+              <button onclick="cargarPlantilla('animales')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-2.5 py-1 rounded transition">🐶 Animales</button>
+              <button onclick="cargarPlantilla('paises')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-2.5 py-1 rounded transition">🌍 Países</button>
+              <button onclick="cargarPlantilla('espacio')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-2.5 py-1 rounded transition">🚀 Espacio</button>
+              <button onclick="cargarPlantilla('tecnologia')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-2.5 py-1 rounded transition">💻 Tecnología</button>
+            </div>
+          </div>
+
+          <div>
+            <textarea id="inputPalabras" rows="6" 
+              class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 font-mono" 
+              placeholder="Escribe palabras separadas por comas o saltos de línea..."></textarea>
+          </div>
+
+          <button onclick="generarNuevaSopa()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2.5 px-4 rounded-lg shadow-lg transition active:scale-[0.99] flex items-center justify-center gap-2">
+            Actualizar Tablero
+          </button>
         </div>
-
-        <button onclick="generarNuevaSopa()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2.5 px-4 rounded-lg shadow-lg transition active:scale-[0.99] flex items-center justify-center gap-2">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-          </svg>
-          Actualizar Tablero
-        </button>
-
       </div>
 
     </section>
 
-    <!-- ÁREA DE VISTA PREVIA Y EXPORTACIÓN (COLUMNA DERECHA) -->
+    <!-- ÁREA DE VISTA PREVIA (COLUMNA DERECHA) -->
     <section class="lg:col-span-7 xl:col-span-8 flex flex-col space-y-6">
 
-      <!-- Barra de Acciones y Modos de Vista -->
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 shadow-xl flex flex-wrap items-center justify-between gap-4">
-        
-        <!-- Toggle Solución -->
         <div class="flex items-center space-x-3">
           <span class="text-sm font-medium text-slate-300">Mostrar Solución:</span>
           <button id="btnToggleSolucion" onclick="toggleMostrarSolucion()" 
@@ -285,110 +283,96 @@
           </button>
         </div>
 
-        <!-- Alerta de Palabras no colocadas (si aplica) -->
         <div id="alertaIncompletas" class="hidden text-xs bg-amber-500/10 border border-amber-500/30 text-amber-300 px-3 py-1.5 rounded-lg flex items-center gap-1.5">
-          <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-          </svg>
-          <span id="textoIncompletas">Algunas palabras no cupieron. Intenta agrandar la rejilla.</span>
+          <span id="textoIncompletas">Algunas palabras no cupieron.</span>
         </div>
 
+        <button onclick="abrirModalDescarga()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-md transition flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+          Exportar y Descargar
+        </button>
       </div>
 
-      <!-- Panel Central de Vista Previa de la Sopa -->
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 sm:p-6 shadow-2xl flex flex-col items-center justify-center min-h-[500px]">
-        
         <div class="w-full flex items-center justify-between mb-4">
           <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-            <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-            </svg>
             Vista Previa Imprimible (Vectorial SVG)
           </h3>
-          <span class="text-xs text-slate-400">Escala A4 / Carta (Altura Dinámica)</span>
+          <span class="text-xs text-slate-400">Altura Dinámica Adaptable</span>
         </div>
 
-        <!-- Visualizador SVG interactivo -->
         <div id="svgContainer" class="svg-container w-full flex justify-center items-center overflow-auto p-2 bg-slate-900/50 rounded-lg border border-slate-700/50">
-          <!-- Aquí se inyecta dinámicamente el SVG -->
         </div>
-
-      </div>
-
-      <!-- ZONA DE DESCARGA Y EXPORTACIÓN -->
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-xl space-y-4">
-        <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2 border-b border-slate-700 pb-3">
-          <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-          </svg>
-          Descargar y Exportar en Alta Resolución
-        </h3>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          
-          <!-- Columna: Descarga de Sopa Limpia -->
-          <div class="bg-slate-900/80 border border-slate-700/70 rounded-lg p-4 space-y-3">
-            <div class="flex items-center justify-between">
-              <span class="text-sm font-bold text-cyan-300">Sopa de Letras (Para Alumnos)</span>
-              <span class="text-[10px] bg-cyan-900/60 text-cyan-300 px-2 py-0.5 rounded border border-cyan-700">Sin Solución</span>
-            </div>
-            <p class="text-xs text-slate-400">Exporta la hoja de juego completamente limpia lista para imprimir o compartir.</p>
-            <div class="grid grid-cols-2 gap-2">
-              <button onclick="exportarSVG(false)" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-cyan-500/40 font-semibold text-xs py-2 px-3 rounded-md transition flex items-center justify-center gap-1.5 shadow-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                </svg>
-                SVG (Vector)
-              </button>
-              <button onclick="exportarPNG(false)" class="bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs py-2 px-3 rounded-md transition flex items-center justify-center gap-1.5 shadow-md">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                </svg>
-                PNG (300 DPI)
-              </button>
-            </div>
-          </div>
-
-          <!-- Columna: Descarga de Solución -->
-          <div class="bg-slate-900/80 border border-slate-700/70 rounded-lg p-4 space-y-3">
-            <div class="flex items-center justify-between">
-              <span class="text-sm font-bold text-emerald-300">Hoja de Solución (Profesor)</span>
-              <span class="text-[10px] bg-emerald-900/60 text-emerald-300 px-2 py-0.5 rounded border border-emerald-700">Respuesta</span>
-            </div>
-            <p class="text-xs text-slate-400">Exporta la hoja con todas las palabras resaltadas con cápsulas de color.</p>
-            <div class="grid grid-cols-2 gap-2">
-              <button onclick="exportarSVG(true)" class="bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/40 font-semibold text-xs py-2 px-3 rounded-md transition flex items-center justify-center gap-1.5 shadow-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                SVG Solución
-              </button>
-              <button onclick="exportarPNG(true)" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs py-2 px-3 rounded-md transition flex items-center justify-center gap-1.5 shadow-md">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                </svg>
-                PNG (300 DPI)
-              </button>
-            </div>
-          </div>
-
-        </div>
-
       </div>
 
     </section>
 
   </main>
 
-  <!-- Pie de página -->
+  <!-- MODAL FLOTANTE DE DESCARGA (Pestaña 3 / Botón de exportación) -->
+  <div id="modalDescarga" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-6 animate-in fade-in zoom-in duration-200">
+      
+      <div class="flex items-center justify-between border-b border-slate-700 pb-4">
+        <h3 class="text-lg font-bold text-slate-100 flex items-center gap-2">
+          <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+          Descargar y Exportar en Alta Resolución
+        </h3>
+        <button onclick="cerrarModalDescarga()" class="text-slate-400 hover:text-white p-1 rounded-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4">
+        <!-- Sopa Limpia -->
+        <div class="bg-slate-900/80 border border-slate-700/70 rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold text-cyan-300">Sopa de Letras (Para Alumnos)</span>
+            <span class="text-[10px] bg-cyan-900/60 text-cyan-300 px-2 py-0.5 rounded border border-cyan-700">Sin Solución</span>
+          </div>
+          <p class="text-xs text-slate-400">Exporta la hoja de juego limpia lista para imprimir.</p>
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="exportarSVG(false); cerrarModalDescarga();" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-cyan-500/40 font-semibold text-xs py-2 px-3 rounded-md transition flex items-center justify-center gap-1.5">
+              SVG (Vector)
+            </button>
+            <button onclick="exportarPNG(false); cerrarModalDescarga();" class="bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs py-2 px-3 rounded-md transition flex items-center justify-center gap-1.5">
+              PNG (300 DPI)
+            </button>
+          </div>
+        </div>
+
+        <!-- Hoja de Solución -->
+        <div class="bg-slate-900/80 border border-slate-700/70 rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold text-emerald-300">Hoja de Solución (Profesor)</span>
+            <span class="text-[10px] bg-emerald-900/60 text-emerald-300 px-2 py-0.5 rounded border border-emerald-700">Respuesta</span>
+          </div>
+          <p class="text-xs text-slate-400">Exporta la hoja con todas las palabras resaltadas en cápsulas.</p>
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="exportarSVG(true); cerrarModalDescarga();" class="bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/40 font-semibold text-xs py-2 px-3 rounded-md transition flex items-center justify-center gap-1.5">
+              SVG Solución
+            </button>
+            <button onclick="exportarPNG(true); cerrarModalDescarga();" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs py-2 px-3 rounded-md transition flex items-center justify-center gap-1.5">
+              PNG (300 DPI)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end pt-2">
+        <button onclick="cerrarModalDescarga()" class="bg-slate-700 hover:bg-slate-600 text-white text-xs font-semibold px-4 py-2 rounded-lg transition">
+          Cerrar
+        </button>
+      </div>
+
+    </div>
+  </div>
+
   <footer class="bg-slate-950 border-t border-slate-800 py-4 text-center text-xs text-slate-500 mt-auto">
-    <p>Generador de Sopa de Letras Vectorial • Generado dinámicamente a 300 DPI para impresión física de alta definición.</p>
+    <p>Generador de Sopa de Letras Vectorial • Alta Definición 300 DPI.</p>
   </footer>
 
-  <!-- LÓGICA JAVASCRIPT PRINCIPAL -->
   <script>
-    // --- PLANTILLAS DE PALABRAS PREDEFINIDAS ---
     const PLANTILLAS = {
       frutas: {
         titulo: "Sopa de Letras: Frutas del Campo",
@@ -412,97 +396,57 @@
       }
     };
 
-    // --- TEMAS DE COLOR PARA IMPRESIÓN / SVG ---
     const TEMAS = {
-      classic: {
-        bg: "#FFFFFF",
-        primary: "#1E293B",
-        secondary: "#64748B",
-        gridLine: "#E2E8F0",
-        gridText: "#0F172A",
-        cellBg: "#F8FAFC",
-        highlight: "rgba(239, 68, 68, 0.25)",
-        highlightStroke: "#EF4444"
-      },
-      blue: {
-        bg: "#FFFFFF",
-        primary: "#1E40AF",
-        secondary: "#3B82F6",
-        gridLine: "#BFDBFE",
-        gridText: "#1E3A8A",
-        cellBg: "#F0F9FF",
-        highlight: "rgba(37, 99, 235, 0.25)",
-        highlightStroke: "#2563EB"
-      },
-      emerald: {
-        bg: "#FFFFFF",
-        primary: "#065F46",
-        secondary: "#059669",
-        gridLine: "#A7F3D0",
-        gridText: "#064E3B",
-        cellBg: "#F0FDF4",
-        highlight: "rgba(16, 185, 129, 0.25)",
-        highlightStroke: "#10B981"
-      },
-      purple: {
-        bg: "#FFFFFF",
-        primary: "#581C87",
-        secondary: "#7C3AED",
-        gridLine: "#DDD6FE",
-        gridText: "#3B0764",
-        cellBg: "#FAF5FF",
-        highlight: "rgba(124, 58, 237, 0.25)",
-        highlightStroke: "#7C3AED"
-      },
-      warm: {
-        bg: "#FFFFFF",
-        primary: "#9A3412",
-        secondary: "#EA580C",
-        gridLine: "#FFEDD5",
-        gridText: "#7C2D12",
-        cellBg: "#FFF7ED",
-        highlight: "rgba(249, 115, 22, 0.25)",
-        highlightStroke: "#F97316"
-      }
+      classic: { bg: "#FFFFFF", primary: "#1E293B", secondary: "#64748B", gridLine: "#E2E8F0", gridText: "#0F172A", cellBg: "#F8FAFC", highlight: "rgba(239, 68, 68, 0.25)", highlightStroke: "#EF4444" },
+      blue: { bg: "#FFFFFF", primary: "#1E40AF", secondary: "#3B82F6", gridLine: "#BFDBFE", gridText: "#1E3A8A", cellBg: "#F0F9FF", highlight: "rgba(37, 99, 235, 0.25)", highlightStroke: "#2563EB" },
+      emerald: { bg: "#FFFFFF", primary: "#065F46", secondary: "#059669", gridLine: "#A7F3D0", gridText: "#064E3B", cellBg: "#F0FDF4", highlight: "rgba(16, 185, 129, 0.25)", highlightStroke: "#10B981" },
+      purple: { bg: "#FFFFFF", primary: "#581C87", secondary: "#7C3AED", gridLine: "#DDD6FE", gridText: "#3B0764", cellBg: "#FAF5FF", highlight: "rgba(124, 58, 237, 0.25)", highlightStroke: "#7C3AED" },
+      warm: { bg: "#FFFFFF", primary: "#9A3412", secondary: "#EA580C", gridLine: "#FFEDD5", gridText: "#7C2D12", cellBg: "#FFF7ED", highlight: "rgba(249, 115, 22, 0.25)", highlightStroke: "#F97316" }
     };
 
-    // --- ESTADO GLOBAL DE LA APLICACIÓN ---
     let estadoGlobal = {
-      titulo: "",
-      subtitulo: "",
-      tamano: 15,
-      temaKey: "blue",
-      mostrarSolucion: false,
-      mostrarTitulo: true,
-      mostrarNombre: false,
-      mostrarFecha: false,
-      mostrarFooter: true,
-      textoFooter: "Generado con SopaDeLetras 300 DPI Pro",
-      fontSizeGrid: 0, // 0 = Auto
-      fontSizeWords: 20, // Default actualizado a 20
-      palabrasOriginales: [],
-      palabrasNormalizadas: [],
-      grid: [],
-      palabrasColocadas: [],
-      palabrasNoColocadas: []
+      titulo: "", subtitulo: "", tamano: 15, temaKey: "blue",
+      mostrarSolucion: false, mostrarTitulo: true, mostrarNombre: false,
+      mostrarFecha: false, mostrarFooter: true, textoFooter: "Generado con SopaDeLetras 300 DPI Pro",
+      fontSizeGrid: 0, fontSizeWords: 20, palabrasNormalizadas: [], grid: [], palabrasColocadas: [], palabrasNoColocadas: []
     };
 
-    // --- INICIALIZACIÓN ---
-    window.addEventListener('DOMContentLoaded', () => {
-      cargarPlantilla('frutas');
-    });
+    window.addEventListener('DOMContentLoaded', () => { cargarPlantilla('frutas'); });
 
-    // Cargar plantilla rápida
+    // Control de Pestañas
+    function cambiarPestana(num) {
+      const p1 = document.getElementById('pestana1');
+      const p2 = document.getElementById('pestana2');
+      const b1 = document.getElementById('tabBtn1');
+      const b2 = document.getElementById('tabBtn2');
+
+      if (num === 1) {
+        p1.classList.remove('hidden'); p2.classList.add('hidden');
+        b1.className = "flex-1 py-2 text-xs font-semibold rounded-lg transition text-center bg-cyan-600 text-white shadow";
+        b2.className = "flex-1 py-2 text-xs font-semibold rounded-lg transition text-center text-slate-400 hover:text-white";
+      } else {
+        p1.classList.add('hidden'); p2.classList.remove('hidden');
+        b2.className = "flex-1 py-2 text-xs font-semibold rounded-lg transition text-center bg-cyan-600 text-white shadow";
+        b1.className = "flex-1 py-2 text-xs font-semibold rounded-lg transition text-center text-slate-400 hover:text-white";
+      }
+    }
+
+    // Modal de Descarga (Pestaña 3 / Botón)
+    function abrirModalDescarga() {
+      document.getElementById('modalDescarga').classList.remove('hidden');
+    }
+    function cerrarModalDescarga() {
+      document.getElementById('modalDescarga').classList.add('hidden');
+    }
+
     function cargarPlantilla(key) {
       const data = PLANTILLAS[key];
       if (!data) return;
-
       document.getElementById('inputTitulo').value = data.titulo;
       document.getElementById('inputPalabras').value = data.palabras.join('\n');
       generarNuevaSopa();
     }
 
-    // Actualizar opciones visuales y re-renderizar SVG en tiempo real (sin volver a calcular la matriz)
     function actualizarOpcionesYRenderizar() {
       estadoGlobal.temaKey = document.getElementById('selectTema').value;
       estadoGlobal.mostrarTitulo = document.getElementById('checkMostrarTitulo').checked;
@@ -510,249 +454,160 @@
       estadoGlobal.mostrarFecha = document.getElementById('checkMostrarFecha').checked;
       estadoGlobal.mostrarFooter = document.getElementById('checkMostrarFooter').checked;
       estadoGlobal.textoFooter = document.getElementById('inputFooter').value;
-
       estadoGlobal.fontSizeGrid = parseInt(document.getElementById('rangeFontGrid').value, 10);
       estadoGlobal.fontSizeWords = parseInt(document.getElementById('rangeFontWords').value, 10);
 
-      // Actualizar indicadores de texto de los sliders
       document.getElementById('valFontGrid').textContent = estadoGlobal.fontSizeGrid === 0 ? "Auto" : `${estadoGlobal.fontSizeGrid} px`;
       document.getElementById('valFontWords').textContent = `${estadoGlobal.fontSizeWords} px`;
-
       renderizarSVG();
     }
 
-    // Alternar visibilidad de la solución
     function toggleMostrarSolucion() {
       estadoGlobal.mostrarSolucion = !estadoGlobal.mostrarSolucion;
-      
       const knob = document.getElementById('toggleKnob');
       const btn = document.getElementById('btnToggleSolucion');
-
       if (estadoGlobal.mostrarSolucion) {
-        knob.classList.remove('translate-x-0');
-        knob.classList.add('translate-x-5');
-        btn.classList.remove('bg-slate-700');
-        btn.classList.add('bg-cyan-500');
+        knob.classList.remove('translate-x-0'); knob.classList.add('translate-x-5');
+        btn.classList.remove('bg-slate-700'); btn.classList.add('bg-cyan-500');
       } else {
-        knob.classList.remove('translate-x-5');
-        knob.classList.add('translate-x-0');
-        btn.classList.remove('bg-cyan-500');
-        btn.classList.add('bg-slate-700');
+        knob.classList.remove('translate-x-5'); knob.classList.add('translate-x-0');
+        btn.classList.remove('bg-cyan-500'); btn.classList.add('bg-slate-700');
       }
-
       renderizarSVG();
     }
 
-    // Normalizar texto en español (Remover acentos pero conservar Ñ)
     function normalizarTextoEs(texto) {
-      return texto.toUpperCase()
-        .replace(/Á/g, 'A')
-        .replace(/É/g, 'E')
-        .replace(/Í/g, 'I')
-        .replace(/Ó/g, 'O')
-        .replace(/Ú/g, 'U')
-        .replace(/Ü/g, 'U')
-        .replace(/[^A-ZÑ]/g, '');
+      return texto.toUpperCase().replace(/Á/g, 'A').replace(/É/g, 'E').replace(/Í/g, 'I').replace(/Ó/g, 'O').replace(/Ú/g, 'U').replace(/Ü/g, 'U').replace(/[^A-ZÑ]/g, '');
     }
 
-    // --- ALGORITMO DE GENERACIÓN DE SOPA DE LETRAS ---
     function generarNuevaSopa() {
-      // 1. Obtener valores de la interfaz
       estadoGlobal.titulo = document.getElementById('inputTitulo').value.trim() || "Sopa de Letras";
       estadoGlobal.subtitulo = document.getElementById('inputSubtitulo').value.trim() || "";
       estadoGlobal.tamano = parseInt(document.getElementById('selectTamano').value, 10);
       estadoGlobal.temaKey = document.getElementById('selectTema').value;
-
       estadoGlobal.mostrarTitulo = document.getElementById('checkMostrarTitulo').checked;
       estadoGlobal.mostrarNombre = document.getElementById('checkMostrarNombre').checked;
       estadoGlobal.mostrarFecha = document.getElementById('checkMostrarFecha').checked;
       estadoGlobal.mostrarFooter = document.getElementById('checkMostrarFooter').checked;
       estadoGlobal.textoFooter = document.getElementById('inputFooter').value;
-
       estadoGlobal.fontSizeGrid = parseInt(document.getElementById('rangeFontGrid').value, 10);
       estadoGlobal.fontSizeWords = parseInt(document.getElementById('rangeFontWords').value, 10);
 
-      document.getElementById('valFontGrid').textContent = estadoGlobal.fontSizeGrid === 0 ? "Auto" : `${estadoGlobal.fontSizeGrid} px`;
-      document.getElementById('valFontWords').textContent = `${estadoGlobal.fontSizeWords} px`;
-
       const rawText = document.getElementById('inputPalabras').value;
-      // Separar por lineas o comas
       const listaRaw = rawText.split(/[\n,]+/).map(s => s.trim()).filter(s => s.length > 0);
       
-      // Filtrar y normalizar palabras
       const procesadas = [];
       listaRaw.forEach(item => {
         const norm = normalizarTextoEs(item);
         if (norm.length >= 2 && norm.length <= estadoGlobal.tamano) {
-          // Guardar objeto con original y normalizado
           procesadas.push({ original: item.toUpperCase(), norm: norm });
         }
       });
 
-      // Eliminar duplicados en palabras normalizadas
       const unicasMap = new Map();
-      procesadas.forEach(obj => {
-        if (!unicasMap.has(obj.norm)) unicasMap.set(obj.norm, obj.original);
-      });
-
+      procesadas.forEach(obj => { if (!unicasMap.has(obj.norm)) unicasMap.set(obj.norm, obj.original); });
       estadoGlobal.palabrasNormalizadas = Array.from(unicasMap.entries()).map(([norm, orig]) => ({ norm, orig }));
       document.getElementById('contadorPalabras').textContent = `${estadoGlobal.palabrasNormalizadas.length} palabras`;
 
-      // 2. Construir matriz de direcciones habilitadas
       const allowH = document.getElementById('dirH').checked;
       const allowV = document.getElementById('dirV').checked;
       const allowD = document.getElementById('dirD').checked;
       const allowRev = document.getElementById('dirRev').checked;
 
       const direcciones = [];
-      if (allowH) direcciones.push({ dr: 0, dc: 1 }); // Derecha
-      if (allowV) direcciones.push({ dr: 1, dc: 0 }); // Abajo
-      if (allowD) direcciones.push({ dr: 1, dc: 1 }, { dr: -1, dc: 1 }); // Diagonales hacia adelante
-
+      if (allowH) direcciones.push({ dr: 0, dc: 1 });
+      if (allowV) direcciones.push({ dr: 1, dc: 0 });
+      if (allowD) direcciones.push({ dr: 1, dc: 1 }, { dr: -1, dc: 1 });
       if (allowRev) {
-        if (allowH) direcciones.push({ dr: 0, dc: -1 }); // Izquierda
-        if (allowV) direcciones.push({ dr: -1, dc: 0 }); // Arriba
-        if (allowD) direcciones.push({ dr: 1, dc: -1 }, { dr: -1, dc: -1 }); // Diagonales inversas
+        if (allowH) direcciones.push({ dr: 0, dc: -1 });
+        if (allowV) direcciones.push({ dr: -1, dc: 0 });
+        if (allowD) direcciones.push({ dr: 1, dc: -1 }, { dr: -1, dc: -1 });
       }
-
-      // En caso de que el usuario desmarque todo, forzar horizontal
       if (direcciones.length === 0) direcciones.push({ dr: 0, dc: 1 });
 
-      // 3. Inicializar Rejilla
       const size = estadoGlobal.tamano;
       const grid = Array.from({ length: size }, () => Array(size).fill(''));
-
-      // Ordenar palabras por longitud descendente (las más largas se colocan primero)
       const palabrasOrdenadas = [...estadoGlobal.palabrasNormalizadas].sort((a, b) => b.norm.length - a.norm.length);
 
       const palabrasColocadas = [];
       const palabrasNoColocadas = [];
 
-      // 4. Intentar colocar cada palabra
       palabrasOrdenadas.forEach(item => {
         const word = item.norm;
-        let colocada = false;
-        let intentos = 0;
-        const maxIntentos = 600;
-
-        while (!colocada && intentos < maxIntentos) {
+        let colocada = false, intentos = 0;
+        while (!colocada && intentos < 600) {
           intentos++;
           const dir = direcciones[Math.floor(Math.random() * direcciones.length)];
-          
-          // Calcular limites de inicio
           const startR = Math.floor(Math.random() * size);
           const startC = Math.floor(Math.random() * size);
-
-          // Verificar si cabe en la dirección
           const endR = startR + dir.dr * (word.length - 1);
           const endC = startC + dir.dc * (word.length - 1);
 
           if (endR >= 0 && endR < size && endC >= 0 && endC < size) {
-            // Verificar colisiones de letras
             let puedeColocar = true;
             for (let i = 0; i < word.length; i++) {
-              const r = startR + dir.dr * i;
-              const c = startC + dir.dc * i;
-              const charExistente = grid[r][c];
-
-              if (charExistente !== '' && charExistente !== word[i]) {
-                puedeColocar = false;
-                break;
-              }
+              const r = startR + dir.dr * i, c = startC + dir.dc * i;
+              if (grid[r][c] !== '' && grid[r][c] !== word[i]) { puedeColocar = false; break; }
             }
-
             if (puedeColocar) {
               const camino = [];
               for (let i = 0; i < word.length; i++) {
-                const r = startR + dir.dr * i;
-                const c = startC + dir.dc * i;
-                grid[r][c] = word[i];
-                camino.push({ r, c });
+                const r = startR + dir.dr * i, c = startC + dir.dc * i;
+                grid[r][c] = word[i]; camino.push({ r, c });
               }
-              palabrasColocadas.push({
-                orig: item.orig,
-                norm: word,
-                camino: camino,
-                start: { r: startR, c: startC },
-                end: { r: endR, c: endC }
-              });
+              palabrasColocadas.push({ orig: item.orig, norm: word, camino, start: { r: startR, c: startC }, end: { r: endR, c: endC } });
               colocada = true;
             }
           }
         }
-
-        if (!colocada) {
-          palabrasNoColocadas.push(item.orig);
-        }
+        if (!colocada) palabrasNoColocadas.push(item.orig);
       });
 
-      // 5. Rellenar casillas vacías con letras aleatorias (Incluye Ñ con frecuencia en español)
       const abecedarioEs = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZAAAAEEEEIIOOOUU";
       for (let r = 0; r < size; r++) {
         for (let c = 0; c < size; c++) {
-          if (grid[r][c] === '') {
-            grid[r][c] = abecedarioEs[Math.floor(Math.random() * abecedarioEs.length)];
-          }
+          if (grid[r][c] === '') grid[r][c] = abecedarioEs[Math.floor(Math.random() * abecedarioEs.length)];
         }
       }
 
-      // Guardar en el estado
       estadoGlobal.grid = grid;
       estadoGlobal.palabrasColocadas = palabrasColocadas;
       estadoGlobal.palabrasNoColocadas = palabrasNoColocadas;
 
-      // Mostrar o esconder alerta de incompletas
       const alerta = document.getElementById('alertaIncompletas');
       if (palabrasNoColocadas.length > 0) {
-        document.getElementById('textoIncompletas').textContent = `${palabrasNoColocadas.length} palabra(s) no cupieron: ${palabrasNoColocadas.join(', ')}`;
+        document.getElementById('textoIncompletas').textContent = `${palabrasNoColocadas.length} palabra(s) no cupieron.`;
         alerta.classList.remove('hidden');
       } else {
         alerta.classList.add('hidden');
       }
-
-      // 6. Renderizar Vista Previa
       renderizarSVG();
     }
 
-    // --- CONSTRUCTOR DE SVG ---
     function generarStringSVG(forzarSolucion = null) {
       const mostrarSol = (forzarSolucion !== null) ? forzarSolucion : estadoGlobal.mostrarSolucion;
       const tema = TEMAS[estadoGlobal.temaKey] || TEMAS.blue;
       const size = estadoGlobal.tamano;
       const grid = estadoGlobal.grid;
 
-      // Escala Base (3:4 ratio) -> 1200 x 1600
-      const baseWidth = 1200;
-      const baseGridSize = 960;
-      
+      const baseWidth = 1200, baseGridSize = 960;
       const userFontSizeGrid = estadoGlobal.fontSizeGrid;
       let actualFontSizeWords = estadoGlobal.fontSizeWords || 20;
 
-      // Calcular cellSize y fontSize 
-      // Se asegura que una fuente muy grande empuje el tamaño del cuadro de manera proporcional
       const autoGridFontSize = Math.max(12, Math.floor((baseGridSize / size) * 0.55));
       const rawFontSizeGrid = (userFontSizeGrid > 0) ? userFontSizeGrid : autoGridFontSize;
       
       const cellSize = Math.max(baseGridSize / size, rawFontSizeGrid * 1.25);
       const gridBoxSize = cellSize * size;
 
-      // Ajuste Dinámico de SVG manteniendo 3:4 aspect ratio
-      // Si la grilla sobrepasa los limites base, escalamos todo el entorno
       let width = baseWidth;
-      if (gridBoxSize > baseGridSize) {
-        width = gridBoxSize + 240; // 120px padding dinámico por lado
-      }
-      
-      const scaleFactor = width / baseWidth; // Factor escalar global
+      if (gridBoxSize > baseGridSize) width = gridBoxSize + 240;
+      const scaleFactor = width / baseWidth;
 
-      // Re-escalar elementos dependientes
       actualFontSizeWords = actualFontSizeWords * scaleFactor;
-      const actualFontSizeGrid = rawFontSizeGrid; // Su escala natural ya adaptó el layout via cellSize
+      const actualFontSizeGrid = rawFontSizeGrid;
 
-      // Cálculos de posiciones y Encabezados
-      let currentY = 40 * scaleFactor;
-      let hasHeaderContent = false;
-      let headerSvg = "";
+      let currentY = 40 * scaleFactor, hasHeaderContent = false, headerSvg = "";
 
       if (estadoGlobal.mostrarTitulo) {
         hasHeaderContent = true;
@@ -767,32 +622,17 @@
       if (estadoGlobal.mostrarNombre || estadoGlobal.mostrarFecha) {
         hasHeaderContent = true;
         currentY += 50 * scaleFactor;
-        const sWidth = 1.5 * scaleFactor;
-        const labelSize = 16 * scaleFactor;
+        const sWidth = 1.5 * scaleFactor, labelSize = 16 * scaleFactor;
         headerSvg += `<g stroke="${tema.gridLine}" stroke-width="${sWidth}">`;
-        
-        const mLeft = 90 * scaleFactor;
-        const mRight = width - (90 * scaleFactor);
-        const split1 = width * 0.45;
-        const split2 = width * 0.55;
+        const mLeft = 90 * scaleFactor, mRight = width - (90 * scaleFactor);
+        const split1 = width * 0.45, split2 = width * 0.55;
 
         if (estadoGlobal.mostrarNombre && estadoGlobal.mostrarFecha) {
-          headerSvg += `
-            <line x1="${mLeft}" y1="${currentY}" x2="${split1}" y2="${currentY}" />
-            <text x="${mLeft}" y="${currentY - (8 * scaleFactor)}" fill="${tema.secondary}" font-size="${labelSize}">Nombre: </text>
-            <line x1="${split2}" y1="${currentY}" x2="${mRight}" y2="${currentY}" />
-            <text x="${split2}" y="${currentY - (8 * scaleFactor)}" fill="${tema.secondary}" font-size="${labelSize}">Fecha: </text>
-          `;
+          headerSvg += `<line x1="${mLeft}" y1="${currentY}" x2="${split1}" y2="${currentY}" /><text x="${mLeft}" y="${currentY - (8 * scaleFactor)}" fill="${tema.secondary}" font-size="${labelSize}">Nombre: </text><line x1="${split2}" y1="${currentY}" x2="${mRight}" y2="${currentY}" /><text x="${split2}" y="${currentY - (8 * scaleFactor)}" fill="${tema.secondary}" font-size="${labelSize}">Fecha: </text>`;
         } else if (estadoGlobal.mostrarNombre) {
-          headerSvg += `
-            <line x1="${mLeft}" y1="${currentY}" x2="${mRight}" y2="${currentY}" />
-            <text x="${mLeft}" y="${currentY - (8 * scaleFactor)}" fill="${tema.secondary}" font-size="${labelSize}">Nombre: </text>
-          `;
+          headerSvg += `<line x1="${mLeft}" y1="${currentY}" x2="${mRight}" y2="${currentY}" /><text x="${mLeft}" y="${currentY - (8 * scaleFactor)}" fill="${tema.secondary}" font-size="${labelSize}">Nombre: </text>`;
         } else if (estadoGlobal.mostrarFecha) {
-          headerSvg += `
-            <line x1="${mLeft}" y1="${currentY}" x2="${split1}" y2="${currentY}" />
-            <text x="${mLeft}" y="${currentY - (8 * scaleFactor)}" fill="${tema.secondary}" font-size="${labelSize}">Fecha: </text>
-          `;
+          headerSvg += `<line x1="${mLeft}" y1="${currentY}" x2="${split1}" y2="${currentY}" /><text x="${mLeft}" y="${currentY - (8 * scaleFactor)}" fill="${tema.secondary}" font-size="${labelSize}">Fecha: </text>`;
         }
         headerSvg += `</g>`;
       }
@@ -800,40 +640,32 @@
       const startY = hasHeaderContent ? currentY + (50 * scaleFactor) : 65 * scaleFactor;
       const startX = (width - gridBoxSize) / 2;
 
-      // Calcular altura dinámica de la sección de palabras para ajustar la altura final del SVG
       const listStartY = startY + gridBoxSize + (50 * scaleFactor);
       const palabras = estadoGlobal.palabrasColocadas.map(p => p.orig);
       const numCols = palabras.length > 18 ? 4 : 3;
       const colWidth = gridBoxSize / numCols;
       const lineHeight = actualFontSizeWords * 1.8; 
-      const listItemsStartY = listStartY + (35 * scaleFactor);
+      // Espacio entre el título "PALABRAS A BUSCAR" y la primera línea de palabras
+      const listItemsStartY = listStartY + (50 * scaleFactor); 
+      
       const rowsCount = Math.ceil(palabras.length / numCols);
       
       let finalY = listItemsStartY + (rowsCount * lineHeight);
-
       let footerSvg = "";
       if (estadoGlobal.mostrarFooter && estadoGlobal.textoFooter.trim() !== "") {
         finalY += (20 * scaleFactor);
         footerSvg = `<text x="${width / 2}" y="${finalY}" text-anchor="middle" fill="${tema.secondary}" font-size="${14 * scaleFactor}">${escapeXml(estadoGlobal.textoFooter)}</text>`;
         finalY += (30 * scaleFactor);
       } else {
-        finalY += (20 * scaleFactor); // Padding extra al final si no hay footer
+        finalY += (20 * scaleFactor); 
       }
 
       const height = Math.round(finalY);
-
       let svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background-color: ${tema.bg}; font-family: 'Inter', system-ui, -apple-system, sans-serif;">`;
 
-      svgContent += `
-        <!-- Fondo General -->
-        <rect width="${width}" height="${height}" fill="${tema.bg}" />
-        ${headerSvg}
-      `;
+      svgContent += `<rect width="${width}" height="${height}" fill="${tema.bg}" />${headerSvg}`;
 
-      // Render Fondo Rejilla
-      svgContent += `<g id="rejilla-fondo">`;
-      svgContent += `<rect x="${startX}" y="${startY}" width="${gridBoxSize}" height="${gridBoxSize}" fill="${tema.cellBg}" stroke="${tema.primary}" stroke-width="${3 * scaleFactor}" rx="${12 * scaleFactor}" />`;
-
+      svgContent += `<g id="rejilla-fondo"><rect x="${startX}" y="${startY}" width="${gridBoxSize}" height="${gridBoxSize}" fill="${tema.cellBg}" stroke="${tema.primary}" stroke-width="${3 * scaleFactor}" rx="${12 * scaleFactor}" />`;
       for (let i = 1; i < size; i++) {
         const pos = i * cellSize;
         svgContent += `<line x1="${startX + pos}" y1="${startY}" x2="${startX + pos}" y2="${startY + gridBoxSize}" stroke="${tema.gridLine}" stroke-width="${1 * scaleFactor}" />`;
@@ -841,7 +673,6 @@
       }
       svgContent += `</g>`;
 
-      // Soluciones
       if (mostrarSol) {
         svgContent += `<g id="capa-soluciones">`;
         estadoGlobal.palabrasColocadas.forEach(p => {
@@ -849,7 +680,6 @@
           const y1 = startY + p.start.r * cellSize + cellSize / 2;
           const x2 = startX + p.end.c * cellSize + cellSize / 2;
           const y2 = startY + p.end.r * cellSize + cellSize / 2;
-
           const capWidth = cellSize * 0.72;
           svgContent += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${tema.highlightStroke}" stroke-width="${capWidth}" stroke-linecap="round" opacity="0.35" />`;
           svgContent += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${tema.highlightStroke}" stroke-width="${2 * scaleFactor}" stroke-linecap="round" opacity="0.8" fill="none" />`;
@@ -857,168 +687,78 @@
         svgContent += `</g>`;
       }
 
-      // Letras de la grilla
       svgContent += `<g id="capa-letras">`;
       for (let r = 0; r < size; r++) {
         for (let c = 0; c < size; c++) {
           const cx = startX + c * cellSize + cellSize / 2;
           const cy = startY + r * cellSize + cellSize / 2 + (actualFontSizeGrid * 0.35);
-
           svgContent += `<text x="${cx}" y="${cy}" text-anchor="middle" fill="${tema.gridText}" font-size="${actualFontSizeGrid}" font-weight="700">${grid[r][c]}</text>`;
         }
       }
       svgContent += `</g>`;
 
-      // Lista de Palabras
-      svgContent += `
-        <g id="seccion-palabras">
-          <text x="${startX}" y="${listStartY}" fill="${tema.primary}" font-size="${Math.max(18 * scaleFactor, actualFontSizeWords + (2 * scaleFactor))}" font-weight="700" font-family="'Montserrat', sans-serif">PALABRAS A BUSCAR (${palabras.length}):</text>
-      `;
+      svgContent += `<g id="seccion-palabras"><text x="${startX}" y="${listStartY}" fill="${tema.primary}" font-size="${Math.max(18 * scaleFactor, actualFontSizeWords + (2 * scaleFactor))}" font-weight="700" font-family="'Montserrat', sans-serif">PALABRAS A BUSCAR (${palabras.length}): </text>`;
 
       const checkboxSize = Math.max(14 * scaleFactor, Math.min(20 * scaleFactor, actualFontSizeWords * 0.8));
-
       palabras.forEach((pal, idx) => {
-        const col = idx % numCols;
-        const row = Math.floor(idx / numCols);
-        const itemX = startX + col * colWidth;
-        const itemY = listItemsStartY + row * lineHeight;
-
-        svgContent += `
-          <rect x="${itemX}" y="${itemY - checkboxSize + (3 * scaleFactor)}" width="${checkboxSize}" height="${checkboxSize}" fill="none" stroke="${tema.secondary}" stroke-width="${1.5 * scaleFactor}" rx="${2 * scaleFactor}" />
-          <text x="${itemX + checkboxSize + (10 * scaleFactor)}" y="${itemY}" fill="${tema.gridText}" font-size="${actualFontSizeWords}" font-weight="500">${escapeXml(pal)}</text>
-        `;
+        const col = idx % numCols, row = Math.floor(idx / numCols);
+        const itemX = startX + col * colWidth, itemY = listItemsStartY + row * lineHeight;
+        svgContent += `<rect x="${itemX}" y="${itemY - checkboxSize + (3 * scaleFactor)}" width="${checkboxSize}" height="${checkboxSize}" fill="none" stroke="${tema.secondary}" stroke-width="${1.5 * scaleFactor}" rx="${2 * scaleFactor}" /><text x="${itemX + checkboxSize + (10 * scaleFactor)}" y="${itemY}" fill="${tema.gridText}" font-size="${actualFontSizeWords}" font-weight="500">${escapeXml(pal)}</text>`;
       });
-      svgContent += `</g>`;
-
-      // Footer
-      svgContent += footerSvg;
-      svgContent += `</svg>`;
+      svgContent += `</g>${footerSvg}</svg>`;
 
       return { svgContent, width, height };
     }
 
-    // Renderizar en el DOM
     function renderizarSVG() {
       const container = document.getElementById('svgContainer');
-      const result = generarStringSVG();
-      container.innerHTML = result.svgContent;
+      container.innerHTML = generarStringSVG().svgContent;
     }
 
-    // Función auxiliar para sanitizar texto XML/SVG
     function escapeXml(unsafe) {
-      return unsafe.replace(/[<>&'"]/g, function (c) {
-        switch (c) {
-          case '<': return '&lt;';
-          case '>': return '&gt;';
-          case '&': return '&amp;';
-          case '\'': return '&apos;';
-          case '"': return '&quot;';
-        }
-      });
+      return unsafe.replace(/[<>&'"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '\'': '&apos;', '"': '&quot;' }[c]));
     }
 
-    // Generar nombre de archivo limpio
     function obtenerNombreArchivo(sufijo) {
-      const tituloLimpio = estadoGlobal.titulo.toLowerCase()
-        .replace(/[^a-z0-9]/g, '_')
-        .replace(/_+/g, '_');
-      return `${tituloLimpio}_${sufijo}`;
+      return `${estadoGlobal.titulo.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_')}_${sufijo}`;
     }
 
-    // --- EXPORTACIÓN SVG ---
     function exportarSVG(esSolucion = false) {
       const result = generarStringSVG(esSolucion);
       const blob = new Blob([result.svgContent], { type: 'image/svg+xml;charset=utf-8' });
       const url = URL.createObjectURL(blob);
-      
       const link = document.createElement('a');
       link.href = url;
       link.download = `${obtenerNombreArchivo(esSolucion ? 'solucion' : 'sopa')}.svg`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      document.body.appendChild(link); link.click(); document.body.removeChild(link);
       URL.revokeObjectURL(url);
     }
 
-    // --- EXPORTACIÓN PNG A 300 DPI (ALTA RESOLUCIÓN) ---
     function exportarPNG(esSolucion = false) {
       const result = generarStringSVG(esSolucion);
-      const svgCode = result.svgContent;
-      
-      const svgWidth = result.width;
-      const svgHeight = result.height;
-
-      const blob = new Blob([svgCode], { type: 'image/svg+xml;charset=utf-8' });
+      const blob = new Blob([result.svgContent], { type: 'image/svg+xml;charset=utf-8' });
       const url = URL.createObjectURL(blob);
-
       const img = new Image();
       img.onload = () => {
-        // Escalar 300 DPI garantizando al menos 2700px (9 pulgadas en 300dpi)
-        const scaleFactorPNG = Math.max(2.25, 2700 / svgWidth); 
-        const targetWidth = Math.round(svgWidth * scaleFactorPNG);
-        const targetHeight = Math.round(svgHeight * scaleFactorPNG);
+        const scaleFactorPNG = Math.max(2.25, 2700 / result.width); 
+        const targetWidth = Math.round(result.width * scaleFactorPNG);
+        const targetHeight = Math.round(result.height * scaleFactorPNG);
 
-        // Crear Canvas Offscreen (En memoria)
         const canvas = document.createElement('canvas');
-        canvas.width = targetWidth;
-        canvas.height = targetHeight;
+        canvas.width = targetWidth; canvas.height = targetHeight;
         const ctx = canvas.getContext('2d');
-
-        // Habilitar suavizado máximo de imagen
-        ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = 'high';
-
-        // Fondo Blanco Imprimible
-        ctx.fillStyle = '#FFFFFF';
-        ctx.fillRect(0, 0, targetWidth, targetHeight);
-
-        // Renderizar la imagen SVG escalada en Canvas
+        ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+        ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, targetWidth, targetHeight);
         ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
 
-        // Convertir Canvas a PNG de alta calidad
-        const pngUrl = canvas.toDataURL('image/png', 1.0);
-
-        // Disparar descarga
         const link = document.createElement('a');
-        link.href = pngUrl;
+        link.href = canvas.toDataURL('image/png', 1.0);
         link.download = `${obtenerNombreArchivo(esSolucion ? 'solucion_300dpi' : 'sopa_300dpi')}.png`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-        // Limpiar memoria
+        document.body.appendChild(link); link.click(); document.body.removeChild(link);
         URL.revokeObjectURL(url);
       };
-
       img.src = url;
     }
   </script>
-  <script>
-    // Bloquear clic derecho (Anticlic)
-    document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-    });
-
-    // Bloquear atajos de teclado de desarrollador
-    document.addEventListener('keydown', function(e) {
-        // Bloquear F12
-        if (e.key === 'F12' || e.keyCode === 123) {
-            e.preventDefault();
-            return false;
-        }
-        
-        // Bloquear Ctrl+Shift+I (Inspeccionar), Ctrl+Shift+J (Consola), Ctrl+Shift+C (Seleccionar elemento)
-        if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
-            e.preventDefault();
-            return false;
-        }
-        
-        // Bloquear Ctrl+U (Ver código fuente) y Ctrl+S (Guardar página)
-        if (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's')) {
-            e.preventDefault();
-            return false;
-        }
-    });
-</script>
 </body>
 </html>
