@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Anagramas por Frases Pro</title>
+    <style>
+        :root {
+            /* Windows 11 Dark Theme Colors */
+            --bg-base: #202020;
+            --bg-card: #2d2d2d;
+            --bg-input: #191919;
+            --bg-overlay: rgba(32, 32, 32, 0.95);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-focus: #60cdff;
+            --text-main: #ffffff;
+            --text-muted: #aaaaaa;
+            --accent: #60cdff;
+            --accent-hover: #50b6e6;
+            --danger: #ff99a4;
+            --danger-hover: #ff808f;
+            --success: #6ccb5f;
+            --radius-md: 8px;
+            --radius-sm: 4px;
+            --font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            --shadow-flyout: 0 8px 16px rgba(0,0,0,0.4);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: var(--font-family);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Header */
+        header {
+            padding: 12px 20px;
+            background-color: var(--bg-base);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            z-index: 150;
+        }
+
+        .header-title { display: flex; align-items: center; gap: 12px; }
+        header h1 { font-size: 16px; font-weight: 600; }
+
+        /* Mobile Menu Toggle */
+        .mobile-toggle {
+            display: none;
+            background: none; border: none; color: var(--text-main);
+            cursor: pointer; padding: 4px;
+        }
+
+        /* Main Layout */
+        .container {
+            display: flex; flex: 1; overflow: hidden; position: relative;
+        }
+
+        /* Sidebar & Tabs Layout */
+        .sidebar {
+            width: 380px;
+            background-color: var(--bg-card);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+
+        /* Tabs Header (Scrollable horizontally) */
+        .tabs-header {
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: none; /* Firefox */
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--bg-base);
+        }
+        .tabs-header::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+        .tab-btn {
+            flex-shrink: 0;
+            background: none; border: none;
+            color: var(--text-muted);
+            padding: 14px 16px;
+            font-size: 13px; font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover { color: var(--text-main); background: rgba(255,255,255,0.03); }
+        .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+        .tab-content {
+            padding: 20px;
+            display: none;
+            flex-direction: column;
+            gap: 18px;
+            overflow-y: auto;
+            flex: 1;
+        }
+        .tab-content.active { display: flex; }
+
+        /* Controls */
+        .control-group { display: flex; flex-direction: column; gap: 8px; }
+        .control-header { display: flex; justify-content: space-between; align-items: center; }
+        label { font-size: 13px; font-weight: 500; color: var(--text-main); }
+        .val-badge { font-size: 12px; color: var(--accent); background: rgba(96, 205, 255, 0.1); padding: 2px 6px; border-radius: 10px; }
+
+        input[type="text"], textarea, select {
+            width: 100%; background-color: var(--bg-input); border: 1px solid var(--border-color);
+            color: var(--text-main); border-radius: var(--radius-sm); padding: 10px 12px;
+            font-family: var(--font-family); font-size: 14px; transition: all 0.2s ease;
+        }
+        input[type="text"]:focus, textarea:focus, select:focus {
+            outline: none; border-color: var(--border-focus); border-bottom: 2px solid var(--border-focus); padding-bottom: 9px;
+        }
+        textarea { min-height: 70px; resize: vertical; }
+
+        /* Phrase Items */
+        .phrase-item { display: flex; gap: 8px; align-items: stretch; margin-bottom: 4px;}
+        .phrase-item textarea { flex: 1; }
+        .btn-remove {
+            background: rgba(255, 153, 164, 0.1); border: 1px solid rgba(255, 153, 164, 0.2);
+            color: var(--danger); border-radius: var(--radius-sm); cursor: pointer;
+            width: 36px; display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+        }
+        .btn-remove:hover { background: var(--danger); color: #000; border-color: var(--danger); }
+
+        /* Range Sliders */
+        input[type="range"] { -webkit-appearance: none; width: 100%; background: transparent; margin: 8px 0; }
+        input[type="range"]:focus { outline: none; }
+        input[type="range"]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: var(--border-color); border-radius: 2px; }
+        input[type="range"]::-webkit-slider-thumb { height: 16px; width: 16px; border-radius: 50%; background: var(--accent); cursor: pointer; -webkit-appearance: none; margin-top: -6px; transition: transform 0.1s; }
+        input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+        .row-inputs { display: flex; gap: 8px; }
+        .row-inputs > div { flex: 1; }
+
+        /* Toggles */
+        .toggles-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+            background: rgba(0,0,0,0.2); padding: 12px;
+            border-radius: var(--radius-sm); border: 1px solid var(--border-color);
+        }
+        .toggle-item { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
+        .toggle-item input[type="checkbox"] { cursor: pointer; accent-color: var(--accent); width: 15px; height: 15px; }
+        
+        .switch-container {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(108, 203, 95, 0.1); border: 1px solid rgba(108, 203, 95, 0.2);
+            padding: 12px; border-radius: var(--radius-sm);
+        }
+        .switch-container label { color: var(--success); cursor: pointer; font-weight: 600; font-size: 13px;}
+        .switch-container input[type="checkbox"] { accent-color: var(--success); width: 16px; height: 16px; cursor: pointer;}
+
+        /* Buttons */
+        .btn {
+            background-color: rgba(255, 255, 255, 0.06); border: 1px solid var(--border-color); color: var(--text-main);
+            padding: 10px 16px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: all 0.15s ease; user-select: none; width: 100%;
+        }
+        .btn:hover { background-color: rgba(255, 255, 255, 0.1); }
+        .btn-sm { padding: 6px 10px; font-size: 12px; width: auto; }
+        .btn-primary { background-color: var(--accent); color: #000; border: none; font-weight: 600; }
+        .btn-primary:hover { background-color: var(--accent-hover); }
+
+        svg.icon { width: 18px; height: 18px; fill: currentColor; }
+
+        /* Preview Area */
+        .preview-area {
+            flex: 1; background-color: #151515; padding: 24px;
+            display: flex; justify-content: center; align-items: flex-start;
+            overflow-y: auto; width: 100%; height: 100%;
+        }
+
+        .canvas-wrapper {
+            background-color: white; box-shadow: var(--shadow-flyout);
+            border-radius: 4px; width: 100%; max-width: 800px;
+            position: relative; display: flex; flex-direction: column;
+            transition: aspect-ratio 0.3s ease;
+        }
+        /* SVG forces the scale to match aspect ratio perfectly */
+        #svgPreview { width: 100%; height: auto; display: block; border-radius: 4px; }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .mobile-toggle { display: block; }
+            .sidebar {
+                position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+                max-height: 70vh; /* Ocupa el 70% de la pantalla */
+                background-color: var(--bg-overlay); backdrop-filter: blur(12px);
+                border-right: none; border-bottom: 1px solid var(--border-color);
+                box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+                transform: translateY(-100%); /* Colapsado por defecto */
+            }
+            .sidebar.open { transform: translateY(0); }
+            .preview-area { padding: 12px; }
+        }
+
+        /* Modal Base */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+            display: none; align-items: center; justify-content: center;
+            z-index: 1000; opacity: 0; transition: opacity 0.2s ease;
+        }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-content {
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: var(--radius-md); padding: 24px; width: 90%; max-width: 420px;
+            box-shadow: var(--shadow-flyout); display: flex; flex-direction: column; gap: 16px;
+            transform: scale(0.95); transition: transform 0.2s ease;
+        }
+        .modal-overlay.active .modal-content { transform: scale(1); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; }
+        .modal-header h3 { font-size: 16px; font-weight: 600; }
+        .close-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; }
+        .close-btn:hover { color: var(--danger); }
+        .download-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title">
+            <svg class="icon" viewBox="0 0 24 24" style="color: var(--accent); width: 22px; height: 22px;">
+                <path d="M12 2L2 22h20L12 2zm0 3.8l7.1 14.2H4.9L12 5.8z"/>
+            </svg>
+            <h1>Generador de Anagramas por Frases</h1>
+        </div>
+        <button class="mobile-toggle" onclick="toggleMobileMenu()">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+        </button>
+    </header>
+
+    <div class="container">
+        <!-- Sidebar superpuesta en móviles -->
+        <div class="sidebar" id="sidebar">
+            
+            <!-- Tabs Header Deslizables -->
+            <div class="tabs-header">
+                <button class="tab-btn active" onclick="switchTab('tab-content', this)">Contenido y Frases</button>
+                <button class="tab-btn" onclick="switchTab('tab-config', this)">Cabecera y Diseño</button>
+                <button class="tab-btn" onclick="switchTab('tab-export', this)">Exportación</button>
+            </div>
+
+            <!-- TAB 1: Contenido y Frases -->
+            <div id="tab-content" class="tab-content active">
+                
+                <div class="control-group">
+                    <div class="control-header">
+                        <label>Lista de Frases</label>
+                        <button class="btn btn-sm" onclick="addPhraseItem()">+ Nueva Frase</button>
+                    </div>
+                    <div id="phrasesListContainer">
+                        <!-- Las frases se inyectan aquí -->
+                    </div>
+                    <p style="font-size: 11px; color: var(--text-muted);">* Presiona Enter dentro de una caja para agregar saltos de línea a la misma frase.</p>
+                </div>
+
+                <button class="btn" style="border-color: var(--accent); color: var(--accent)" onclick="forceNewScramble()">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                    Forzar Nuevo Orden Aleatorio
+                </button>
+
+                <hr style="border:0; border-top:1px solid var(--border-color); margin: 4px 0;">
+
+                <!-- Controles de Diseño (Movidos aquí) -->
+                <div class="control-group">
+                    <div class="control-header">
+                        <label for="fontSize">Tamaño de Letras</label>
+                        <span class="val-badge" id="fontSizeVal">24px</span>
+                    </div>
+                    <input type="range" id="fontSize" min="10" max="100" value="24" oninput="updateSliders(); renderPuzzle()">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-header">
+                        <label for="lineSpacing">Interlineado entre frases</label>
+                        <span class="val-badge" id="lineSpacingVal">60px</span>
+                    </div>
+                    <input type="range" id="lineSpacing" min="10" max="200" value="60" oninput="updateSliders(); renderPuzzle()">
+                </div>
+
+                <div class="switch-container" style="margin-top: 5px;">
+                    <label for="chkSolution">Mostrar Respuestas en Preview</label>
+                    <input type="checkbox" id="chkSolution" onchange="renderPuzzle()">
+                </div>
+            </div>
+
+            <!-- TAB 2: Configuración (Cabecera) -->
+            <div id="tab-config" class="tab-content">
+                
+                <div class="control-group">
+                    <label for="docTitle">Título principal</label>
+                    <input type="text" id="docTitle" value="Descifra el Mensaje Oculto" oninput="renderPuzzle()">
+                </div>
+
+                <div class="control-group">
+                    <label for="docSubtitle">Subtítulo / Instrucciones</label>
+                    <input type="text" id="docSubtitle" value="Ordena las letras debajo de cada línea para revelar la frase." oninput="renderPuzzle()">
+                </div>
+
+                <div class="control-group">
+                    <label>Elementos visibles de Cabecera</label>
+                    <div class="toggles-grid">
+                        <label class="toggle-item"><input type="checkbox" id="chkTitle" checked onchange="renderPuzzle()"> Título</label>
+                        <label class="toggle-item"><input type="checkbox" id="chkSubtitle" checked onchange="renderPuzzle()"> Subtítulo</label>
+                        <label class="toggle-item"><input type="checkbox" id="chkName" checked onchange="renderPuzzle()"> Nombre</label>
+                        <label class="toggle-item"><input type="checkbox" id="chkDate" checked onchange="renderPuzzle()"> Fecha</label>
+                        <label class="toggle-item"><input type="checkbox" id="chkClass" checked onchange="renderPuzzle()"> Aula</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: Exportación -->
+            <div id="tab-export" class="tab-content">
+                <div class="control-group">
+                    <label for="dimensionSelect">Dimensión del Documento (Lienzo)</label>
+                    <select id="dimensionSelect" onchange="updateDimensions()">
+                        <option value="a4">A4 vertical (794 x 1123)</option>
+                        <option value="3:4" selected>3:4 Estándar (794 x 1059)</option>
+                        <option value="1:1">1:1 Cuadrado (1000 x 1000)</option>
+                        <option value="4:3">4:3 Horizontal (1024 x 768)</option>
+                        <option value="16:9">16:9 Pantalla (1280 x 720)</option>
+                        <option value="custom">Personalizado</option>
+                    </select>
+                </div>
+
+                <div class="row-inputs" id="customDimBox" style="display: none;">
+                    <div class="control-group">
+                        <label for="customWidth">Ancho (px)</label>
+                        <input type="text" id="customWidth" value="800" oninput="renderPuzzle()">
+                    </div>
+                    <div class="control-group">
+                        <label for="customHeight">Alto (px)</label>
+                        <input type="text" id="customHeight" value="1000" oninput="renderPuzzle()">
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="openModal()" style="margin-top: 15px;">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                    Opciones de Descarga
+                </button>
+            </div>
+        </div>
+
+        <!-- Preview Area -->
+        <div class="preview-area" id="previewArea" onclick="closeMobileMenuIfOpen()">
+            <div class="canvas-wrapper" id="canvasWrapper">
+                <!-- SVG Preview -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Descargas -->
+    <div class="modal-overlay" id="downloadModal" onclick="closeModalOutside(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Exportar Documento (Alta Calidad)</h3>
+                <button class="close-btn" onclick="closeModal()">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                </button>
+            </div>
+            
+            <p style="font-size: 13px; color: var(--text-muted);">El orden aleatorio es idéntico en ambos formatos. La plantilla del estudiante siempre se descargará sin resolver.</p>
+
+            <div class="download-grid">
+                <!-- isSolutionExport = false -->
+                <button class="btn btn-primary" onclick="exportDocument('svg', false)">Plantilla Estudiante (SVG)</button>
+                <button class="btn btn-primary" onclick="exportDocument('png', false)">Plantilla Estudiante (PNG)</button>
+                
+                <div style="height: 1px; background: var(--border-color); margin: 6px 0;"></div>
+
+                <!-- isSolutionExport = true -->
+                <button class="btn" style="color: var(--success); border-color: rgba(108, 203, 95, 0.4);" onclick="exportDocument('svg', true)">Hoja de Respuestas (SVG)</button>
+                <button class="btn" style="color: var(--success); border-color: rgba(108, 203, 95, 0.4);" onclick="exportDocument('png', true)">Hoja de Respuestas (PNG)</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables Base
+        let svgWidth = 794;
+        let svgHeight = 1059;
+        
+        // ESTADO GLOBAL: Almacena el orden aleatorio estructurado por frases y líneas
+        let storedPuzzleData = [];
+
+        // UI Tabs & Mobile
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        function closeMobileMenuIfOpen() {
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('open');
+            }
+        }
+
+        function updateSliders() {
+            document.getElementById('fontSizeVal').innerText = document.getElementById('fontSize').value + 'px';
+            document.getElementById('lineSpacingVal').innerText = document.getElementById('lineSpacing').value + 'px';
+        }
+
+        // Gestión de Textareas (Frases Independientes)
+        function addPhraseItem(initialText = '') {
+            const container = document.getElementById('phrasesListContainer');
+            const div = document.createElement('div');
+            div.className = 'phrase-item';
+            div.innerHTML = `
+                <textarea class="phrase-input" oninput="updatePuzzleData()" placeholder="Escribe aquí tu frase...">${initialText}</textarea>
+                <button class="btn-remove" onclick="removePhraseItem(this)" title="Eliminar frase">
+                    <svg class="icon" viewBox="0 0 24 24" style="width: 16px; height: 16px;"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                </button>
+            `;
+            container.appendChild(div);
+            if (initialText === '') updatePuzzleData();
+        }
+
+        function removePhraseItem(btn) {
+            btn.parentElement.remove();
+            updatePuzzleData();
+        }
+
+        function initInitialPhrases() {
+            addPhraseItem("LA CURIOSIDAD VENCE\nA LA IGNORANCIA");
+            addPhraseItem("EL CONOCIMIENTO ES\nPODER INFINITO");
+        }
+
+        // Modal Logic
+        function openModal() { document.getElementById('downloadModal').classList.add('active'); }
+        function closeModal() { document.getElementById('downloadModal').classList.remove('active'); }
+        function closeModalOutside(e) { if (e.target.id === 'downloadModal') closeModal(); }
+
+        // Dimensión del lienzo
+        function updateDimensions() {
+            const val = document.getElementById('dimensionSelect').value;
+            const customBox = document.getElementById('customDimBox');
+            
+            if (val === 'a4') { svgWidth = 794; svgHeight = 1123; customBox.style.display = 'none'; }
+            else if (val === '3:4') { svgWidth = 794; svgHeight = 1059; customBox.style.display = 'none'; }
+            else if (val === '1:1') { svgWidth = 1000; svgHeight = 1000; customBox.style.display = 'none'; }
+            else if (val === '4:3') { svgWidth = 1024; svgHeight = 768; customBox.style.display = 'none'; }
+            else if (val === '16:9') { svgWidth = 1280; svgHeight = 720; customBox.style.display = 'none'; }
+            else if (val === 'custom') {
+                customBox.style.display = 'flex';
+                svgWidth = parseInt(document.getElementById('customWidth').value) || 800;
+                svgHeight = parseInt(document.getElementById('customHeight').value) || 1000;
+            }
+            // Forzar proporción perfecta visualmente
+            document.getElementById('canvasWrapper').style.aspectRatio = `${svgWidth} / ${svgHeight}`;
+            renderPuzzle();
+        }
+
+        // Lógica Aleatoria y Memoria (Persistencia)
+        function scrambleWord(word) {
+            word = word.trim().toUpperCase();
+            if (word.length <= 1) return word;
+            
+            let arr = word.split('');
+            let original = word;
+            let attempts = 0;
+            do {
+                for (let i = arr.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [arr[i], arr[j]] = [arr[j], arr[i]];
+                }
+                attempts++;
+            } while (arr.join('') === original && attempts < 15);
+            return arr.join('');
+        }
+
+        function updatePuzzleData(forceNew = false) {
+            const textareas = document.querySelectorAll('.phrase-input');
+            
+            const newData = Array.from(textareas).map((input, phraseIndex) => {
+                // Separamos por saltos de línea DENTRO del mismo textarea
+                const explicitLines = input.value.split('\n');
+                
+                return explicitLines.map((lineContent, lineIndex) => {
+                    const words = lineContent.trim().split(/\s+/).filter(w => w.length > 0);
+                    
+                    return words.map((word, wordIndex) => {
+                        const upperWord = word.toUpperCase();
+                        
+                        // Verificamos si en la memoria existe esta frase, esta línea y esta palabra exacta
+                        const existingPhrase = storedPuzzleData[phraseIndex];
+                        if (!forceNew && existingPhrase && existingPhrase[lineIndex] && existingPhrase[lineIndex][wordIndex]) {
+                            const cached = existingPhrase[lineIndex][wordIndex];
+                            if (cached.original === upperWord) {
+                                return cached; // Retorna la versión ya desordenada (memoria)
+                            }
+                        }
+                        // Si no existe o cambió, genera un nuevo desorden
+                        return { original: upperWord, scrambled: scrambleWord(upperWord) };
+                    });
+                });
+            });
+            
+            storedPuzzleData = newData;
+            renderPuzzle();
+        }
+
+        function forceNewScramble() {
+            updatePuzzleData(true);
+        }
+
+        // Renderizado del SVG
+        // isExport indica si es una descarga, forceSolution fuerza la visibilidad de respuestas en la descarga
+        function buildSVGString(isExport = false, forceSolution = false) {
+            if (document.getElementById('dimensionSelect').value === 'custom') {
+                svgWidth = parseInt(document.getElementById('customWidth').value) || 800;
+                svgHeight = parseInt(document.getElementById('customHeight').value) || 1000;
+            }
+
+            const title = document.getElementById('docTitle').value.trim();
+            const subtitle = document.getElementById('docSubtitle').value.trim();
+            
+            const fontSize = parseInt(document.getElementById('fontSize').value);
+            const lineSpacing = parseInt(document.getElementById('lineSpacing').value);
+            
+            const showTitle = document.getElementById('chkTitle').checked;
+            const showSubtitle = document.getElementById('chkSubtitle').checked;
+            const showName = document.getElementById('chkName').checked;
+            const showDate = document.getElementById('chkDate').checked;
+            const showClass = document.getElementById('chkClass').checked;
+            
+            // Lógica corregida para la visibilidad de soluciones
+            let showSolution;
+            if (isExport) {
+                // Si es una exportación, obedece estrictamente al botón presionado (Plantilla = false, Hoja = true)
+                showSolution = forceSolution;
+            } else {
+                // Si es solo para ver en pantalla, obedece al checkbox
+                showSolution = document.getElementById('chkSolution').checked;
+            }
+
+            let svg = `<svg id="svgPreview" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${svgWidth} ${svgHeight}" width="${svgWidth}" height="${svgHeight}" style="background-color: white; width: 100%; height: auto;">
+                <defs>
+                    <style>
+                        .title { font-family: sans-serif; font-size: 26px; font-weight: bold; fill: #000; text-anchor: middle; }
+                        .subtitle { font-family: sans-serif; font-size: 14px; fill: #555; text-anchor: middle; }
+                        .header-text { font-family: sans-serif; font-size: 13px; fill: #000; }
+                        .phrase-label { font-family: sans-serif; font-size: ${Math.max(16, fontSize)}px; font-weight: bold; fill: #222; }
+                        .scrambled-char { font-family: monospace; font-size: ${fontSize}px; font-weight: bold; fill: #111; text-anchor: middle; }
+                        .solution-char { font-family: sans-serif; font-size: ${fontSize * 0.85}px; font-weight: bold; fill: #d32f2f; text-anchor: middle; }
+                        .line { stroke: #000; stroke-width: 1.5; }
+                    </style>
+                </defs>`;
+
+            let currentY = 45;
+
+            // Cabeceras Textuales
+            if (showTitle && title) {
+                svg += `<text x="${svgWidth / 2}" y="${currentY}" class="title">${title}${showSolution ? " (RESPUESTAS)" : ""}</text>`;
+                currentY += 22;
+            }
+            if (showSubtitle && subtitle) {
+                svg += `<text x="${svgWidth / 2}" y="${currentY}" class="subtitle">${subtitle}</text>`;
+                currentY += 25;
+            } else if (!showTitle && !showSubtitle) {
+                currentY = 30;
+            }
+
+            // Datos del alumno
+            if (showName || showDate || showClass) {
+                let infoX = 50;
+                if (showName) {
+                    svg += `<text x="${infoX}" y="${currentY}" class="header-text">Nombre: _________________________</text>`;
+                    infoX += 260;
+                }
+                if (showDate) {
+                    svg += `<text x="${infoX}" y="${currentY}" class="header-text">Fecha: ____________</text>`;
+                    infoX += 180;
+                }
+                if (showClass) {
+                    svg += `<text x="${infoX}" y="${currentY}" class="header-text">Aula: ________</text>`;
+                }
+                currentY += 15;
+                svg += `<line x1="50" y1="${currentY}" x2="${svgWidth - 50}" y2="${currentY}" class="line" style="stroke-width:1"/>`;
+                currentY += 40;
+            } else {
+                currentY += 20;
+            }
+
+            const charWidth = fontSize * 1.4;
+            const lineLength = charWidth * 0.8;
+
+            // Iterar sobre las frases (textareas)
+            storedPuzzleData.forEach((phraseLines, phraseIndex) => {
+                
+                // Si la frase está totalmente vacía, la ignoramos visualmente
+                if (phraseLines.length === 0 || phraseLines.every(l => l.length === 0)) return;
+
+                currentY += fontSize; 
+                svg += `<text x="40" y="${currentY}" class="phrase-label">${phraseIndex + 1}.</text>`;
+
+                let cursorX = 80;
+
+                // Iterar sobre los saltos de línea dentro del textarea
+                phraseLines.forEach((lineWords, lineIndex) => {
+                    
+                    // Si el usuario dio un Enter, bajamos de línea forzosamente a menos que sea la primera
+                    if (lineIndex > 0 && lineWords.length > 0) {
+                        cursorX = 80;
+                        currentY += fontSize + lineSpacing;
+                    }
+
+                    lineWords.forEach(wordData => {
+                        const originalStr = wordData.original;
+                        const scrambledStr = wordData.scrambled;
+                        const wordWidth = originalStr.length * charWidth;
+
+                        // Si la palabra excede el ancho horizontal del lienzo, saltamos
+                        if (cursorX + wordWidth > svgWidth - 40) {
+                            cursorX = 80;
+                            currentY += fontSize + lineSpacing;
+                        }
+
+                        // Renderizado de las casillas
+                        for (let i = 0; i < originalStr.length; i++) {
+                            const char = scrambledStr[i];
+                            const correctChar = originalStr[i];
+                            const cx = cursorX + (i * charWidth) + (charWidth / 2);
+                            
+                            // Raya inferior
+                            svg += `<line x1="${cx - lineLength/2}" y1="${currentY}" x2="${cx + lineLength/2}" y2="${currentY}" class="line" />`;
+                            
+                            // Letra codificada
+                            svg += `<text x="${cx}" y="${currentY + fontSize + 4}" class="scrambled-char">${char}</text>`;
+                            
+                            // Solución
+                            if (showSolution) {
+                                svg += `<text x="${cx}" y="${currentY - 4}" class="solution-char">${correctChar}</text>`;
+                            }
+                        }
+                        cursorX += wordWidth + (charWidth * 0.8);
+                    });
+                });
+                // Al final de una frase completa (textarea), agregamos espaciado final
+                currentY += fontSize + lineSpacing;
+            });
+
+            svg += `</svg>`;
+            return svg;
+        }
+
+        function renderPuzzle() {
+            // Se llama con isExport = false
+            const svgContent = buildSVGString(false, false);
+            document.getElementById('canvasWrapper').innerHTML = svgContent;
+        }
+
+        // Descargas
+        function triggerDownload(content, filename, type) {
+            const blob = new Blob([content], { type: type });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function exportDocument(format, isSolutionExport) {
+            // Se llama con isExport = true, y forceSolution dependiendo de qué botón se presionó
+            const svgData = buildSVGString(true, isSolutionExport);
+            const nameSuffix = isSolutionExport ? "_respuestas" : "_plantilla";
+
+            if (format === 'svg') {
+                triggerDownload(svgData, `anagrama${nameSuffix}.svg`, 'image/svg+xml');
+            } else if (format === 'png') {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const scale = 3.125; // Exportación 300 DPI
+                canvas.width = svgWidth * scale;
+                canvas.height = svgHeight * scale;
+
+                ctx.fillStyle = "#ffffff";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                const img = new Image();
+                const svgBlob = new Blob([svgData], {type: 'image/svg+xml;charset=utf-8'});
+                const url = URL.createObjectURL(svgBlob);
+
+                img.onload = function () {
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    URL.revokeObjectURL(url);
+                    canvas.toBlob((blob) => {
+                        const pngUrl = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = pngUrl;
+                        a.download = `anagrama${nameSuffix}_300dpi.png`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(pngUrl);
+                    }, 'image/png', 1.0);
+                };
+                img.src = url;
+            }
+            closeModal();
+        }
+
+        // Inicialización
+        window.onload = function() {
+            updateSliders();
+            initInitialPhrases();
+            document.getElementById('canvasWrapper').style.aspectRatio = `${svgWidth} / ${svgHeight}`;
+        };
+    </script>
+</body>
+</html>
