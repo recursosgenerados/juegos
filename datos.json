@@ -36,6 +36,12 @@
         "url": "/juegos/src/pintar.html"
     },
     {
+        "titulo": "ANAGRAMAS",
+        "descripcion": "Crea Anagramas una Palabras con letras Desordenadas",
+        "imagen": "https://i.postimg.cc/7LR62dYr/anagrama-portada.png",
+        "url": "/juegos/src/anagrama.html"
+    },
+    {
         "titulo": "ANAGRAMAS POR FRASES",
         "descripcion": "Genera anagramas pero con estilo de Frases",
         "imagen": "https://i.postimg.cc/D0v8HdXz/anagrama-por-frase.png",
