@@ -90,183 +90,178 @@
   <!-- Contenedor Principal -->
   <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-    <!-- PANEL DE CONFIGURACIÓN CON PESTAÑAS (COLUMNA IZQUIERDA) -->
+    <!-- PANEL DE CONFIGURACIÓN CON PESTAÑAS COLAPSABLES (COLUMNA IZQUIERDA) -->
     <section class="lg:col-span-5 xl:col-span-4 flex flex-col space-y-4">
       
-      <!-- Navegación por Pestañas Horizontales -->
-      <div class="flex bg-slate-800 p-1.5 rounded-xl border border-slate-700 shadow-md">
-        <button onclick="cambiarPestana(1)" id="tabBtn1" class="flex-1 py-2 text-xs font-semibold rounded-lg transition text-center bg-cyan-600 text-white shadow">
-          1. Estética y Datos
+      <!-- Navegación por Pestañas Colapsables -->
+      <div class="flex flex-col gap-2">
+        
+        <!-- Botón Pestaña 1 -->
+        <button onclick="togglePestana(1)" id="tabBtn1" class="w-full py-2.5 px-4 text-xs font-semibold rounded-xl transition flex items-center justify-between bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700/60 shadow-md">
+          <span class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+            1. Estética y Datos
+          </span>
+          <svg id="tabArrow1" class="w-4 h-4 transition-transform duration-200 transform rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </button>
-        <button onclick="cambiarPestana(2)" id="tabBtn2" class="flex-1 py-2 text-xs font-semibold rounded-lg transition text-center text-slate-400 hover:text-white">
-          2. Fuentes y Palabras
-        </button>
-        <button onclick="abrirModalDescarga()" class="flex-1 py-2 text-xs font-semibold rounded-lg transition text-center text-emerald-400 hover:text-emerald-300 flex items-center justify-center gap-1">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-          3. Descargar
-        </button>
-      </div>
 
-      <!-- PESTAÑA 1: Desde Título de la Sopa hasta Visibilidad de Encabezado -->
-      <div id="pestana1" class="space-y-4">
-        <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-xl space-y-4">
-          <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2 border-b border-slate-700 pb-3">
-            <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
-            </svg>
-            Ajustes Principales
-          </h2>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Título de la Sopa</label>
-            <input type="text" id="inputTitulo" value="Sopa de Letras: Frutas del Campo" 
-              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition" 
-              placeholder="Ej: Sopa de Letras - Botánica">
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Subtítulo o Indicación</label>
-            <input type="text" id="inputSubtitulo" value="Encuentra las palabras escondidas en la rejilla" 
-              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition">
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Texto Pie de Página</label>
-            <input type="text" id="inputFooter" value="Generado con SopaDeLetras 300 DPI Pro" oninput="actualizarOpcionesYRenderizar()"
-              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition">
-          </div>
-
-          <div class="grid grid-cols-2 gap-3">
+        <!-- PESTAÑA 1 (Colapsada por defecto) -->
+        <div id="pestana1" class="space-y-4 hidden">
+          <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-xl space-y-4">
             <div>
-              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Tamaño Rejilla</label>
-              <select id="selectTamano" onchange="generarNuevaSopa()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                <option value="10">10 x 10 (Fácil)</option>
-                <option value="12">12 x 12 (Medio)</option>
-                <option value="15" selected>15 x 15 (Estándar)</option>
-                <option value="18">18 x 18 (Desafío)</option>
-                <option value="20">20 x 20 (Experto)</option>
-                <option value="25">25 x 25 (Gigante)</option>
-              </select>
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Título de la Sopa</label>
+              <input type="text" id="inputTitulo" value="Sopa de Letras: Frutas del Campo" 
+                class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition" 
+                placeholder="Ej: Sopa de Letras - Botánica">
             </div>
+
             <div>
-              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Estilo de Color</label>
-              <select id="selectTema" onchange="actualizarOpcionesYRenderizar()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                <option value="classic">Clásico (Negro/Blanco)</option>
-                <option value="blue" selected>Azul Educativo</option>
-                <option value="emerald">Verde Esmeralda</option>
-                <option value="purple">Púrpura Creativo</option>
-                <option value="warm">Cálido / Naranja</option>
-              </select>
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Subtítulo o Indicación</label>
+              <input type="text" id="inputSubtitulo" value="Encuentra las palabras escondidas en la rejilla" 
+                class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition">
             </div>
-          </div>
 
-          <div class="pt-2 border-t border-slate-700/60">
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Visibilidad de Encabezado</label>
-            <div class="space-y-1.5 text-xs">
-              <label class="flex items-center justify-between bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
-                <span class="text-slate-200 font-medium">Mostrar Título y Subtítulo</span>
-                <input type="checkbox" id="checkMostrarTitulo" checked onchange="actualizarOpcionesYRenderizar()" class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600 w-4 h-4">
-              </label>
-              <label class="flex items-center justify-between bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
-                <span class="text-slate-200 font-medium">Campo "Nombre: _______"</span>
-                <input type="checkbox" id="checkMostrarNombre" onchange="actualizarOpcionesYRenderizar()" class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600 w-4 h-4">
-              </label>
-              <label class="flex items-center justify-between bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
-                <span class="text-slate-200 font-medium">Campo "Fecha: _______"</span>
-                <input type="checkbox" id="checkMostrarFecha" onchange="actualizarOpcionesYRenderizar()" class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600 w-4 h-4">
-              </label>
-              <label class="flex items-center justify-between bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
-                <span class="text-slate-200 font-medium">Mostrar Pie de Página</span>
-                <input type="checkbox" id="checkMostrarFooter" checked onchange="actualizarOpcionesYRenderizar()" class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600 w-4 h-4">
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- PESTAÑA 2: Desde Tamaño de Fuente Personalizado hasta Lista de Palabras -->
-      <div id="pestana2" class="space-y-4 hidden">
-        <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-xl space-y-4">
-          <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2 border-b border-slate-700 pb-3">
-            <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-            </svg>
-            Fuentes y Palabras
-          </h2>
-
-          <div class="space-y-3">
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">Tamaño de Fuente Personalizado</label>
-            
             <div>
-              <div class="flex justify-between items-center text-xs mb-1">
-                <span class="text-slate-300">Letras del Tablero</span>
-                <span id="valFontGrid" class="text-cyan-400 font-mono font-bold">Auto</span>
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Texto Pie de Página</label>
+              <input type="text" id="inputFooter" value="Generado con SopaDeLetras 300 DPI Pro" oninput="actualizarOpcionesYRenderizar()"
+                class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition">
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Tamaño Rejilla</label>
+                <select id="selectTamano" onchange="generarNuevaSopa()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                  <option value="10">10 x 10 (Fácil)</option>
+                  <option value="12">12 x 12 (Medio)</option>
+                  <option value="15" selected>15 x 15 (Estándar)</option>
+                  <option value="18">18 x 18 (Desafío)</option>
+                  <option value="20">20 x 20 (Experto)</option>
+                  <option value="25">25 x 25 (Gigante)</option>
+                </select>
               </div>
-              <input type="range" id="rangeFontGrid" min="0" max="60" step="1" value="0" oninput="actualizarOpcionesYRenderizar()" 
-                class="w-full h-1.5 bg-slate-900 rounded-lg appearance-none cursor-pointer accent-cyan-500">
-              <p class="text-[10px] text-slate-400 mt-0.5">El valor 0 ajusta el tamaño automáticamente.</p>
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Estilo de Color</label>
+                <select id="selectTema" onchange="actualizarOpcionesYRenderizar()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                  <option value="classic">Clásico (Negro/Blanco)</option>
+                  <option value="blue" selected>Azul Educativo</option>
+                  <option value="emerald">Verde Esmeralda</option>
+                  <option value="purple">Púrpura Creativo</option>
+                  <option value="warm">Cálido / Naranja</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-slate-700/60">
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Visibilidad de Encabezado</label>
+              <div class="space-y-1.5 text-xs">
+                <label class="flex items-center justify-between bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
+                  <span class="text-slate-200 font-medium">Mostrar Título y Subtítulo</span>
+                  <input type="checkbox" id="checkMostrarTitulo" checked onchange="actualizarOpcionesYRenderizar()" class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600 w-4 h-4">
+                </label>
+                <label class="flex items-center justify-between bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
+                  <span class="text-slate-200 font-medium">Campo "Nombre: _______"</span>
+                  <input type="checkbox" id="checkMostrarNombre" onchange="actualizarOpcionesYRenderizar()" class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600 w-4 h-4">
+                </label>
+                <label class="flex items-center justify-between bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
+                  <span class="text-slate-200 font-medium">Campo "Fecha: _______"</span>
+                  <input type="checkbox" id="checkMostrarFecha" onchange="actualizarOpcionesYRenderizar()" class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600 w-4 h-4">
+                </label>
+                <label class="flex items-center justify-between bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
+                  <span class="text-slate-200 font-medium">Mostrar Pie de Página</span>
+                  <input type="checkbox" id="checkMostrarFooter" checked onchange="actualizarOpcionesYRenderizar()" class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600 w-4 h-4">
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botón Pestaña 2 -->
+        <button onclick="togglePestana(2)" id="tabBtn2" class="w-full py-2.5 px-4 text-xs font-semibold rounded-xl transition flex items-center justify-between bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700/60 shadow-md">
+          <span class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            2. Fuentes y Palabras
+          </span>
+          <svg id="tabArrow2" class="w-4 h-4 transition-transform duration-200 transform rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </button>
+
+        <!-- PESTAÑA 2 (Colapsada por defecto) -->
+        <div id="pestana2" class="space-y-4 hidden">
+          <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-xl space-y-4">
+            <div class="space-y-3">
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">Tamaño de Fuente Personalizado</label>
+              
+              <div>
+                <div class="flex justify-between items-center text-xs mb-1">
+                  <span class="text-slate-300">Letras del Tablero</span>
+                  <span id="valFontGrid" class="text-cyan-400 font-mono font-bold">Auto</span>
+                </div>
+                <input type="range" id="rangeFontGrid" min="0" max="60" step="1" value="0" oninput="actualizarOpcionesYRenderizar()" 
+                  class="w-full h-1.5 bg-slate-900 rounded-lg appearance-none cursor-pointer accent-cyan-500">
+                <p class="text-[10px] text-slate-400 mt-0.5">El valor 0 ajusta el tamaño automáticamente.</p>
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center text-xs mb-1">
+                  <span class="text-slate-300">Lista de Palabras</span>
+                  <span id="valFontWords" class="text-cyan-400 font-mono font-bold">20 px</span>
+                </div>
+                <input type="range" id="rangeFontWords" min="10" max="40" step="1" value="20" oninput="actualizarOpcionesYRenderizar()" 
+                  class="w-full h-1.5 bg-slate-900 rounded-lg appearance-none cursor-pointer accent-cyan-500">
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-slate-700/60">
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Direcciones Permitidas</label>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <label class="flex items-center space-x-2 bg-slate-900/60 p-2 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
+                  <input type="checkbox" id="dirH" checked class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600">
+                  <span class="text-slate-200">Horizontal ➡️</span>
+                </label>
+                <label class="flex items-center space-x-2 bg-slate-900/60 p-2 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
+                  <input type="checkbox" id="dirV" checked class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600">
+                  <span class="text-slate-200">Vertical ⬇️</span>
+                </label>
+                <label class="flex items-center space-x-2 bg-slate-900/60 p-2 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
+                  <input type="checkbox" id="dirD" checked class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600">
+                  <span class="text-slate-200">Diagonal ↘️</span>
+                </label>
+                <label class="flex items-center space-x-2 bg-slate-900/60 p-2 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
+                  <input type="checkbox" id="dirRev" class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600">
+                  <span class="text-slate-200">Invertidas ⬅️⬆️</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-xl space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-700 pb-3">
+              <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">Lista de Palabras</h2>
+              <span id="contadorPalabras" class="text-xs bg-slate-700 text-cyan-300 font-semibold px-2.5 py-1 rounded-full">0 palabras</span>
             </div>
 
             <div>
-              <div class="flex justify-between items-center text-xs mb-1">
-                <span class="text-slate-300">Lista de Palabras</span>
-                <span id="valFontWords" class="text-cyan-400 font-mono font-bold">20 px</span>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Plantillas Rápidas</label>
+              <div class="flex flex-wrap gap-1.5">
+                <button onclick="cargarPlantilla('frutas')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-2.5 py-1 rounded transition">🍎 Frutas</button>
+                <button onclick="cargarPlantilla('animales')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-2.5 py-1 rounded transition">🐶 Animales</button>
+                <button onclick="cargarPlantilla('paises')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-2.5 py-1 rounded transition">🌍 Países</button>
+                <button onclick="cargarPlantilla('espacio')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-2.5 py-1 rounded transition">🚀 Espacio</button>
+                <button onclick="cargarPlantilla('tecnologia')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-2.5 py-1 rounded transition">💻 Tecnología</button>
               </div>
-              <input type="range" id="rangeFontWords" min="10" max="40" step="1" value="20" oninput="actualizarOpcionesYRenderizar()" 
-                class="w-full h-1.5 bg-slate-900 rounded-lg appearance-none cursor-pointer accent-cyan-500">
             </div>
-          </div>
 
-          <div class="pt-2 border-t border-slate-700/60">
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Direcciones Permitidas</label>
-            <div class="grid grid-cols-2 gap-2 text-xs">
-              <label class="flex items-center space-x-2 bg-slate-900/60 p-2 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
-                <input type="checkbox" id="dirH" checked class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600">
-                <span class="text-slate-200">Horizontal ➡️</span>
-              </label>
-              <label class="flex items-center space-x-2 bg-slate-900/60 p-2 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
-                <input type="checkbox" id="dirV" checked class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600">
-                <span class="text-slate-200">Vertical ⬇️</span>
-              </label>
-              <label class="flex items-center space-x-2 bg-slate-900/60 p-2 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
-                <input type="checkbox" id="dirD" checked class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600">
-                <span class="text-slate-200">Diagonal ↘️</span>
-              </label>
-              <label class="flex items-center space-x-2 bg-slate-900/60 p-2 rounded-lg border border-slate-700 cursor-pointer hover:bg-slate-700/50">
-                <input type="checkbox" id="dirRev" class="rounded text-cyan-500 focus:ring-cyan-500 bg-slate-800 border-slate-600">
-                <span class="text-slate-200">Invertidas ⬅️⬆️</span>
-              </label>
+            <div>
+              <textarea id="inputPalabras" rows="6" 
+                class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 font-mono" 
+                placeholder="Escribe palabras separadas por comas o saltos de línea..."></textarea>
             </div>
+
+            <button onclick="generarNuevaSopa()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2.5 px-4 rounded-lg shadow-lg transition active:scale-[0.99] flex items-center justify-center gap-2">
+              Actualizar Tablero
+            </button>
           </div>
         </div>
 
-        <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-xl space-y-4">
-          <div class="flex items-center justify-between border-b border-slate-700 pb-3">
-            <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">Lista de Palabras</h2>
-            <span id="contadorPalabras" class="text-xs bg-slate-700 text-cyan-300 font-semibold px-2.5 py-1 rounded-full">0 palabras</span>
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Plantillas Rápidas</label>
-            <div class="flex flex-wrap gap-1.5">
-              <button onclick="cargarPlantilla('frutas')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-2.5 py-1 rounded transition">🍎 Frutas</button>
-              <button onclick="cargarPlantilla('animales')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-2.5 py-1 rounded transition">🐶 Animales</button>
-              <button onclick="cargarPlantilla('paises')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-2.5 py-1 rounded transition">🌍 Países</button>
-              <button onclick="cargarPlantilla('espacio')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-2.5 py-1 rounded transition">🚀 Espacio</button>
-              <button onclick="cargarPlantilla('tecnologia')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-2.5 py-1 rounded transition">💻 Tecnología</button>
-            </div>
-          </div>
-
-          <div>
-            <textarea id="inputPalabras" rows="6" 
-              class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 font-mono" 
-              placeholder="Escribe palabras separadas por comas o saltos de línea..."></textarea>
-          </div>
-
-          <button onclick="generarNuevaSopa()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2.5 px-4 rounded-lg shadow-lg transition active:scale-[0.99] flex items-center justify-center gap-2">
-            Actualizar Tablero
-          </button>
-        </div>
       </div>
 
     </section>
@@ -309,7 +304,7 @@
 
   </main>
 
-  <!-- MODAL FLOTANTE DE DESCARGA (Pestaña 3 / Botón de exportación) -->
+  <!-- MODAL FLOTANTE DE DESCARGA -->
   <div id="modalDescarga" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-6 animate-in fade-in zoom-in duration-200">
       
@@ -413,25 +408,24 @@
 
     window.addEventListener('DOMContentLoaded', () => { cargarPlantilla('frutas'); });
 
-    // Control de Pestañas
-    function cambiarPestana(num) {
-      const p1 = document.getElementById('pestana1');
-      const p2 = document.getElementById('pestana2');
-      const b1 = document.getElementById('tabBtn1');
-      const b2 = document.getElementById('tabBtn2');
+    // Control de Pestañas Colapsables
+    function togglePestana(num) {
+      const p = document.getElementById(`pestana${num}`);
+      const arrow = document.getElementById(`tabArrow${num}`);
+      const btn = document.getElementById(`tabBtn${num}`);
 
-      if (num === 1) {
-        p1.classList.remove('hidden'); p2.classList.add('hidden');
-        b1.className = "flex-1 py-2 text-xs font-semibold rounded-lg transition text-center bg-cyan-600 text-white shadow";
-        b2.className = "flex-1 py-2 text-xs font-semibold rounded-lg transition text-center text-slate-400 hover:text-white";
+      if (p.classList.contains('hidden')) {
+        p.classList.remove('hidden');
+        arrow.classList.add('rotate-180');
+        btn.classList.add('bg-slate-700', 'border-cyan-500/50', 'text-cyan-400');
       } else {
-        p1.classList.add('hidden'); p2.classList.remove('hidden');
-        b2.className = "flex-1 py-2 text-xs font-semibold rounded-lg transition text-center bg-cyan-600 text-white shadow";
-        b1.className = "flex-1 py-2 text-xs font-semibold rounded-lg transition text-center text-slate-400 hover:text-white";
+        p.classList.add('hidden');
+        arrow.classList.remove('rotate-180');
+        btn.classList.remove('bg-slate-700', 'border-cyan-500/50', 'text-cyan-400');
       }
     }
 
-    // Modal de Descarga (Pestaña 3 / Botón)
+    // Modal de Descarga
     function abrirModalDescarga() {
       document.getElementById('modalDescarga').classList.remove('hidden');
     }
@@ -644,8 +638,7 @@
       const palabras = estadoGlobal.palabrasColocadas.map(p => p.orig);
       const numCols = palabras.length > 18 ? 4 : 3;
       const colWidth = gridBoxSize / numCols;
-      const lineHeight = actualFontSizeWords * 1.8; 
-      // Espacio entre el título "PALABRAS A BUSCAR" y la primera línea de palabras
+      const lineHeight = actualFontSizeWords * 2.2; 
       const listItemsStartY = listStartY + (50 * scaleFactor); 
       
       const rowsCount = Math.ceil(palabras.length / numCols);
@@ -760,7 +753,7 @@
       img.src = url;
     }
   </script>
-    <script>
+  <script>
     // Bloquear clic derecho (Anticlic)
     document.addEventListener('contextmenu', function(e) {
         e.preventDefault();
@@ -768,24 +761,19 @@
 
     // Bloquear atajos de teclado de desarrollador
     document.addEventListener('keydown', function(e) {
-        // Bloquear F12
         if (e.key === 'F12' || e.keyCode === 123) {
             e.preventDefault();
             return false;
         }
-        
-        // Bloquear Ctrl+Shift+I (Inspeccionar), Ctrl+Shift+J (Consola), Ctrl+Shift+C (Seleccionar elemento)
         if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
             e.preventDefault();
             return false;
         }
-        
-        // Bloquear Ctrl+U (Ver código fuente) y Ctrl+S (Guardar página)
         if (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's')) {
             e.preventDefault();
             return false;
         }
     });
-</script>
+  </script>
 </body>
 </html>
