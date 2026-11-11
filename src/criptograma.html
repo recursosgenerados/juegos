@@ -9,16 +9,16 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
+            background-color: #0b1329;
         }
         
         /* Animación suave para la aparición de elementos */
         .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
+            animation: fadeIn 0.4s ease-in-out;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -27,122 +27,173 @@
             width: 100%;
             height: auto;
             border-radius: 0.5rem;
-            background-color: white;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Estilo para sliders en tema oscuro */
+        input[type=range] {
+            accent-color: #6366f1;
         }
     </style>
 </head>
-<body class="min-h-screen text-gray-800 p-4 sm:p-8">
+<body class="min-h-screen text-slate-100 p-4 sm:p-8">
 
     <main class="max-w-4xl mx-auto">
         <!-- Encabezado -->
         <header class="text-center mb-8">
-            <div class="inline-flex items-center justify-center p-3 bg-indigo-600 rounded-full mb-4 shadow-lg">
+            <div class="inline-flex items-center justify-center p-3 bg-indigo-600/90 rounded-full mb-4 shadow-lg shadow-indigo-500/20">
                 <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"></path>
                 </svg>
             </div>
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Generador de Criptogramas</h1>
-            <p class="text-gray-600">Ingresa una frase para crear un rompecabezas de sustitución aleatoria. Listo para imprimir.</p>
+            <h1 class="text-3xl font-bold text-white mb-2">Generador de Criptogramas</h1>
+            <p class="text-slate-400">Ingresa una frase para crear un rompecabezas de sustitución aleatoria. Listo para imprimir.</p>
         </header>
 
-        <!-- Tarjeta Principal de Controles -->
-        <div class="bg-white rounded-xl shadow-md p-6 mb-8 border border-gray-100">
-            <div class="mb-4">
-                <label for="input-phrase" class="block text-sm font-semibold text-gray-700 mb-2">Frase o mensaje oculto:</label>
-                <textarea id="input-phrase" rows="4" 
-                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none text-lg"
-                    placeholder="Ejemplo: El conocimiento es poder."></textarea>
-            </div>
-
-            <!-- Panel de Personalización de Estilos -->
-            <div class="bg-gray-50 rounded-xl p-4 mb-6 border border-gray-200">
-                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-600 mb-3 flex items-center gap-2">
-                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-                    Personalización de Tamaños y Espaciados
-                </h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">Tamaño Números Puzzle: <span id="val-puzzle-font" class="font-bold text-indigo-600">60</span></label>
-                        <input type="range" id="input-puzzle-font" min="40" max="90" value="60" oninput="app.updateParam('puzzleFontSize', this.value)" class="w-full accent-indigo-600">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">Ancho Caracter Puzzle: <span id="val-puzzle-width" class="font-bold text-indigo-600">70</span></label>
-                        <input type="range" id="input-puzzle-width" min="50" max="100" value="70" oninput="app.updateParam('puzzleCharWidth', this.value)" class="w-full accent-indigo-600">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">Tamaño Fuente Clave: <span id="val-key-font" class="font-bold text-indigo-600">64</span></label>
-                        <input type="range" id="input-key-font" min="40" max="90" value="64" oninput="app.updateParam('keyFontSize', this.value)" class="w-full accent-indigo-600">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">Espaciado Celda Clave: <span id="val-key-col" class="font-bold text-indigo-600">420</span></label>
-                        <input type="range" id="input-key-col" min="320" max="550" value="420" oninput="app.updateParam('keyColWidth', this.value)" class="w-full accent-indigo-600">
-                    </div>
+        <!-- Tarjeta Principal de Controles con Pestañas Horizontales y Colapsable -->
+        <div class="bg-slate-900 rounded-xl shadow-xl p-6 mb-8 border border-slate-800">
+            
+            <!-- Barra Superior de Pestañas Horizontales + Botón Colapsar -->
+            <div class="flex flex-wrap items-center justify-between border-b border-slate-800 pb-4 mb-5 gap-3">
+                <!-- Pestañas Horizontales de Formularios -->
+                <div class="flex items-center gap-2 bg-slate-950 p-1.5 rounded-lg border border-slate-800/80">
+                    <button id="tab-btn-phrase" onclick="app.switchFormTab('phrase')" 
+                        class="px-4 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 bg-indigo-600 text-white shadow">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        Frase Oculta
+                    </button>
+                    <button id="tab-btn-custom" onclick="app.switchFormTab('custom')" 
+                        class="px-4 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                        Personalización
+                    </button>
                 </div>
-            </div>
 
-            <!-- Caja de mensajes de error -->
-            <div id="error-message" class="hidden bg-red-50 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm font-medium border border-red-200">
-                Por favor, ingresa al menos una palabra para generar el criptograma.
-            </div>
-
-            <div class="flex flex-col sm:flex-row gap-4 items-center justify-between">
-                <button id="btn-generate" onclick="app.generate()" 
-                    class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-8 rounded-lg shadow-sm transition-all transform hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
-                    Generar Criptograma
+                <!-- Botón Desplegable / Colapsable -->
+                <button id="btn-collapse-form" onclick="app.toggleFormCollapse()" 
+                    class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-colors flex items-center gap-1.5 ml-auto">
+                    <span id="collapse-icon">▲</span>
+                    <span id="collapse-text">Colapsar Opciones</span>
                 </button>
+            </div>
+
+            <!-- Contenedor Colapsable del Formulario -->
+            <div id="form-body-container" class="transition-all duration-300">
                 
-                <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-                    <button id="btn-export-svg" onclick="app.exportSVG(app.currentSvgString, 'criptograma.svg')" disabled
-                        class="w-full sm:w-auto bg-white hover:bg-gray-50 text-gray-700 font-medium py-2.5 px-5 rounded-lg border border-gray-300 shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
-                        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        Descargar Rompecabezas (SVG)
-                    </button>
-                    <button id="btn-export-png" onclick="app.exportPNG(app.currentSvgString, app.puzzleWidth, app.puzzleHeight, 'criptograma_300dpi.png', 'btn-export-png')" disabled
-                        class="w-full sm:w-auto bg-white hover:bg-gray-50 text-gray-700 font-medium py-2.5 px-5 rounded-lg border border-gray-300 shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
-                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        Descargar Rompecabezas (PNG)
+                <!-- Pestaña 1: Entrada de Frase -->
+                <div id="form-tab-phrase" class="fade-in">
+                    <label for="input-phrase" class="block text-sm font-semibold text-slate-300 mb-2">Frase o mensaje oculto:</label>
+                    <textarea id="input-phrase" rows="4" 
+                        class="w-full px-4 py-3 rounded-lg bg-slate-950 border border-slate-700 text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none text-lg mb-4"
+                        placeholder="Ejemplo: El conocimiento es poder."></textarea>
+                </div>
+
+                <!-- Pestaña 2: Personalización de Tamaños y Espaciados -->
+                <div id="form-tab-custom" class="hidden fade-in">
+                    <div class="bg-slate-950/70 rounded-xl p-4 mb-4 border border-slate-800">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-400 mb-4 flex items-center gap-2">
+                            Ajustes del Rompecabezas (3:4) y Clave de Cifrado (16:9)
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Tamaño Números Puzzle: <span id="val-puzzle-font" class="font-bold text-indigo-400">60</span></label>
+                                <input type="range" id="input-puzzle-font" min="40" max="90" value="60" oninput="app.updateParam('puzzleFontSize', this.value)" class="w-full">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Ancho Caracter Puzzle: <span id="val-puzzle-width" class="font-bold text-indigo-400">70</span></label>
+                                <input type="range" id="input-puzzle-width" min="50" max="100" value="70" oninput="app.updateParam('puzzleCharWidth', this.value)" class="w-full">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Tamaño Fuente Clave: <span id="val-key-font" class="font-bold text-indigo-400">64</span></label>
+                                <input type="range" id="input-key-font" min="40" max="90" value="64" oninput="app.updateParam('keyFontSize', this.value)" class="w-full">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Espaciado Celda Clave: <span id="val-key-col" class="font-bold text-indigo-400">420</span></label>
+                                <input type="range" id="input-key-col" min="320" max="550" value="420" oninput="app.updateParam('keyColWidth', this.value)" class="w-full">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mensaje de Error -->
+                <div id="error-message" class="hidden bg-red-950/80 text-red-300 px-4 py-3 rounded-lg mb-4 text-sm font-medium border border-red-800">
+                    Por favor, ingresa al menos una palabra para generar el criptograma.
+                </div>
+
+                <!-- Botón Principal Generar -->
+                <div class="flex justify-end pt-2">
+                    <button id="btn-generate" onclick="app.generate()" 
+                        class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-8 rounded-lg shadow-lg shadow-indigo-600/30 transition-all transform hover:scale-[1.01] active:scale-95 flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                        Generar Criptograma
                     </button>
                 </div>
+
             </div>
         </div>
 
-        <!-- Contenedor de Resultado -->
-        <div id="result-section" class="hidden fade-in space-y-8">
-            <div>
-                <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                    <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                    Vista Previa del Rompecabezas
-                </h2>
-                <div id="svg-preview-container" class="w-full flex justify-center bg-white rounded-lg p-2 shadow-sm border border-gray-100">
-                    <!-- El SVG generado se inyectará aquí -->
-                </div>
-            </div>
+        <!-- Contenedor de Previsualizaciones (Lienzos por Pestañas) -->
+        <div id="result-section" class="hidden fade-in space-y-6">
             
-            <div class="bg-blue-50 border border-blue-200 rounded-lg p-5 text-sm text-blue-800 shadow-sm">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
-                    <h3 class="text-lg font-bold text-blue-900 flex items-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
-                        Clave de Cifrado (Guía de Resolución)
-                    </h3>
-                    <div class="flex gap-2 w-full sm:w-auto">
+            <div class="bg-slate-900 rounded-xl shadow-xl p-6 border border-slate-800">
+                
+                <!-- Pestañas Horizontales para Lienzos / Previews -->
+                <div class="flex flex-wrap items-center justify-between border-b border-slate-800 pb-4 mb-6 gap-3">
+                    <div class="flex items-center gap-2 bg-slate-950 p-1.5 rounded-lg border border-slate-800/80">
+                        <button id="tab-preview-btn-puzzle" onclick="app.switchPreviewTab('puzzle')" 
+                            class="px-4 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 bg-indigo-600 text-white shadow">
+                            🧩 Rompecabezas (3:4)
+                        </button>
+                        <button id="tab-preview-btn-key" onclick="app.switchPreviewTab('key')" 
+                            class="px-4 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800">
+                            🔑 Clave de Cifrado (16:9)
+                        </button>
+                    </div>
+
+                    <!-- Botones de Exportación Dinámicos -->
+                    <div id="puzzle-export-actions" class="flex flex-wrap gap-2">
+                        <button id="btn-export-svg" onclick="app.exportSVG(app.currentSvgString, 'criptograma.svg')" disabled
+                            class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium py-2 px-4 rounded-lg border border-slate-700 shadow-sm transition-colors disabled:opacity-50 text-xs sm:text-sm flex items-center gap-1.5">
+                            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            SVG
+                        </button>
+                        <button id="btn-export-png" onclick="app.exportPNG(app.currentSvgString, app.puzzleWidth, app.puzzleHeight, 'criptograma_300dpi.png', 'btn-export-png')" disabled
+                            class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium py-2 px-4 rounded-lg border border-slate-700 shadow-sm transition-colors disabled:opacity-50 text-xs sm:text-sm flex items-center gap-1.5">
+                            <svg class="w-4 h-4 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            PNG 300DPI
+                        </button>
+                    </div>
+
+                    <div id="key-export-actions" class="hidden flex flex-wrap gap-2">
                         <button id="btn-export-key-svg" onclick="app.exportSVG(app.currentKeySvgString, 'clave_criptograma.svg')" 
-                            class="flex-1 sm:flex-none bg-white hover:bg-gray-50 text-blue-700 font-medium py-2 px-4 rounded-lg border border-blue-300 shadow-sm transition-colors text-xs flex items-center justify-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                            Descargar Clave (SVG)
+                            class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium py-2 px-4 rounded-lg border border-slate-700 shadow-sm transition-colors text-xs sm:text-sm flex items-center gap-1.5">
+                            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            Clave (SVG)
                         </button>
                         <button id="btn-export-key-png" onclick="app.exportPNG(app.currentKeySvgString, app.keyWidth, app.keyHeight, 'clave_criptograma_300dpi.png', 'btn-export-key-png')"
-                            class="flex-1 sm:flex-none bg-white hover:bg-gray-50 text-blue-700 font-medium py-2 px-4 rounded-lg border border-blue-300 shadow-sm transition-colors text-xs flex items-center justify-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                            Descargar Clave (PNG)
+                            class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium py-2 px-4 rounded-lg border border-slate-700 shadow-sm transition-colors text-xs sm:text-sm flex items-center gap-1.5">
+                            <svg class="w-4 h-4 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            Clave (PNG 300DPI)
                         </button>
                     </div>
                 </div>
-                <div id="svg-key-container" class="w-full flex justify-center bg-white rounded border border-blue-100 p-2">
-                    <!-- El SVG de la clave se inyectará aquí -->
+
+                <!-- Lienzo Pestaña 1: Rompecabezas (Ratio 3:4) -->
+                <div id="preview-tab-puzzle" class="fade-in">
+                    <div id="svg-preview-container" class="w-full flex justify-center bg-slate-950 rounded-lg p-2 border border-slate-800">
+                        <!-- El SVG generado se inyectará aquí -->
+                    </div>
                 </div>
+
+                <!-- Lienzo Pestaña 2: Clave de Cifrado (Ratio 16:9) -->
+                <div id="preview-tab-key" class="hidden fade-in">
+                    <div id="svg-key-container" class="w-full flex justify-center bg-slate-950 rounded-lg p-2 border border-slate-800">
+                        <!-- El SVG de la clave se inyectará aquí -->
+                    </div>
+                </div>
+
             </div>
+
         </div>
 
     </main>
@@ -152,6 +203,8 @@
             alphabet: "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split(''),
             currentSvgString: '',
             currentKeySvgString: '',
+            currentCipherMap: {},
+            isFormCollapsed: false,
             
             // Parámetros personalizables iniciales
             puzzleFontSize: 60,
@@ -161,9 +214,74 @@
 
             // Resoluciones nativas de alta calidad (DPI equivalente ~300)
             puzzleWidth: 2400,
-            puzzleHeight: 2400, // Ratio 3:4 (Aprox 8x10.6 pulgadas)
+            puzzleHeight: 3200, // Ratio 3:4 (Aprox 8x10.6 pulgadas)
             keyWidth: 2400,
-            keyHeight: 1350,    // Ratio 1:1 Cuadrado perfecto
+            keyHeight: 1350,    // Ratio 16:9 Horizontal
+
+            // Cambiar Pestañas de Formulario
+            switchFormTab(tabName) {
+                const phraseTab = document.getElementById('form-tab-phrase');
+                const customTab = document.getElementById('form-tab-custom');
+                const btnPhrase = document.getElementById('tab-btn-phrase');
+                const btnCustom = document.getElementById('tab-btn-custom');
+
+                if (tabName === 'phrase') {
+                    phraseTab.classList.remove('hidden');
+                    customTab.classList.add('hidden');
+                    btnPhrase.className = "px-4 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 bg-indigo-600 text-white shadow";
+                    btnCustom.className = "px-4 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800";
+                } else {
+                    phraseTab.classList.add('hidden');
+                    customTab.classList.remove('hidden');
+                    btnCustom.className = "px-4 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 bg-indigo-600 text-white shadow";
+                    btnPhrase.className = "px-4 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800";
+                }
+            },
+
+            // Colapsar/Desplegar Formulario
+            toggleFormCollapse() {
+                const body = document.getElementById('form-body-container');
+                const icon = document.getElementById('collapse-icon');
+                const text = document.getElementById('collapse-text');
+
+                this.isFormCollapsed = !this.isFormCollapsed;
+
+                if (this.isFormCollapsed) {
+                    body.classList.add('hidden');
+                    icon.innerText = '▼';
+                    text.innerText = 'Desplegar Opciones';
+                } else {
+                    body.classList.remove('hidden');
+                    icon.innerText = '▲';
+                    text.innerText = 'Colapsar Opciones';
+                }
+            },
+
+            // Cambiar Pestañas de Previsualización (Lienzos)
+            switchPreviewTab(tabName) {
+                const puzzleTab = document.getElementById('preview-tab-puzzle');
+                const keyTab = document.getElementById('preview-tab-key');
+                const btnPuzzle = document.getElementById('tab-preview-btn-puzzle');
+                const btnKey = document.getElementById('tab-preview-btn-key');
+                const puzzleActions = document.getElementById('puzzle-export-actions');
+                const keyActions = document.getElementById('key-export-actions');
+
+                if (tabName === 'puzzle') {
+                    puzzleTab.classList.remove('hidden');
+                    keyTab.classList.add('hidden');
+                    puzzleActions.classList.remove('hidden');
+                    keyActions.classList.add('hidden');
+                    btnPuzzle.className = "px-4 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 bg-indigo-600 text-white shadow";
+                    btnKey.className = "px-4 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800";
+                } else {
+                    puzzleTab.classList.add('hidden');
+                    keyTab.classList.remove('hidden');
+                    puzzleActions.classList.add('hidden');
+                    keyActions.classList.remove('hidden');
+                    btnKey.className = "px-4 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 bg-indigo-600 text-white shadow";
+                    btnPuzzle.className = "px-4 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800";
+                }
+            },
 
             updateParam(param, val) {
                 this[param] = parseInt(val);
@@ -183,7 +301,7 @@
                 }
             },
 
-            // Función para normalizar texto (Quitar acentos, dejar caracteres estándar españoles)
+            // Normalización de Texto (Quitar acentos, dejar caracteres estándar españoles)
             normalizeText(text) {
                 return text.toUpperCase()
                     .replace(/[ÁÄÂÀ]/g, 'A')
@@ -193,10 +311,9 @@
                     .replace(/[ÚÜÛÙ]/g, 'U');
             },
 
-            // Generar una sustitución aleatoria por números únicos del 1 al 27
+            // Generar sustitución aleatoria por números únicos del 1 al 27
             generateCipherMap() {
                 let numbers = Array.from({length: this.alphabet.length}, (_, i) => (i + 1).toString());
-                // Fisher-Yates shuffle
                 for (let i = numbers.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
                     [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
@@ -309,13 +426,13 @@
             buildKeySVG(map) {
                 let svgContent = '';
                 const cols = 7;
-                const cellWidth = this.keyColWidth; // Controlado por el slider horizontal
-                const cellHeight = Math.round(this.keyColWidth * 0.75); // Espacio vertical proporcional
+                const cellWidth = this.keyColWidth; 
+                const cellHeight = Math.round(this.keyColWidth * 0.75); 
                 
                 // Centrar la cuadrícula de 7 columnas en el lienzo de 2400x1350 (Ratio 16:9)
                 const gridTotalWidth = (cols - 1) * cellWidth; 
                 const startX = (this.keyWidth - gridTotalWidth) / 2;
-                const startY = 360; // Espacio superior reservado para el título
+                const startY = 360; 
 
                 this.alphabet.forEach((char, index) => {
                     const col = index % cols;
@@ -325,17 +442,13 @@
 
                     const num = map[char];
                     
-                    // Dimensiones del rectángulo dinámicas según el tamaño de fuente para evitar desbordamientos
                     const rectWidth = Math.round(this.keyFontSize * 2.8);
                     const rectHeight = Math.round(this.keyFontSize * 1.35);
                     const rectX = x - (rectWidth / 2);
                     const rectY = y - (rectHeight / 2) - Math.round(this.keyFontSize * 0.1);
                     
-                    // Fondo de tarjeta adaptado al tamaño del texto
+                    svgContent += `<rect x="${rectX}" y="${rectY}" width="${rectWidth}" height="${rectHeight}" rx="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="3" />`;
                     
-                    svgContent += `<rect x="${rectX}" y="${rectY}" width="${rectWidth}" height="${rectHeight}" rx="14" fill="none" stroke="none" />`;
-                    
-                    // Letra y número cifrado más juntos y alineados
                     svgContent += `<text x="${x}" y="${y + Math.round(this.keyFontSize * 0.3)}" text-anchor="middle" font-family="monospace, Arial, sans-serif" font-size="${this.keyFontSize}" font-weight="bold" fill="#1e293b">${char}<tspan fill="#94a3b8" font-size="${Math.round(this.keyFontSize * 0.8)}">= </tspan><tspan fill="#2563eb">${num}</tspan></text>`;
                 });
 
@@ -370,11 +483,9 @@
 
                 const btn = document.getElementById(btnId);
                 const originalText = btn.innerHTML;
-                btn.innerHTML = `<svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Procesando...`;
+                btn.innerHTML = `<svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Procesando...`;
                 btn.disabled = true;
 
-                // Como baseWidth y baseHeight ahora son por defecto 2400x3200 o 2400x2400 (Full 300DPI)
-                // Se genera directamente en esas dimensiones reales, sin escalar para evitar pixelado
                 const canvas = document.createElement('canvas');
                 canvas.width = baseWidth;
                 canvas.height = baseHeight;
@@ -405,31 +516,31 @@
         };
     </script>
     <script>
-    // Bloquear clic derecho (Anticlic)
-    document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-    });
+        // Bloquear clic derecho (Anticlic)
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
 
-    // Bloquear atajos de teclado de desarrollador
-    document.addEventListener('keydown', function(e) {
-        // Bloquear F12
-        if (e.key === 'F12' || e.keyCode === 123) {
-            e.preventDefault();
-            return false;
-        }
-        
-        // Bloquear Ctrl+Shift+I (Inspeccionar), Ctrl+Shift+J (Consola), Ctrl+Shift+C (Seleccionar elemento)
-        if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
-            e.preventDefault();
-            return false;
-        }
-        
-        // Bloquear Ctrl+U (Ver código fuente) y Ctrl+S (Guardar página)
-        if (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's')) {
-            e.preventDefault();
-            return false;
-        }
-    });
-</script>
+        // Bloquear atajos de teclado de desarrollador
+        document.addEventListener('keydown', function(e) {
+            // Bloquear F12
+            if (e.key === 'F12' || e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Bloquear Ctrl+Shift+I, J, C
+            if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Bloquear Ctrl+U y Ctrl+S
+            if (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's')) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
 </body>
 </html>
