@@ -16,17 +16,41 @@
             --text-muted: #aaaaaa;
             --accent: #60cdff;
             --accent-hover: #50b6e6;
+            --success: #6ccb5f;
             --danger: #ff99a4;
             --radius-md: 8px;
             --radius-sm: 4px;
             --font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            --shadow-flyout: 0 8px 16px rgba(0,0,0,0.3);
+            --shadow-flyout: 0 8px 16px rgba(0,0,0,0.5);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+        }
+
+        /* --- Custom Windows 11 Style Scrollbars --- */
+        ::-webkit-scrollbar {
+            width: 14px;
+            height: 14px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            border: 4px solid var(--bg-base);
+            background-clip: padding-box;
+            transition: background-color 0.2s ease;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            border-color: var(--bg-card);
         }
 
         body {
@@ -47,11 +71,27 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            z-index: 110;
+            position: relative;
         }
 
         header h1 {
             font-size: 16px;
             font-weight: 600;
+        }
+
+        .mobile-toggle-btn {
+            display: none;
+            margin-left: auto;
+            background-color: rgba(255,255,255,0.1);
+            border: 1px solid var(--border-color);
+            color: white;
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            cursor: pointer;
+            align-items: center;
+            gap: 6px;
         }
 
         /* Main Layout */
@@ -60,18 +100,65 @@
             flex: 1;
             overflow: hidden;
             flex-direction: row;
+            position: relative;
         }
 
         /* Sidebar Controls */
         .sidebar {
-            width: 320px;
+            width: 380px;
             background-color: var(--bg-card);
             border-right: 1px solid var(--border-color);
-            padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
             overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-header-action {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* Tabs System */
+        .tabs-header {
+            display: flex;
+            background-color: var(--bg-input);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 0;
+            background: transparent;
+            color: var(--text-muted);
+            border: none;
+            border-bottom: 2px solid transparent;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .tab-btn.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+            background-color: rgba(96, 205, 255, 0.05);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 16px;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .tab-content.active {
+            display: flex;
         }
 
         /* Input Controls */
@@ -81,15 +168,20 @@
             gap: 6px;
         }
 
+        .row-group {
+            display: flex;
+            gap: 8px;
+        }
+
         label {
             font-size: 13px;
             font-weight: 500;
             color: var(--text-main);
         }
 
-        input[type="text"], textarea {
+        input[type="text"], input[type="number"], select, textarea {
             width: 100%;
-            background-color: var(--bg-input);
+            background-color: var(--bg-base);
             border: 1px solid var(--border-color);
             color: var(--text-main);
             border-radius: var(--radius-sm);
@@ -97,18 +189,99 @@
             font-family: var(--font-family);
             font-size: 14px;
             transition: all 0.2s ease;
-            resize: vertical;
         }
 
-        input[type="text"]:focus, textarea:focus {
+        input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--border-focus);
             border-bottom: 2px solid var(--border-focus);
-            padding-bottom: 7px; /* compensate for border */
+            padding-bottom: 7px;
         }
 
         textarea {
-            min-height: 120px;
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        /* Sliders */
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent);
+            cursor: pointer;
+        }
+
+        .range-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Toggle Switches */
+        .switches-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            background: var(--bg-base);
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .switch-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 32px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #555;
+            transition: .3s;
+            border-radius: 18px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 12px;
+            width: 12px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(14px);
+            background-color: #000;
+        }
+
+        .switch-solution input:checked + .slider {
+            background-color: var(--success);
         }
 
         /* Buttons */
@@ -116,9 +289,9 @@
             background-color: rgba(255, 255, 255, 0.06);
             border: 1px solid var(--border-color);
             color: var(--text-main);
-            padding: 8px 16px;
+            padding: 10px 12px;
             border-radius: var(--radius-sm);
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -136,20 +309,28 @@
             color: #000;
             border: none;
             font-weight: 600;
+            width: 100%;
         }
 
         .btn-primary:hover {
             background-color: var(--accent-hover);
         }
 
-        .button-group {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
+        .btn-success {
+            background-color: var(--success);
+            color: #000;
+            border: none;
+            font-weight: 600;
         }
 
-        .button-group .btn {
-            flex: 1;
+        .btn-success:hover {
+            background-color: #5bb84e;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
         }
 
         /* Icons */
@@ -157,6 +338,7 @@
             width: 16px;
             height: 16px;
             fill: currentColor;
+            flex-shrink: 0;
         }
 
         /* Preview Area */
@@ -175,39 +357,43 @@
             box-shadow: var(--shadow-flyout);
             border-radius: 4px;
             width: 100%;
-            max-width: 794px; /* A4 aspect width approx */
-            aspect-ratio: 3/4;
+            max-width: 800px;
+            aspect-ratio: 794 / 1123;
             position: relative;
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            transition: aspect-ratio 0.3s ease;
         }
 
-        #svgPreview {
+        #canvasWrapper {
             width: 100%;
             height: 100%;
             display: block;
         }
 
-        /* Responsive Mobile & Tablet */
+        /* Responsive Mobile Overlays */
         @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
+            .mobile-toggle-btn {
+                display: flex;
             }
             .sidebar {
+                position: fixed;
+                top: 55px; /* header height */
+                left: 0;
                 width: 100%;
+                height: calc(100vh - 55px);
                 border-right: none;
-                border-bottom: 1px solid var(--border-color);
-                max-height: 40vh;
+                box-shadow: 0 -10px 30px rgba(0,0,0,0.8);
+                transform: translateY(100%); /* hidden */
+                transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+                padding-bottom: 20px;
+            }
+            .sidebar.open {
+                transform: translateY(0);
             }
             .preview-area {
                 padding: 12px;
-            }
-            .btn span.label {
-                display: none;
-            }
-            .btn {
-                padding: 8px;
             }
         }
     </style>
@@ -218,20 +404,126 @@
         <svg class="icon" viewBox="0 0 24 24" style="color: var(--accent); width: 20px; height: 20px;">
             <path d="M12 2L2 22h20L12 2zm0 3.8l7.1 14.2H4.9L12 5.8z"/>
         </svg>
-        <h1>Generador de Anagramas</h1>
+        <h1>Generador de Anagramas Pro</h1>
+        
+        <button class="mobile-toggle-btn" id="mobileToggle" onclick="toggleSidebar()">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98 0-.34-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98 0 .33.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+            Ajustes
+        </button>
     </header>
 
     <div class="container">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <div class="control-group">
-                <label for="docTitle">Título del Documento</label>
-                <input type="text" id="docTitle" value="Ejercicios de Anagramas">
+        <!-- Sidebar Controls -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header-action">
+                <button class="btn btn-primary" onclick="generatePuzzle()">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                    <span>Mezclar Anagramas</span>
+                </button>
             </div>
 
-            <div class="control-group">
-                <label for="wordList">Lista de Palabras (una por línea)</label>
-                <textarea id="wordList">MURCIELAGO
+            <!-- Tabs Navigation -->
+            <div class="tabs-header">
+                <button class="tab-btn active" onclick="openTab(event, 'tab-general')">General</button>
+                <button class="tab-btn" onclick="openTab(event, 'tab-design')">Diseño</button>
+                <button class="tab-btn" onclick="openTab(event, 'tab-export')">Exportar</button>
+            </div>
+
+            <!-- Tab 1: General (Títulos y Resolución) -->
+            <div class="tab-content active" id="tab-general">
+                
+                <div class="control-group">
+                    <label for="resolutionSelect">Resolución / Orientación</label>
+                    <select id="resolutionSelect" onchange="updateResolution()">
+                        <option value="a4">A4 (Impresión 794x1123)</option>
+                        <option value="3:4">3:4 (Retrato 794x1059)</option>
+                        <option value="4:3">4:3 (Paisaje 1059x794)</option>
+                        <option value="16:9">16:9 (Pantalla Ancha 1280x720)</option>
+                        <option value="1:1">1:1 (Cuadrado 800x800)</option>
+                        <option value="custom">Personalizado...</option>
+                    </select>
+                </div>
+
+                <div class="control-group" id="customResGroup" style="display: none;">
+                    <div class="row-group">
+                        <input type="number" id="customWidth" placeholder="Ancho px" value="1000" oninput="updateResolution()">
+                        <input type="number" id="customHeight" placeholder="Alto px" value="1000" oninput="updateResolution()">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="docTitle">Título del Documento</label>
+                    <input type="text" id="docTitle" value="Ejercicios de Anagramas" oninput="generatePuzzle()">
+                </div>
+                
+                <div class="control-group">
+                    <label for="docSubtitle">Subtítulo</label>
+                    <input type="text" id="docSubtitle" value="Descifra las siguientes palabras ocultas" oninput="generatePuzzle()">
+                </div>
+
+                <div class="control-group">
+                    <label>Mostrar Elementos</label>
+                    <div class="switches-grid">
+                        <label class="switch-container">
+                            <div class="switch"><input type="checkbox" id="showTitle" checked onchange="generatePuzzle()"><span class="slider"></span></div>
+                            Título
+                        </label>
+                        <label class="switch-container">
+                            <div class="switch"><input type="checkbox" id="showSubtitle" checked onchange="generatePuzzle()"><span class="slider"></span></div>
+                            Subtítulo
+                        </label>
+                        <label class="switch-container">
+                            <div class="switch"><input type="checkbox" id="showName" checked onchange="generatePuzzle()"><span class="slider"></span></div>
+                            Nombre
+                        </label>
+                        <label class="switch-container">
+                            <div class="switch"><input type="checkbox" id="showClassroom" checked onchange="generatePuzzle()"><span class="slider"></span></div>
+                            Aula
+                        </label>
+                        <label class="switch-container">
+                            <div class="switch"><input type="checkbox" id="showDate" checked onchange="generatePuzzle()"><span class="slider"></span></div>
+                            Fecha
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Diseño y Palabras -->
+            <div class="tab-content" id="tab-design">
+                <div class="control-group" style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 6px; border: 1px solid var(--border-color);">
+                    <label class="switch-container switch-solution">
+                        <div class="switch"><input type="checkbox" id="showSolution" onchange="generatePuzzle()"><span class="slider"></span></div>
+                        <strong style="color: var(--success);">Mostrar Solución en Preview</strong>
+                    </label>
+                </div>
+
+                <div class="control-group">
+                    <div class="range-header">
+                        <label for="fontSize">Tamaño de Letra</label>
+                        <span id="fontSizeVal">20px</span>
+                    </div>
+                    <input type="range" id="fontSize" min="12" max="40" value="20" oninput="document.getElementById('fontSizeVal').innerText = this.value + 'px'; generatePuzzle()">
+                </div>
+
+                <div class="control-group">
+                    <div class="range-header">
+                        <label for="charSpacing">Espacio entre Letras</label>
+                        <span id="charSpacingVal">4px</span>
+                    </div>
+                    <input type="range" id="charSpacing" min="0" max="24" value="4" oninput="document.getElementById('charSpacingVal').innerText = this.value + 'px'; generatePuzzle()">
+                </div>
+
+                <div class="control-group">
+                    <div class="range-header">
+                        <label for="lineSpacing">Interlineado</label>
+                        <span id="lineSpacingVal">60px</span>
+                    </div>
+                    <input type="range" id="lineSpacing" min="30" max="120" value="60" oninput="document.getElementById('lineSpacingVal').innerText = this.value + 'px'; generatePuzzle()">
+                </div>
+
+                <div class="control-group">
+                    <label for="wordList">Palabras (una por línea)</label>
+                    <textarea id="wordList" oninput="generatePuzzle()">MURCIELAGO
 COMPUTADORA
 UNIVERSO
 ELEFANTE
@@ -241,27 +533,43 @@ MARIPOSA
 ASTRO
 TECLADO
 PANTALLA</textarea>
+                </div>
             </div>
 
-            <button class="btn btn-primary" onclick="generatePuzzle()">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-                <span class="label">Generar Anagramas</span>
-            </button>
-
-            <div class="button-group">
-                <button class="btn" onclick="exportSVG()">
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 11h-2v-2h2v2zm0-4h-2V6h2v4zm4 4h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg>
-                    <span class="label">Exportar SVG</span>
-                </button>
-                <button class="btn" onclick="exportPNG()">
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-                    <span class="label">Exportar PNG (300 DPI)</span>
-                </button>
+            <!-- Tab 3: Exportar -->
+            <div class="tab-content" id="tab-export">
+                <div class="control-group">
+                    <label>Ficha para Alumnos (Oculta)</label>
+                    <div class="button-grid">
+                        <button class="btn" onclick="exportSVG(false)">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 11h-2v-2h2v2zm0-4h-2V6h2v4zm4 4h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg>
+                            <span>Descargar SVG</span>
+                        </button>
+                        <button class="btn" onclick="exportPNG(false)">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+                            <span>Descargar PNG</span>
+                        </button>
+                    </div>
+                </div>
+                <hr style="border:0; border-top: 1px solid var(--border-color); margin: 5px 0;">
+                <div class="control-group">
+                    <label style="color: var(--success);">Hoja del Maestro (Resuelta)</label>
+                    <div class="button-grid">
+                        <button class="btn btn-success" onclick="exportSVG(true)">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+                            <span>Solución SVG</span>
+                        </button>
+                        <button class="btn btn-success" onclick="exportPNG(true)">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+                            <span>Solución PNG</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Preview -->
-        <div class="preview-area">
+        <div class="preview-area" onclick="closeSidebarOnMobile()">
             <div class="canvas-wrapper" id="canvasWrapper">
                 <!-- SVG Will be injected here -->
             </div>
@@ -269,10 +577,63 @@ PANTALLA</textarea>
     </div>
 
     <script>
-        // Logic Variables
-        const SVG_WIDTH = 794;
-        const SVG_HEIGHT = 1059; // 3:4 aspect roughly A4
+        // Default Logic Variables
+        let SVG_WIDTH = 794;
+        let SVG_HEIGHT = 1123;
         let currentSVGData = '';
+
+        // UI Interactions
+        function openTab(evt, tabId) {
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const btn = document.getElementById('mobileToggle');
+            sidebar.classList.toggle('open');
+            if(sidebar.classList.contains('open')) {
+                btn.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+            } else {
+                btn.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+            }
+        }
+
+        function closeSidebarOnMobile() {
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('mobileToggle').style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+            }
+        }
+
+        // Setup Resolution
+        function updateResolution() {
+            const res = document.getElementById('resolutionSelect').value;
+            const customGroup = document.getElementById('customResGroup');
+            
+            customGroup.style.display = res === 'custom' ? 'block' : 'none';
+            
+            switch(res) {
+                case 'a4': SVG_WIDTH = 794; SVG_HEIGHT = 1123; break;
+                case '3:4': SVG_WIDTH = 794; SVG_HEIGHT = 1059; break;
+                case '1:1': SVG_WIDTH = 800; SVG_HEIGHT = 800; break;
+                case '4:3': SVG_WIDTH = 1059; SVG_HEIGHT = 794; break;
+                case '16:9': SVG_WIDTH = 1280; SVG_HEIGHT = 720; break;
+                case 'custom':
+                    SVG_WIDTH = parseInt(document.getElementById('customWidth').value) || 1000;
+                    SVG_HEIGHT = parseInt(document.getElementById('customHeight').value) || 1000;
+                    break;
+            }
+            
+            document.getElementById('canvasWrapper').style.aspectRatio = `${SVG_WIDTH} / ${SVG_HEIGHT}`;
+            generatePuzzle();
+        }
 
         // Scramble function
         function scrambleWord(word) {
@@ -291,65 +652,142 @@ PANTALLA</textarea>
                 attempts++;
             } while (arr.join('') === original && attempts < 10);
             
-            return arr.join(' ');
+            return arr.join('');
         }
 
-        // Generate SVG Content
-        function generatePuzzle() {
-            const title = document.getElementById('docTitle').value.trim() || 'Anagramas';
+        // Core Puzzle Generator (Returns raw SVG string)
+        function buildSVGContent(forceSolution = null) {
+            const title = document.getElementById('docTitle').value.trim();
+            const subtitle = document.getElementById('docSubtitle').value.trim();
             const rawText = document.getElementById('wordList').value;
             const words = rawText.split('\n').map(w => w.trim().toUpperCase()).filter(w => w.length > 0);
+
+            // Switches logic
+            const showTitle = document.getElementById('showTitle').checked;
+            const showSubtitle = document.getElementById('showSubtitle').checked;
+            const showName = document.getElementById('showName').checked;
+            const showClassroom = document.getElementById('showClassroom').checked;
+            const showDate = document.getElementById('showDate').checked;
+            const showSolution = forceSolution !== null ? forceSolution : document.getElementById('showSolution').checked;
+            
+            // Sizes & Spacing
+            const fontSize = parseInt(document.getElementById('fontSize').value);
+            const lineSpacing = parseInt(document.getElementById('lineSpacing').value);
+            const charSpacing = parseInt(document.getElementById('charSpacing').value);
+
+            // Cálculo dinámico para los guiones (blanks)
+            // Se escala según el tamaño de la letra y el espaciado
+            const lineLength = fontSize * 0.8;
+            const letterGap = lineLength + charSpacing + (fontSize * 0.25);
+
+            // Precalcular anagramas y el ancho máximo para alinear las respuestas en bloque (columna perfecta)
+            const charPixelApprox = fontSize * 0.65;
+            let maxScrambledWidthPx = 0;
+            const scrambledWords = words.map(word => {
+                const scrambled = scrambleWord(word);
+                const widthPx = scrambled.length * (charPixelApprox + charSpacing);
+                if (widthPx > maxScrambledWidthPx) {
+                    maxScrambledWidthPx = widthPx;
+                }
+                return scrambled;
+            });
+
+            // Definir un único punto de inicio (X) para TODAS las líneas de respuesta basándose en la palabra más larga
+            const globalBlankStartX = Math.max(380, Math.min(SVG_WIDTH - 250, 95 + maxScrambledWidthPx + 40));
 
             // Start building SVG
             let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${SVG_WIDTH} ${SVG_HEIGHT}" width="100%" height="100%" style="background-color: white;">
                 <defs>
                     <style>
                         .title { font-family: sans-serif; font-size: 32px; font-weight: bold; fill: #000; text-anchor: middle; }
-                        .header-text { font-family: sans-serif; font-size: 16px; fill: #000; }
-                        .anagram-scrambled { font-family: monospace; font-size: 20px; font-weight: bold; fill: #333; letter-spacing: 2px; }
+                        .subtitle { font-family: sans-serif; font-size: 18px; font-weight: normal; fill: #444; text-anchor: middle; }
+                        .header-text { font-family: sans-serif; font-size: 15px; fill: #000; }
+                        .anagram-scrambled { font-family: monospace; font-size: ${fontSize}px; font-weight: bold; fill: #333; letter-spacing: ${charSpacing}px; }
+                        .solution-text { font-family: sans-serif; font-size: ${Math.max(14, fontSize - 2)}px; font-weight: bold; fill: #2e7d32; text-anchor: middle; }
                         .line { stroke: #000; stroke-width: 1.5; }
-                        .item-number { font-family: sans-serif; font-size: 18px; font-weight: bold; fill: #000; }
+                        .item-number { font-family: sans-serif; font-size: ${Math.max(16, fontSize - 2)}px; font-weight: bold; fill: #000; text-anchor: end; }
                     </style>
                 </defs>`;
 
-            // Header Elements
-            svg += `<text x="${SVG_WIDTH / 2}" y="60" class="title">${title}</text>`;
-            svg += `<text x="50" y="120" class="header-text">Nombre: ______________________________________</text>`;
-            svg += `<text x="550" y="120" class="header-text">Fecha: _________________</text>`;
-            svg += `<line x1="50" y1="140" x2="${SVG_WIDTH - 50}" y2="140" class="line" />`;
+            let currentY = 55;
 
-            // Draw Words
-            const startY = 190;
-            const rowHeight = 60;
-            const maxRows = 14; 
+            // Layout Title and Subtitle dynamically
+            if (showTitle && title !== '') {
+                svg += `<text x="${SVG_WIDTH / 2}" y="${currentY}" class="title">${title}</text>`;
+                currentY += 35;
+            }
+            if (showSubtitle && subtitle !== '') {
+                svg += `<text x="${SVG_WIDTH / 2}" y="${currentY}" class="subtitle">${subtitle}</text>`;
+                currentY += 30;
+            }
 
-            words.forEach((word, index) => {
-                if (index >= maxRows) return; // Prevent overflow
+            // Layout Header details
+            let hasHeaderInfo = showName || showClassroom || showDate;
+            if (hasHeaderInfo) {
+                currentY += 10;
+                let currentX = 50;
 
-                const yPos = startY + (index * rowHeight);
-                const scrambled = scrambleWord(word);
+                if (showName) {
+                    svg += `<text x="${currentX}" y="${currentY}" class="header-text">Nombre: ________________________________</text>`;
+                    currentX += 370;
+                }
+                if (showClassroom) {
+                    svg += `<text x="${currentX}" y="${currentY}" class="header-text">Aula: _________</text>`;
+                    currentX += 150;
+                }
+                if (showDate) {
+                    svg += `<text x="${currentX}" y="${currentY}" class="header-text">Fecha: _________</text>`;
+                }
                 
-                // Number
-                svg += `<text x="50" y="${yPos}" class="item-number">${index + 1}.</text>`;
+                currentY += 18;
+                svg += `<line x1="50" y1="${currentY}" x2="${SVG_WIDTH - 50}" y2="${currentY}" class="line" />`;
+                currentY += 35;
+            } else {
+                currentY += 25;
+            }
+
+            // Draw Words (Anagrams)
+            const startY = currentY;
+            
+            words.forEach((word, index) => {
+                const yPos = startY + (index * lineSpacing);
+                if (yPos > SVG_HEIGHT - 30) return; // Prevent render off canvas
+
+                const scrambled = scrambledWords[index];
+
+                // Number (Alineado a la derecha en la coordenada x="75")
+                svg += `<text x="60" y="${yPos}" class="item-number">${index + 1}.</text>`;
                 
                 // Scrambled Text
                 svg += `<text x="90" y="${yPos}" class="anagram-scrambled">${scrambled}</text>`;
                 
-                // Blanks for answers based on word length
-                const letterSpacing = 25;
-                const blankStartX = 400;
-                for(let i=0; i<word.length; i++) {
-                    const bx = blankStartX + (i * letterSpacing);
-                    svg += `<line x1="${bx}" y1="${yPos + 5}" x2="${bx + 15}" y2="${yPos + 5}" class="line" />`;
+                // Posición en Y para las líneas de guiones y soluciones
+                const lineYPos = yPos + (fontSize * 0.2); 
+                const solutionYPos = lineYPos - (fontSize * 0.2);
+
+                for(let i = 0; i < word.length; i++) {
+                    const bx = globalBlankStartX + (i * letterGap);
+                    // Hide blanks if they exceed the canvas borders
+                    if (bx + lineLength < SVG_WIDTH - 30) {
+                        svg += `<line x1="${bx}" y1="${lineYPos}" x2="${bx + lineLength}" y2="${lineYPos}" class="line" />`;
+                        
+                        if (showSolution) {
+                            svg += `<text x="${bx + (lineLength / 2)}" y="${solutionYPos}" class="solution-text">${word[i]}</text>`;
+                        }
+                    }
                 }
             });
 
             svg += `</svg>`;
-            currentSVGData = svg;
-            document.getElementById('canvasWrapper').innerHTML = svg;
+            return svg;
         }
 
-        // Trigger file download
+        function generatePuzzle() {
+            currentSVGData = buildSVGContent();
+            document.getElementById('canvasWrapper').innerHTML = currentSVGData;
+        }
+
+        // Export Functions
         function downloadFile(content, filename, type) {
             const blob = new Blob([content], { type: type });
             const url = URL.createObjectURL(blob);
@@ -362,29 +800,28 @@ PANTALLA</textarea>
             URL.revokeObjectURL(url);
         }
 
-        function exportSVG() {
-            if (!currentSVGData) return;
-            downloadFile(currentSVGData, 'anagramas.svg', 'image/svg+xml');
+        function exportSVG(isSolution = false) {
+            const svgData = buildSVGContent(isSolution);
+            const filename = isSolution ? 'anagramas_solucion.svg' : 'anagramas_ejercicio.svg';
+            downloadFile(svgData, filename, 'image/svg+xml');
         }
 
-        function exportPNG() {
-            if (!currentSVGData) return;
-            
-            // Render SVG to Canvas for high DPI
+        function exportPNG(isSolution = false) {
+            const svgData = buildSVGContent(isSolution);
+            const filename = isSolution ? 'anagramas_solucion_300dpi.png' : 'anagramas_ejercicio_300dpi.png';
+
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             
-            // 300 DPI multiplier (300 / 96 baseline ≈ 3.125)
-            const scale = 3.125;
+            const scale = 3.125; // 300 DPI 
             canvas.width = SVG_WIDTH * scale;
             canvas.height = SVG_HEIGHT * scale;
             
-            // Force white background on canvas context to ensure transparency is covered
             ctx.fillStyle = "#ffffff";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
             const img = new Image();
-            const svgBlob = new Blob([currentSVGData], {type: 'image/svg+xml;charset=utf-8'});
+            const svgBlob = new Blob([svgData], {type: 'image/svg+xml;charset=utf-8'});
             const url = URL.createObjectURL(svgBlob);
             
             img.onload = function () {
@@ -395,7 +832,7 @@ PANTALLA</textarea>
                     const pngUrl = URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = pngUrl;
-                    a.download = 'anagramas_300dpi.png';
+                    a.download = filename;
                     document.body.appendChild(a);
                     a.click();
                     document.body.removeChild(a);
@@ -406,9 +843,11 @@ PANTALLA</textarea>
         }
 
         // Initialize on load
-        window.onload = generatePuzzle;
+        window.onload = function() {
+            updateResolution();
+        };
     </script>
-      <script>
+<script>
     // Bloquear clic derecho (Anticlic)
     document.addEventListener('contextmenu', function(e) {
         e.preventDefault();
