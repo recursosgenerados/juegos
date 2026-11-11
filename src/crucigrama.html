@@ -1,19 +1,18 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Crucigramas Pro</title>
+    <title>Generador de Crucigramas Pro - Navegación y Fuentes</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Custom styles to handle specific behaviors not fully covered by Tailwind */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden; /* Prevent page scrolling, canvas is pan/zoomable */
-            background-color: #111827; /* Tailwind gray-900 */
+            overflow: hidden; 
+            background-color: #111827; 
             font-family: 'Inter', system-ui, sans-serif;
         }
 
@@ -29,19 +28,24 @@
         #canvas-container {
             transition: transform 0.2s ease-out;
             transform-origin: center center;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            background-color: white;
-            border-radius: 4px;
-            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        #preview-canvas {
-            display: block;
+        .preview-canvas {
+            display: none; /* Oculto por defecto, se maneja por JS */
             image-rendering: -webkit-optimize-contrast;
             image-rendering: crisp-edges;
+            background-color: white;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
         }
 
-        /* Make panel handle obvious and unselectable */
+        .preview-canvas.active {
+            display: block;
+        }
+
         .drag-handle {
             cursor: grab;
             user-select: none;
@@ -50,7 +54,6 @@
             cursor: grabbing;
         }
 
-        /* SVG icon alignment helper */
         .btn-icon-text {
             display: inline-flex;
             align-items: center;
@@ -68,29 +71,49 @@
             stroke-linejoin: round;
         }
 
-        textarea {
-            resize: none;
-        }
-        
-        /* Custom scrollbar for textarea */
+        textarea { resize: none; }
         textarea::-webkit-scrollbar { width: 8px; }
         textarea::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
         textarea::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         textarea::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Estilo personalizado para el slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #2563eb;
+            cursor: pointer;
+            margin-top: -6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
     </style>
 </head>
 <body>
 
     <div id="workspace">
-        <!-- Canvas Container (Handles Pan/Zoom) -->
+        <!-- Canvas Container -->
         <div id="canvas-container">
-            <canvas id="preview-canvas"></canvas>
+            <canvas id="preview-canvas-grid" class="preview-canvas active"></canvas>
+            <canvas id="preview-canvas-clues" class="preview-canvas"></canvas>
         </div>
 
         <!-- Floating Control Panel -->
         <div id="control-panel" class="absolute top-4 left-4 sm:top-6 sm:left-6 z-20 w-80 sm:w-96 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-200 flex flex-col transition-all duration-300" style="max-height: calc(100vh - 3rem);">
             
-            <!-- Panel Header / Drag Handle -->
             <div id="panel-header" class="drag-handle flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50/50 rounded-t-2xl">
                 <div class="flex items-center gap-2 text-gray-700">
                     <svg class="svg-icon opacity-50" viewBox="0 0 24 24"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>
@@ -101,12 +124,10 @@
                 </button>
             </div>
 
-            <!-- Panel Content -->
             <div id="panel-content" class="flex flex-col p-4 gap-4 overflow-y-auto">
                 <div class="flex flex-col gap-1.5">
                     <label class="text-xs font-semibold text-gray-600 uppercase tracking-wider">Palabras y Pistas</label>
-                    <p class="text-[11px] text-gray-500 leading-tight">Formato: <code>PALABRA: Pista</code> (una por línea)</p>
-                    <textarea id="input-words" class="w-full h-48 sm:h-56 p-3 text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-mono" spellcheck="false">
+                    <textarea id="input-words" class="w-full h-40 sm:h-48 p-3 text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-mono" spellcheck="false">
 JAVASCRIPT: Lenguaje principal de la web interactiva
 
 CANVAS: Elemento HTML para dibujar gráficos por código
@@ -116,6 +137,15 @@ FRONTEND: Parte del desarrollo que ve el usuario
 INTERFAZ: Medio con el que el usuario interactúa
 
 DISEÑO: Proceso de idear la parte visual</textarea>
+                </div>
+
+                <!-- Slider de Tamaño de Fuente -->
+                <div class="flex flex-col gap-1.5 px-1">
+                    <div class="flex justify-between items-center">
+                        <label class="text-xs font-semibold text-gray-600 uppercase tracking-wider">Tamaño de letra (Pistas)</label>
+                        <span id="font-size-val" class="text-xs text-gray-500 font-mono bg-gray-100 px-2 py-0.5 rounded">16px</span>
+                    </div>
+                    <input type="range" id="slider-font-size" min="10" max="40" value="16" step="1">
                 </div>
 
                 <button id="btn-generate" class="w-full btn-icon-text bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-xl shadow-md transition-colors">
@@ -142,12 +172,22 @@ DISEÑO: Proceso de idear la parte visual</textarea>
                         <span class="hidden md:inline">Exportar</span> SVG
                     </button>
                 </div>
-                <p class="text-[10px] text-center text-gray-400 mt-[-5px]">Exportaciones listas para imprimir (300 DPI, en blanco).</p>
             </div>
         </div>
 
+        <!-- Universal Navigation (Siguiente/Anterior) -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center bg-white/90 backdrop-blur-md border border-gray-200 rounded-full shadow-2xl p-1.5 gap-2">
+            <button id="btn-prev" class="p-2 hover:bg-gray-100 rounded-full text-gray-600 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+                <svg class="svg-icon w-5 h-5" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <span id="view-label" class="px-4 text-sm font-bold text-gray-700 min-w-[130px] text-center uppercase tracking-wide">Crucigrama</span>
+            <button id="btn-next" class="p-2 hover:bg-gray-100 rounded-full text-gray-600 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+                <svg class="svg-icon w-5 h-5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+        </div>
+
         <!-- Zoom & Fullscreen Toolbar -->
-        <div id="zoom-toolbar" class="absolute bottom-6 right-6 z-20 flex bg-white/90 backdrop-blur-md border border-gray-200 rounded-full shadow-xl p-1.5 gap-1">
+        <div id="zoom-toolbar" class="absolute bottom-8 right-6 z-30 flex flex-col md:flex-row bg-white/90 backdrop-blur-md border border-gray-200 rounded-full shadow-xl p-1.5 gap-1">
             <button id="btn-zoom-in" class="p-2 hover:bg-gray-100 rounded-full text-gray-700 transition-colors" title="Acercar">
                 <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
             </button>
@@ -157,58 +197,66 @@ DISEÑO: Proceso de idear la parte visual</textarea>
             <button id="btn-zoom-reset" class="p-2 hover:bg-gray-100 rounded-full text-gray-700 transition-colors" title="Restablecer 100%">
                 <svg class="svg-icon" viewBox="0 0 24 24"><path d="M15 3h6v6"></path><path d="M9 21H3v-6"></path><path d="M21 3l-7 7"></path><path d="M3 21l7-7"></path></svg>
             </button>
-            <div class="w-px bg-gray-300 mx-1"></div>
+            <div class="w-px h-px md:w-px md:h-auto bg-gray-300 mx-1 my-1 md:my-0"></div>
             <button id="btn-fullscreen" class="p-2 hover:bg-gray-100 rounded-full text-gray-700 transition-colors" title="Pantalla Completa">
                 <svg class="svg-icon" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
             </button>
         </div>
     </div>
 
-    <!-- Core Application Logic -->
     <script>
         /**
-         * State and Layout Variables
+         * State Variables
          */
-        let currentLayoutData = null;
+        let currentPlacedWords = [];
+        let currentLayouts = null; 
         let zoomLevel = 1;
         let isPanelCollapsed = false;
+        let currentViewIndex = 0; // 0: Grid, 1: Clues
 
-        // Configuration
         const CONFIG = {
             CELL_SIZE: 40,
             PADDING: 40,
-            CLUE_AREA_WIDTH: 350,
             FONT_MAIN: 'sans-serif'
         };
 
-        // DOM Elements
         const DOM = {
             input: document.getElementById('input-words'),
+            sliderFontSize: document.getElementById('slider-font-size'),
+            fontSizeVal: document.getElementById('font-size-val'),
             btnGenerate: document.getElementById('btn-generate'),
             toggleSolution: document.getElementById('toggle-solution'),
             btnExportPNG: document.getElementById('btn-export-png'),
             btnExportSVG: document.getElementById('btn-export-svg'),
-            canvas: document.getElementById('preview-canvas'),
+            
+            canvasGrid: document.getElementById('preview-canvas-grid'),
+            canvasClues: document.getElementById('preview-canvas-clues'),
             container: document.getElementById('canvas-container'),
             workspace: document.getElementById('workspace'),
+            
             panel: document.getElementById('control-panel'),
             panelHeader: document.getElementById('panel-header'),
             panelContent: document.getElementById('panel-content'),
             btnCollapse: document.getElementById('btn-collapse'),
             iconCollapse: document.getElementById('icon-collapse'),
+            
+            btnPrev: document.getElementById('btn-prev'),
+            btnNext: document.getElementById('btn-next'),
+            viewLabel: document.getElementById('view-label'),
+
             btnZoomIn: document.getElementById('btn-zoom-in'),
             btnZoomOut: document.getElementById('btn-zoom-out'),
             btnZoomReset: document.getElementById('btn-zoom-reset'),
             btnFullscreen: document.getElementById('btn-fullscreen')
         };
 
-        const ctx = DOM.canvas.getContext('2d');
+        const ctxGrid = DOM.canvasGrid.getContext('2d');
+        const ctxClues = DOM.canvasClues.getContext('2d');
 
         /**
-         * Crossword Generation Algorithm
+         * Crossword Algorithm
          */
         function generateCrosswordGrid(inputList) {
-            // Sort words by length descending for better interlocking chances
             let words = [...inputList].sort((a, b) => b.word.length - a.word.length);
             let grid = new Map(); 
             let placed = [];
@@ -216,31 +264,24 @@ DISEÑO: Proceso de idear la parte visual</textarea>
             const getCell = (x, y) => grid.get(`${x},${y}`);
             const setCell = (x, y, char) => grid.set(`${x},${y}`, char);
 
-            // Checks if a word can be placed at (x,y) with given direction
             function checkFit(word, x, y, dx, dy) {
                 let intersections = 0;
-                
-                // Boundaries (cells immediately before and after must be empty)
                 if (getCell(x - dx, y - dy)) return -1;
                 if (getCell(x + dx * word.length, y + dy * word.length)) return -1;
-
                 for (let i = 0; i < word.length; i++) {
                     let cx = x + dx * i;
                     let cy = y + dy * i;
                     let cell = getCell(cx, cy);
-
                     if (cell) {
-                        if (cell !== word[i]) return -1; // Letter mismatch
+                        if (cell !== word[i]) return -1;
                         intersections++;
                     } else {
-                        // Check parallel adjacent cells to prevent accidental 2-letter words
                         if (getCell(cx + dy, cy + dx) || getCell(cx - dy, cy - dx)) return -1;
                     }
                 }
                 return intersections;
             }
 
-            // Place initial word
             if (words.length > 0) {
                 let w0 = words[0];
                 for (let i = 0; i < w0.word.length; i++) setCell(i, 0, w0.word[i]);
@@ -251,13 +292,10 @@ DISEÑO: Proceso de idear la parte visual</textarea>
             let passes = 0;
             const MAX_PASSES = 3;
 
-            // Greedily find intersecting spots
             while (unplaced.length > 0 && passes < MAX_PASSES) {
                 let nextUnplaced = [];
                 for (let w of unplaced) {
                     let bestFit = null;
-                    
-                    // Check intersections with all placed words
                     for (let p of placed) {
                         for (let i = 0; i < w.word.length; i++) {
                             for (let j = 0; j < p.word.length; j++) {
@@ -278,7 +316,6 @@ DISEÑO: Proceso de idear la parte visual</textarea>
                             }
                         }
                     }
-                    
                     if (bestFit) {
                         let dx = bestFit.isHorizontal ? 1 : 0;
                         let dy = bestFit.isHorizontal ? 0 : 1;
@@ -294,12 +331,10 @@ DISEÑO: Proceso de idear la parte visual</textarea>
                 passes++;
             }
 
-            // Fallback: Place remaining unplaced words vertically at the bottom separated
             if (unplaced.length > 0) {
                 let maxY = 0;
                 for (let key of grid.keys()) maxY = Math.max(maxY, parseInt(key.split(',')[1]));
                 let startY = maxY + 2;
-                
                 for (let w of unplaced) {
                     for (let i = 0; i < w.word.length; i++) setCell(0, startY + i, w.word[i]);
                     placed.push({ ...w, x: 0, y: startY, isHorizontal: false });
@@ -307,7 +342,6 @@ DISEÑO: Proceso de idear la parte visual</textarea>
                 }
             }
 
-            // Sort top-to-bottom, left-to-right to assign logical crossword numbers
             placed.sort((a, b) => {
                 if (a.y !== b.y) return a.y - b.y;
                 return a.x - b.x;
@@ -326,9 +360,6 @@ DISEÑO: Proceso de idear la parte visual</textarea>
             return placed;
         }
 
-        /**
-         * Parses Text Input
-         */
         function parseInput(text) {
             const lines = text.split('\n');
             const result = [];
@@ -345,15 +376,11 @@ DISEÑO: Proceso de idear la parte visual</textarea>
             return result;
         }
 
-        /**
-         * Helper: Word Wrap using Canvas context
-         */
         function wrapText(text, maxWidth, font, measureCtx) {
             measureCtx.font = font;
             let words = text.split(' ');
             let lines = [];
             let currentLine = words[0];
-            
             for (let i = 1; i < words.length; i++) {
                 let word = words[i];
                 let width = measureCtx.measureText(currentLine + " " + word).width;
@@ -369,9 +396,10 @@ DISEÑO: Proceso de idear la parte visual</textarea>
         }
 
         /**
-         * Abstract Layout Builder (Provides geometry used by both Canvas and SVG)
+         * Layout Builder
          */
-        function buildLayoutData(placedWords) {
+        function buildLayouts(placedWords) {
+            // --- 1. GRID LAYOUT ---
             let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
             placedWords.forEach(w => {
                 let endX = w.x + (w.isHorizontal ? w.word.length - 1 : 0);
@@ -382,12 +410,9 @@ DISEÑO: Proceso de idear la parte visual</textarea>
 
             const gridPixelW = (maxX - minX + 1) * CONFIG.CELL_SIZE;
             const gridPixelH = (maxY - minY + 1) * CONFIG.CELL_SIZE;
-
             let cells = [];
-            let clueTexts = [];
             let cellSet = new Set();
 
-            // 1. Build Geometry for Cells
             placedWords.forEach(w => {
                 let dx = w.isHorizontal ? 1 : 0;
                 let dy = w.isHorizontal ? 0 : 1;
@@ -400,11 +425,7 @@ DISEÑO: Proceso de idear la parte visual</textarea>
 
                     if (!cellSet.has(key)) {
                         cellSet.add(key);
-                        cells.push({
-                            px, py,
-                            char: w.word[i],
-                            num: i === 0 ? w.number : null
-                        });
+                        cells.push({ px, py, char: w.word[i], num: i === 0 ? w.number : null });
                     } else if (i === 0) {
                         let existing = cells.find(c => c.px === px && c.py === py);
                         if (existing) existing.num = w.number;
@@ -412,127 +433,138 @@ DISEÑO: Proceso de idear la parte visual</textarea>
                 }
             });
 
-            // 2. Build Geometry for Clues
+            const gridLayout = {
+                type: 'grid',
+                cells,
+                width: gridPixelW + CONFIG.PADDING * 2,
+                height: gridPixelH + CONFIG.PADDING * 2
+            };
+
+            // --- 2. CLUES LAYOUT ---
+            const fontSize = parseInt(DOM.sliderFontSize.value);
+            const headerSize = fontSize + 4;
+            const lineHeight = fontSize + Math.max(6, fontSize * 0.4);
+
+            let clueTexts = [];
             const dummyCanvas = document.createElement('canvas');
             const measureCtx = dummyCanvas.getContext('2d');
             
-            let clueStartX = CONFIG.PADDING + gridPixelW + CONFIG.PADDING;
+            const clueStartX = CONFIG.PADDING;
             let clueY = CONFIG.PADDING;
-            const maxTextWidth = CONFIG.CLUE_AREA_WIDTH;
+            const maxTextWidth = 700; // Fixed width for exporting
 
             const addClueSection = (title, wordsSubset) => {
                 if (wordsSubset.length === 0) return;
                 
-                clueTexts.push({ text: title, x: clueStartX, y: clueY, font: `bold 18px ${CONFIG.FONT_MAIN}`, size: 18, isBold: true });
-                clueY += 28;
+                clueTexts.push({ text: title, x: clueStartX, y: clueY, font: `bold ${headerSize}px ${CONFIG.FONT_MAIN}`, size: headerSize, isBold: true });
+                clueY += headerSize + 12;
 
                 wordsSubset.sort((a, b) => a.number - b.number).forEach(w => {
                     let line = `${w.number}. ${w.clue}`;
-                    let wrapped = wrapText(line, maxTextWidth, `14px ${CONFIG.FONT_MAIN}`, measureCtx);
+                    let wrapped = wrapText(line, maxTextWidth, `${fontSize}px ${CONFIG.FONT_MAIN}`, measureCtx);
                     wrapped.forEach(l => {
-                        clueTexts.push({ text: l, x: clueStartX, y: clueY, font: `14px ${CONFIG.FONT_MAIN}`, size: 14, isBold: false });
-                        clueY += 20;
+                        clueTexts.push({ text: l, x: clueStartX, y: clueY, font: `${fontSize}px ${CONFIG.FONT_MAIN}`, size: fontSize, isBold: false });
+                        clueY += lineHeight;
                     });
-                    clueY += 6;
+                    clueY += 4; // Spacing between clues
                 });
-                clueY += 20;
+                clueY += headerSize; // Spacing between sections
             };
 
             addClueSection("HORIZONTALES", placedWords.filter(w => w.isHorizontal));
             addClueSection("VERTICALES", placedWords.filter(w => !w.isHorizontal));
 
-            const totalWidth = clueStartX + maxTextWidth + CONFIG.PADDING;
-            const totalHeight = Math.max(CONFIG.PADDING + gridPixelH + CONFIG.PADDING, clueY + CONFIG.PADDING);
+            const cluesLayout = {
+                type: 'clues',
+                clueTexts,
+                width: maxTextWidth + CONFIG.PADDING * 2,
+                height: clueY + CONFIG.PADDING
+            };
 
-            return { cells, clueTexts, width: totalWidth, height: totalHeight };
+            return { grid: gridLayout, clues: cluesLayout };
         }
 
         /**
-         * Canvas Renderer
+         * Render & Export Engines
          */
         function renderToCanvas(targetCtx, layout, showLetters, dprScale = 1) {
             targetCtx.save();
             targetCtx.scale(dprScale, dprScale);
-            
             targetCtx.imageSmoothingEnabled = true;
             targetCtx.imageSmoothingQuality = 'high';
 
-            // Background
             targetCtx.fillStyle = '#ffffff';
             targetCtx.fillRect(0, 0, layout.width, layout.height);
 
-            // Draw Cells
-            targetCtx.lineWidth = 1.5;
-            layout.cells.forEach(c => {
-                targetCtx.fillStyle = '#ffffff';
-                targetCtx.fillRect(c.px, c.py, CONFIG.CELL_SIZE, CONFIG.CELL_SIZE);
-                targetCtx.strokeStyle = '#000000';
-                targetCtx.strokeRect(c.px, c.py, CONFIG.CELL_SIZE, CONFIG.CELL_SIZE);
+            if (layout.cells) {
+                targetCtx.lineWidth = 1.5;
+                layout.cells.forEach(c => {
+                    targetCtx.fillStyle = '#ffffff';
+                    targetCtx.fillRect(c.px, c.py, CONFIG.CELL_SIZE, CONFIG.CELL_SIZE);
+                    targetCtx.strokeStyle = '#000000';
+                    targetCtx.strokeRect(c.px, c.py, CONFIG.CELL_SIZE, CONFIG.CELL_SIZE);
 
-                // Small start number
-                if (c.num) {
-                    targetCtx.fillStyle = '#000000';
-                    targetCtx.font = `11px ${CONFIG.FONT_MAIN}`;
-                    targetCtx.textAlign = 'left';
-                    targetCtx.textBaseline = 'top';
-                    targetCtx.fillText(c.num, c.px + 3, c.py + 3);
-                }
+                    if (c.num) {
+                        targetCtx.fillStyle = '#000000';
+                        targetCtx.font = `11px ${CONFIG.FONT_MAIN}`;
+                        targetCtx.textAlign = 'left';
+                        targetCtx.textBaseline = 'top';
+                        targetCtx.fillText(c.num, c.px + 3, c.py + 3);
+                    }
 
-                // Solution letter
-                if (showLetters && c.char) {
-                    targetCtx.fillStyle = '#000000';
-                    targetCtx.font = `bold 22px ${CONFIG.FONT_MAIN}`;
-                    targetCtx.textAlign = 'center';
-                    targetCtx.textBaseline = 'middle';
-                    targetCtx.fillText(c.char, c.px + CONFIG.CELL_SIZE / 2, c.py + CONFIG.CELL_SIZE / 2 + 2);
-                }
-            });
+                    if (showLetters && c.char) {
+                        targetCtx.fillStyle = '#000000';
+                        targetCtx.font = `bold 22px ${CONFIG.FONT_MAIN}`;
+                        targetCtx.textAlign = 'center';
+                        targetCtx.textBaseline = 'middle';
+                        targetCtx.fillText(c.char, c.px + CONFIG.CELL_SIZE / 2, c.py + CONFIG.CELL_SIZE / 2 + 2);
+                    }
+                });
+            }
 
-            // Draw Clues
-            targetCtx.fillStyle = '#000000';
-            targetCtx.textAlign = 'left';
-            targetCtx.textBaseline = 'top';
-            layout.clueTexts.forEach(t => {
-                targetCtx.font = t.font;
-                targetCtx.fillText(t.text, t.x, t.y);
-            });
+            if (layout.clueTexts) {
+                targetCtx.fillStyle = '#000000';
+                targetCtx.textAlign = 'left';
+                targetCtx.textBaseline = 'top';
+                layout.clueTexts.forEach(t => {
+                    targetCtx.font = t.font;
+                    targetCtx.fillText(t.text, t.x, t.y);
+                });
+            }
 
             targetCtx.restore();
         }
 
-        /**
-         * SVG Exporter
-         */
         function generateSVGString(layout) {
             let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${layout.width}" height="${layout.height}" viewBox="0 0 ${layout.width} ${layout.height}" style="background-color: white;">`;
             
-            // Cells group
-            svg += `<g id="grid">`;
-            layout.cells.forEach(c => {
-                svg += `<rect x="${c.px}" y="${c.py}" width="${CONFIG.CELL_SIZE}" height="${CONFIG.CELL_SIZE}" fill="white" stroke="black" stroke-width="1.5" />`;
-                if (c.num) {
-                    svg += `<text x="${c.px + 3}" y="${c.py + 13}" fill="black" font-family="${CONFIG.FONT_MAIN}" font-size="11px">${c.num}</text>`;
-                }
-                // Letters omitted intentionally for export
-            });
-            svg += `</g>`;
+            if (layout.cells) {
+                svg += `<g id="grid">`;
+                layout.cells.forEach(c => {
+                    svg += `<rect x="${c.px}" y="${c.py}" width="${CONFIG.CELL_SIZE}" height="${CONFIG.CELL_SIZE}" fill="white" stroke="black" stroke-width="1.5" />`;
+                    if (c.num) {
+                        svg += `<text x="${c.px + 3}" y="${c.py + 13}" fill="black" font-family="${CONFIG.FONT_MAIN}" font-size="11px">${c.num}</text>`;
+                    }
+                });
+                svg += `</g>`;
+            }
 
-            // Clues group
-            svg += `<g id="clues">`;
-            layout.clueTexts.forEach(t => {
-                let weight = t.isBold ? 'bold' : 'normal';
-                // Convert dominant-baseline hanging to standard y-offset for better compatibility
-                let baselineY = t.y + (t.size * 0.85); 
-                svg += `<text x="${t.x}" y="${baselineY}" fill="black" font-family="${CONFIG.FONT_MAIN}" font-weight="${weight}" font-size="${t.size}px">${t.text}</text>`;
-            });
-            svg += `</g>`;
+            if (layout.clueTexts) {
+                svg += `<g id="clues">`;
+                layout.clueTexts.forEach(t => {
+                    let weight = t.isBold ? 'bold' : 'normal';
+                    let baselineY = t.y + (t.size * 0.85); 
+                    svg += `<text x="${t.x}" y="${baselineY}" fill="black" font-family="${CONFIG.FONT_MAIN}" font-weight="${weight}" font-size="${t.size}px">${t.text}</text>`;
+                });
+                svg += `</g>`;
+            }
 
             svg += `</svg>`;
             return svg;
         }
 
         /**
-         * Main Generation & Update Routine
+         * Controllers & Updates
          */
         function handleGenerate() {
             const rawText = DOM.input.value;
@@ -543,63 +575,96 @@ DISEÑO: Proceso de idear la parte visual</textarea>
                 return;
             }
 
-            const placedWords = generateCrosswordGrid(parsed);
-            currentLayoutData = buildLayoutData(placedWords);
-            updatePreview();
+            currentPlacedWords = generateCrosswordGrid(parsed);
+            rebuildAndRender();
             
-            // Reset Zoom
             zoomLevel = 1;
             applyZoom();
         }
 
-        function updatePreview() {
-            if (!currentLayoutData) return;
+        function rebuildAndRender() {
+            if (!currentPlacedWords || currentPlacedWords.length === 0) return;
             
+            currentLayouts = buildLayouts(currentPlacedWords);
             const showLetters = DOM.toggleSolution.checked;
             
-            // Setup High DPI Canvas (5K Super Sampling Scale)
+            setupCanvas(DOM.canvasGrid, ctxGrid, currentLayouts.grid, showLetters);
+            setupCanvas(DOM.canvasClues, ctxClues, currentLayouts.clues, false);
+        }
+
+        function setupCanvas(canvas, ctx, layout, showLetters) {
             const deviceDpr = window.devicePixelRatio || 1;
-            const scale5K = Math.max(4, Math.ceil(5120 / currentLayoutData.width)); // Target 5K pixel width
+            const scale5K = Math.max(4, Math.ceil(5120 / layout.width)); 
             const renderScale = Math.max(deviceDpr, scale5K);
 
-            DOM.canvas.width = Math.round(currentLayoutData.width * renderScale);
-            DOM.canvas.height = Math.round(currentLayoutData.height * renderScale);
+            canvas.width = Math.round(layout.width * renderScale);
+            canvas.height = Math.round(layout.height * renderScale);
             
-            DOM.canvas.style.width = `${currentLayoutData.width}px`;
-            DOM.canvas.style.height = `${currentLayoutData.height}px`;
+            canvas.style.width = `${layout.width}px`;
+            canvas.style.height = `${layout.height}px`;
 
-            // Clear and render in Ultra 5K High Quality
-            ctx.clearRect(0, 0, DOM.canvas.width, DOM.canvas.height);
-            renderToCanvas(ctx, currentLayoutData, showLetters, renderScale);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            renderToCanvas(ctx, layout, showLetters, renderScale);
         }
 
         /**
-         * Export Handlers
+         * Navigation (View Switcher)
+         */
+        function updateNavigationState() {
+            DOM.canvasGrid.classList.toggle('active', currentViewIndex === 0);
+            DOM.canvasClues.classList.toggle('active', currentViewIndex === 1);
+            
+            DOM.viewLabel.textContent = currentViewIndex === 0 ? 'Crucigrama' : 'Pistas';
+            DOM.btnPrev.disabled = currentViewIndex === 0;
+            DOM.btnNext.disabled = currentViewIndex === 1;
+            
+            // Reapply zoom so the newly shown canvas centers correctly based on its distinct size
+            applyZoom();
+        }
+
+        DOM.btnPrev.addEventListener('click', () => { if(currentViewIndex > 0) { currentViewIndex--; updateNavigationState(); } });
+        DOM.btnNext.addEventListener('click', () => { if(currentViewIndex < 1) { currentViewIndex++; updateNavigationState(); } });
+
+        /**
+         * Sliders & Toggles
+         */
+        DOM.sliderFontSize.addEventListener('input', (e) => {
+            DOM.fontSizeVal.textContent = `${e.target.value}px`;
+            rebuildAndRender(); // Recalcula dimensiones con el nuevo font size
+        });
+
+        DOM.toggleSolution.addEventListener('change', rebuildAndRender);
+        DOM.btnGenerate.addEventListener('click', handleGenerate);
+
+        /**
+         * Export Engine
          */
         function handleExportPNG() {
-            if (!currentLayoutData) return;
-
-            // Target 300 DPI approx (Scale internally by factor of 4)
-            const SCALE_FACTOR = 4;
-            const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = Math.round(currentLayoutData.width * SCALE_FACTOR);
-            tempCanvas.height = Math.round(currentLayoutData.height * SCALE_FACTOR);
-            const tempCtx = tempCanvas.getContext('2d');
-
-            // Force letters hidden for export
-            renderToCanvas(tempCtx, currentLayoutData, false, SCALE_FACTOR);
-
-            const dataURL = tempCanvas.toDataURL('image/png');
-            triggerDownload(dataURL, 'crucigrama.png');
+            if (!currentLayouts) return;
+            const SCALE_FACTOR = 4; // 300 DPI target
+            const exportCanvasToPNG = (layout, filename) => {
+                const tempCanvas = document.createElement('canvas');
+                tempCanvas.width = Math.round(layout.width * SCALE_FACTOR);
+                tempCanvas.height = Math.round(layout.height * SCALE_FACTOR);
+                const tempCtx = tempCanvas.getContext('2d');
+                renderToCanvas(tempCtx, layout, false, SCALE_FACTOR); // Export without answers
+                triggerDownload(tempCanvas.toDataURL('image/png'), filename);
+            };
+            exportCanvasToPNG(currentLayouts.grid, 'crucigrama_grid.png');
+            setTimeout(() => exportCanvasToPNG(currentLayouts.clues, 'crucigrama_pistas.png'), 500);
         }
 
         function handleExportSVG() {
-            if (!currentLayoutData) return;
-            const svgString = generateSVGString(currentLayoutData);
-            const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            triggerDownload(url, 'crucigrama.svg');
-            setTimeout(() => URL.revokeObjectURL(url), 2000);
+            if (!currentLayouts) return;
+            const exportCanvasToSVG = (layout, filename) => {
+                const svgString = generateSVGString(layout);
+                const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                triggerDownload(url, filename);
+                setTimeout(() => URL.revokeObjectURL(url), 2000);
+            };
+            exportCanvasToSVG(currentLayouts.grid, 'crucigrama_grid.svg');
+            setTimeout(() => exportCanvasToSVG(currentLayouts.clues, 'crucigrama_pistas.svg'), 500);
         }
 
         function triggerDownload(url, filename) {
@@ -611,13 +676,15 @@ DISEÑO: Proceso de idear la parte visual</textarea>
             document.body.removeChild(a);
         }
 
+        DOM.btnExportPNG.addEventListener('click', handleExportPNG);
+        DOM.btnExportSVG.addEventListener('click', handleExportSVG);
+
         /**
-         * UI Interactions (Zoom, Fullscreen)
+         * Zoom & Fullscreen
          */
         function applyZoom() {
             DOM.container.style.transform = `scale(${zoomLevel})`;
         }
-
         DOM.btnZoomIn.addEventListener('click', () => { zoomLevel = Math.min(zoomLevel + 0.2, 3); applyZoom(); });
         DOM.btnZoomOut.addEventListener('click', () => { zoomLevel = Math.max(zoomLevel - 0.2, 0.2); applyZoom(); });
         DOM.btnZoomReset.addEventListener('click', () => { zoomLevel = 1; applyZoom(); });
@@ -629,14 +696,8 @@ DISEÑO: Proceso de idear la parte visual</textarea>
             }
         });
 
-        // Toggles
-        DOM.toggleSolution.addEventListener('change', updatePreview);
-        DOM.btnGenerate.addEventListener('click', handleGenerate);
-        DOM.btnExportPNG.addEventListener('click', handleExportPNG);
-        DOM.btnExportSVG.addEventListener('click', handleExportSVG);
-
         /**
-         * Optimized 60FPS Lag-Free Panel Dragging Engine
+         * 60FPS Drag Engine for Panel
          */
         let isDragging = false;
         let dragOffsetX = 0;
@@ -648,8 +709,6 @@ DISEÑO: Proceso de idear la parte visual</textarea>
         DOM.panelHeader.addEventListener('mousedown', (e) => {
             if (e.target === DOM.btnCollapse || DOM.btnCollapse.contains(e.target)) return;
             isDragging = true;
-            
-            // Temporarily disable CSS transitions during drag to remove movement rubberbanding/lag
             DOM.panel.classList.remove('transition-all', 'duration-300');
             document.body.style.userSelect = 'none';
 
@@ -660,18 +719,14 @@ DISEÑO: Proceso de idear la parte visual</textarea>
 
         document.addEventListener('mousemove', (e) => {
             if (!isDragging) return;
-
             let newX = e.clientX - dragOffsetX;
             let newY = e.clientY - dragOffsetY;
 
-            // Keep within window bounds
             const maxX = window.innerWidth - DOM.panel.offsetWidth;
             const maxY = window.innerHeight - 50;
-            
             nextX = Math.max(0, Math.min(newX, maxX));
             nextY = Math.max(0, Math.min(newY, maxY));
 
-            // Throttle paints to screen refresh rate via requestAnimationFrame
             if (!dragRafId) {
                 dragRafId = requestAnimationFrame(() => {
                     DOM.panel.style.left = `${nextX}px`;
@@ -687,30 +742,29 @@ DISEÑO: Proceso de idear la parte visual</textarea>
             if (isDragging) {
                 isDragging = false;
                 document.body.style.userSelect = '';
-                // Restore CSS transition for collapse/expand toggle animations
                 DOM.panel.classList.add('transition-all', 'duration-300');
             }
         });
 
-        /**
-         * Panel Collapse Logic
-         */
         DOM.btnCollapse.addEventListener('click', () => {
             isPanelCollapsed = !isPanelCollapsed;
             if (isPanelCollapsed) {
                 DOM.panelContent.style.display = 'none';
-                DOM.iconCollapse.innerHTML = `<polyline points="6 9 12 15 18 9"></polyline>`; // Chevron Down
+                DOM.iconCollapse.innerHTML = `<polyline points="6 9 12 15 18 9"></polyline>`; 
             } else {
                 DOM.panelContent.style.display = 'flex';
-                DOM.iconCollapse.innerHTML = `<polyline points="18 15 12 9 6 15"></polyline>`; // Chevron Up
+                DOM.iconCollapse.innerHTML = `<polyline points="18 15 12 9 6 15"></polyline>`; 
             }
         });
 
         // Initialize on load
-        window.addEventListener('load', handleGenerate);
+        window.addEventListener('load', () => {
+            handleGenerate();
+            updateNavigationState();
+        });
 
     </script>
-    <script>
+      <script>
     // Bloquear clic derecho (Anticlic)
     document.addEventListener('contextmenu', function(e) {
         e.preventDefault();
