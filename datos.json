@@ -12,7 +12,7 @@
         "url": "/juegos/src/sopadeletra.html"
     },
     {
-        "titulo": "GENERADOR DE PALABRAS Aleatorias",
+        "titulo": "GENERADOR DE PALABRAS ALEATORIA",
         "descripcion": "Crea tu propia lista de palabras para importar a la Sopa De Letras",
         "imagen": "https://i.postimg.cc/X7yCgJcN/images.png",
         "url": "https://www.palabrasaleatorias.com/"
@@ -30,9 +30,21 @@
         "url": "/juegos/src/criptograma.html"
     },
     {
-        "titulo": "Corvertidor de Imagen",
+        "titulo": "CONVERTIDOR DE IMAGEN",
         "descripcion": "Cambia una imagen a Blanco y Negro para Colorear",
         "imagen": "https://i.postimg.cc/jqZdprvj/image-(4).png",
         "url": "/juegos/src/pintar.html"
+    },
+    {
+        "titulo": "ANAGRAMAS POR FRASES",
+        "descripcion": "Genera anagramas pero con estilo de Frases",
+        "imagen": "https://i.postimg.cc/D0v8HdXz/anagrama-por-frase.png",
+        "url": "/juegos/src/anagrama-frase.html"
+    },
+    {
+        "titulo": "UNIR PARES",
+        "descripcion": "Cambia una imagen a Blanco y Negro para Colorear",
+        "imagen": "https://i.postimg.cc/7ZGMKw4R/unir-pares.png",
+        "url": "/juegos/src/unirpuntos.html"
     }
 ]
