@@ -3,13 +3,13 @@
         "titulo": "LABERINTO",
         "descripcion": "crea tu laberinto donde tienes que buscar la salida",
         "imagen": "https://i.postimg.cc/pL4MG9LQ/Laberinto.png",
-        "url": "https://recursosgenerados.github.io/laberinto/"
+        "url": "/juegos/src/laberinto.html"
     },
     {
         "titulo": "SOPA DE LETRA",
         "descripcion": "Crea tu propia Pupiletra y Busca las Palabras ocultas ",
         "imagen": "https://i.postimg.cc/QdwZ4BdJ/sopadeletra.png",
-        "url": "https://recursosgenerados.github.io/sopadeletra/"
+        "url": "/juegos/src/sopadeletra.html"
     },
     {
         "titulo": "GENERADOR DE PALABRAS Aleatorias",
@@ -21,18 +21,18 @@
         "titulo": "CRUCIGRAMA",
         "descripcion": "Crea tus propias Crucigrama con pistas",
         "imagen": "https://i.postimg.cc/BnkfY8nc/crucigrama.png",
-        "url": "https://recursosgenerados.github.io/crucigrama/"
+        "url": "/juegos/src/crucigrama.html"
     },
     {
         "titulo": "CRIPTOGRAMA",
         "descripcion": "Crea tu propio Criptograma Letra = Numero",
         "imagen": "https://i.postimg.cc/YCZBn4C1/criptograma.png",
-        "url": "https://recursosgenerados.github.io/criptograma/"
+        "url": "/juegos/src/criptograma.html"
     },
     {
         "titulo": "Corvertidor de Imagen",
         "descripcion": "Cambia una imagen a Blanco y Negro para Colorear",
         "imagen": "https://i.postimg.cc/jqZdprvj/image-(4).png",
-        "url": "/juegos/pintar.html"
+        "url": "/juegos/src/pintar.html"
     }
 ]
