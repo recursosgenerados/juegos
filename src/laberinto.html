@@ -28,20 +28,39 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #6b7280; 
         }
+        
+        /* Ocultar el panel de tabs en movil por defecto, mostrar en md */
+        @media (min-width: 768px) {
+            #tabsContainer {
+                display: flex !important;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center justify-center p-4">
 
     <div class="max-w-6xl w-full bg-gray-800 rounded-2xl shadow-2xl p-6 md:p-8 flex flex-col md:flex-row gap-8">
         
-        <!-- Panel de Controles Izquierdo -->
-        <div class="w-full md:w-1/3 flex flex-col gap-5">
-            <div>
+        <!-- Panel de Controles Izquierdo (Acordeón en móviles) -->
+        <div class="w-full md:w-1/3 flex flex-col gap-4">
+            
+            <div class="hidden md:block">
                 <h1 class="text-3xl font-bold text-white mb-1">Generador de Laberintos</h1>
-                <p class="text-gray-400 text-sm">Entradas y salidas siempre en lados opuestos cruzados (Izquierda vs Derecha/Centro, etc).</p>
+                <p class="text-gray-400 text-sm">Entradas y salidas siempre en lados opuestos cruzados.</p>
             </div>
 
-            <div class="space-y-3">
+            <!-- Botón Toggle Móvil -->
+            <button id="btnToggleTabs" class="md:hidden w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg flex justify-between items-center border border-gray-600 shadow-md transition-colors">
+                <span class="flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    Ajustes y Generador
+                </span>
+                <svg id="iconToggleTabs" class="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+
+            <!-- Contenedor Colapsable (Oculto en móvil por defecto) -->
+            <div id="tabsContainer" class="hidden flex-col gap-4 bg-gray-800 rounded-xl md:p-0 md:bg-transparent border border-gray-700 md:border-none shadow-xl md:shadow-none p-4 mt-2 md:mt-0">
+                
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label for="cols" class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1">Columnas</label>
@@ -91,41 +110,17 @@
                     <label for="mazeCount" class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1">Cantidad a generar</label>
                     <input type="number" id="mazeCount" min="1" max="50" value="1" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-white transition-all text-sm">
                 </div>
-            </div>
-
-            <div class="flex flex-col gap-2.5 mt-2">
-                <button id="btnGenerate" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 shadow-lg transition-colors">
+                
+                <button id="btnGenerate" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 shadow-lg transition-colors mt-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                     <span>Generar Laberintos</span>
                 </button>
 
-                <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-1">Exportar Actual</div>
-                <div class="flex gap-2">
-                    <button id="btnDownloadSvg" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 shadow-md text-xs transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        <span>SVG</span>
-                    </button>
-                    <button id="btnDownloadPng" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 shadow-md text-xs transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        <span>PNG (300 DPI)</span>
-                    </button>
-                </div>
+                <div class="h-px w-full bg-gray-700 my-2"></div>
 
-                <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-1">Exportar Todos en Lote (.ZIP)</div>
-                <div class="flex gap-2">
-                    <button id="btnDownloadZipSvg" class="flex-1 bg-teal-600 hover:bg-teal-500 text-white font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 shadow-md text-xs transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v1a2 2 0 01-2 2M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
-                        <span>ZIP (SVG)</span>
-                    </button>
-                    <button id="btnDownloadZipPng" class="flex-1 bg-purple-600 hover:bg-purple-500 text-white font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 shadow-md text-xs transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v1a2 2 0 01-2 2M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
-                        <span>ZIP (PNG)</span>
-                    </button>
-                </div>
-
-                <button id="btnClearDraw" class="w-full bg-red-600 hover:bg-red-500 text-white font-semibold py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 shadow-lg transition-colors mt-1 text-sm">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                    <span>Limpiar Trazo</span>
+                <button id="btnOpenExport" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 shadow-lg transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    <span>Exportar / Descargar</span>
                 </button>
             </div>
         </div>
@@ -133,9 +128,17 @@
         <!-- Área del Canvas y Controles de Vista -->
         <div id="canvasWrapper" class="relative w-full md:w-2/3 bg-gray-900 rounded-xl border border-gray-700 flex flex-col overflow-hidden min-h-[520px]">
             
-            <!-- Panel Flotante Draggable & Collapsible -->
+            <!-- Switch Solución Flotante (Arriba Izquierda) -->
+            <div class="absolute top-4 left-4 z-20 bg-gray-800/90 backdrop-blur border border-gray-600 shadow-[0_0_15px_rgba(0,0,0,0.5)] px-3 py-2 rounded-full flex items-center gap-3">
+                <span class="text-xs font-bold text-gray-200 uppercase tracking-wider">Solución</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="switchSolution" class="sr-only peer">
+                    <div class="w-10 h-5 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500 shadow-inner"></div>
+                </label>
+            </div>
+
+            <!-- Panel Flotante Draggable & Collapsible (Zoom/Fullscreen) -->
             <div id="floatingPanel" class="absolute top-4 right-4 z-10 flex flex-col bg-gray-800/95 backdrop-blur border border-gray-600 rounded-xl shadow-[0_0_15px_rgba(0,0,0,0.5)] overflow-hidden w-[60px] transition-all duration-300">
-                
                 <div id="dragHandle" class="w-full h-6 bg-gray-700 cursor-grab active:cursor-grabbing flex items-center justify-center border-b border-gray-600" title="Arrastrar panel">
                     <div class="flex gap-1">
                         <div class="w-1 h-1 bg-gray-400 rounded-full"></div>
@@ -143,7 +146,6 @@
                         <div class="w-1 h-1 bg-gray-400 rounded-full"></div>
                     </div>
                 </div>
-
                 <div id="panelContent" class="flex flex-col items-center p-2 gap-2">
                     <button id="btnFullscreen" class="p-2 text-gray-300 hover:text-white hover:bg-gray-600 rounded-lg transition-colors" title="Pantalla Completa">
                         <svg id="iconFullscreen" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
@@ -161,7 +163,6 @@
                         Reset<br>100%
                     </button>
                 </div>
-
                 <button id="btnCollapse" class="w-full bg-gray-700 hover:bg-gray-600 p-1 flex items-center justify-center border-t border-gray-600 text-gray-400 hover:text-white transition-colors">
                     <svg id="iconCollapse" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
                 </button>
@@ -170,37 +171,137 @@
             <!-- Contenedor con Scroll para Navegación -->
             <div id="scrollArea" class="flex-1 w-full h-full overflow-auto flex p-4 touch-none">
                 <div id="canvasContainer" class="relative m-auto shadow-[0_0_20px_rgba(0,0,0,0.6)] rounded-lg transition-all duration-200">
-                    <div id="mazeSvgContainer" class="absolute top-0 left-0 w-full h-full rounded-lg overflow-hidden"></div>
-                    <canvas id="drawCanvas" class="absolute top-0 left-0 w-full h-full rounded-lg cursor-crosshair touch-none"></canvas>
+                    <div id="mazeSvgContainer" class="absolute top-0 left-0 w-full h-full rounded-lg overflow-hidden select-none pointer-events-none"></div>
                 </div>
             </div>
 
             <!-- Paginación de Múltiples Laberintos -->
-            <div id="paginationCtrl" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 items-center gap-4 bg-gray-800/90 backdrop-blur px-5 py-2 rounded-full border border-gray-600 shadow-[0_4px_15px_rgba(0,0,0,0.5)] hidden z-10">
+            <div id="paginationCtrl" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 items-center gap-4 bg-gray-800/90 backdrop-blur px-5 py-2 rounded-full border border-gray-600 shadow-[0_4px_15px_rgba(0,0,0,0.5)] hidden z-20">
                 <button id="btnPrevMaze" class="text-gray-300 hover:text-white hover:bg-gray-700 p-1.5 rounded-full transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
                 <span id="mazeIndexText" class="text-white font-medium text-sm w-20 text-center tracking-wide">1 / 1</span>
                 <button id="btnNextMaze" class="text-gray-300 hover:text-white hover:bg-gray-700 p-1.5 rounded-full transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button>
             </div>
             
         </div>
+    </div>
 
+    <!-- Modal Flotante de Exportación -->
+    <div id="exportModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm items-center justify-center p-4 transition-opacity">
+        <div class="bg-gray-800 rounded-2xl max-w-lg w-full p-6 border border-gray-600 shadow-2xl relative">
+            
+            <button id="btnCloseModal" class="absolute top-4 right-4 text-gray-400 hover:text-white bg-gray-700 hover:bg-gray-600 rounded-full p-1 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            
+            <h2 class="text-2xl font-bold text-white mb-6 pr-8">Exportar Laberintos</h2>
+            
+            <div>
+                <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Descargar Actual (En pantalla)</div>
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                    <button id="btnDownloadSvg" class="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-3 rounded-lg flex flex-col items-center justify-center gap-1 shadow-md text-sm transition-colors border border-gray-600">
+                        <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        <span>Laberinto SVG</span>
+                    </button>
+                    <button id="btnDownloadPng" class="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-3 rounded-lg flex flex-col items-center justify-center gap-1 shadow-md text-sm transition-colors border border-gray-600">
+                        <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        <span>Laberinto PNG</span>
+                    </button>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <button id="btnDownloadSolSvg" class="bg-indigo-700 hover:bg-indigo-600 text-white font-semibold py-3 px-3 rounded-lg flex flex-col items-center justify-center gap-1 shadow-md text-sm transition-colors border border-indigo-500">
+                        <svg class="w-5 h-5 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        <span>Solución SVG</span>
+                    </button>
+                    <button id="btnDownloadSolPng" class="bg-indigo-700 hover:bg-indigo-600 text-white font-semibold py-3 px-3 rounded-lg flex flex-col items-center justify-center gap-1 shadow-md text-sm transition-colors border border-indigo-500">
+                        <svg class="w-5 h-5 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        <span>Solución PNG</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Exportar Todos (Lote ZIP)</div>
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                    <button id="btnDownloadZipSvg" class="bg-teal-700 hover:bg-teal-600 text-white font-semibold py-3 px-3 rounded-lg flex flex-col items-center justify-center gap-1 shadow-md text-sm transition-colors border border-teal-500">
+                        <svg class="w-5 h-5 text-teal-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v1a2 2 0 01-2 2M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
+                        <span>Laberintos ZIP (SVG)</span>
+                    </button>
+                    <button id="btnDownloadZipPng" class="bg-teal-700 hover:bg-teal-600 text-white font-semibold py-3 px-3 rounded-lg flex flex-col items-center justify-center gap-1 shadow-md text-sm transition-colors border border-teal-500">
+                        <svg class="w-5 h-5 text-teal-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v1a2 2 0 01-2 2M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
+                        <span>Laberintos ZIP (PNG)</span>
+                    </button>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <button id="btnDownloadZipSolSvg" class="bg-purple-700 hover:bg-purple-600 text-white font-semibold py-3 px-3 rounded-lg flex flex-col items-center justify-center gap-1 shadow-md text-sm transition-colors border border-purple-500">
+                        <svg class="w-5 h-5 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v1a2 2 0 01-2 2M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
+                        <span>Soluciones ZIP (SVG)</span>
+                    </button>
+                    <button id="btnDownloadZipSolPng" class="bg-purple-700 hover:bg-purple-600 text-white font-semibold py-3 px-3 rounded-lg flex flex-col items-center justify-center gap-1 shadow-md text-sm transition-colors border border-purple-500">
+                        <svg class="w-5 h-5 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v1a2 2 0 01-2 2M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
+                        <span>Soluciones ZIP (PNG)</span>
+                    </button>
+                </div>
+            </div>
+            
+        </div>
     </div>
 
     <script>
+        // ==========================================
+        // GESTIÓN DEL PANEL MÓVIL (ACORDEÓN)
+        // ==========================================
+        const btnToggleTabs = document.getElementById('btnToggleTabs');
+        const tabsContainer = document.getElementById('tabsContainer');
+        const iconToggleTabs = document.getElementById('iconToggleTabs');
+
+        btnToggleTabs.addEventListener('click', () => {
+            tabsContainer.classList.toggle('hidden');
+            tabsContainer.classList.toggle('flex');
+            iconToggleTabs.classList.toggle('rotate-180');
+        });
+
+        // ==========================================
+        // GESTIÓN DEL MODAL DE EXPORTACIÓN
+        // ==========================================
+        const exportModal = document.getElementById('exportModal');
+        const btnOpenExport = document.getElementById('btnOpenExport');
+        const btnCloseModal = document.getElementById('btnCloseModal');
+
+        btnOpenExport.addEventListener('click', () => {
+            exportModal.classList.remove('hidden');
+            exportModal.classList.add('flex');
+        });
+
+        btnCloseModal.addEventListener('click', () => {
+            exportModal.classList.add('hidden');
+            exportModal.classList.remove('flex');
+        });
+
+        // Cerrar modal clickeando afuera
+        exportModal.addEventListener('click', (e) => {
+            if (e.target === exportModal) {
+                exportModal.classList.add('hidden');
+                exportModal.classList.remove('flex');
+            }
+        });
+
+        // ==========================================
+        // VARIABLES GLOBALES Y SETUP
+        // ==========================================
         const canvasWrapper = document.getElementById('canvasWrapper');
         const container = document.getElementById('canvasContainer');
         const mazeSvgContainer = document.getElementById('mazeSvgContainer');
-        const drawCanvas = document.getElementById('drawCanvas');
-        const ctxDraw = drawCanvas.getContext('2d');
         const paginationCtrl = document.getElementById('paginationCtrl');
+        const switchSolution = document.getElementById('switchSolution');
         
         let cols, rows, w;
         let totalWidth = 0;
         let totalHeight = 0;
         let zoomLevel = 1;
         
-        let generatedMazes = []; 
+        let generatedMazes = []; // Array of { emptySVG: '', solvedSVG: '' }
         let currentMazeIndex = 0;
+        let isSolutionVisible = false;
         
         class Cell {
             constructor(i, j, active = true) {
@@ -245,7 +346,9 @@
             else if (y === -1) { a.walls[2] = false; b.walls[0] = false; }
         }
 
-        // Enmascaramiento de formas geométricas
+        // ==========================================
+        // ALGORITMOS DE FORMAS
+        // ==========================================
         function isCellActive(i, j, cCols, cRows, shape) {
             const u = (i + 0.5) / cCols * 2 - 1;
             const v = (j + 0.5) / cRows * 2 - 1;
@@ -312,7 +415,6 @@
             }
         }
 
-        // Obtener bordes exteriores y emparejarlos en lados opuestos cruzados
         function getOppositeCrossedEntries(grid, cols, rows) {
             let edges = [];
             for (let cell of grid) {
@@ -323,107 +425,62 @@
                 if (j === rows - 1 || !grid[index(i, j + 1)] || !grid[index(i, j + 1)].active) edges.push({ cell, wall: 2, x: i, y: j });
                 if (i === 0 || !grid[index(i - 1, j)] || !grid[index(i - 1, j)].active) edges.push({ cell, wall: 3, x: i, y: j });
             }
-
-            // Agrupar por muro: 0=Arriba, 1=Derecha, 2=Abajo, 3=Izquierda
             let groups = { 0: [], 1: [], 2: [], 3: [] };
             for (let e of edges) groups[e.wall].push(e);
 
-            // Determinar ejes válidos (Arriba vs Abajo, o Izquierda vs Derecha)
             let validPairs = [];
             if (groups[0].length > 0 && groups[2].length > 0) { validPairs.push([0, 2]); validPairs.push([2, 0]); }
             if (groups[1].length > 0 && groups[3].length > 0) { validPairs.push([1, 3]); validPairs.push([3, 1]); }
 
             if (validPairs.length === 0) {
-                // Fallback de seguridad extrema
                 let start = edges[0];
                 return { startEntry: start, endEntry: edges[edges.length - 1] || start };
             }
-
-            // Escoger un eje de juego al azar
             let chosenPair = validPairs[Math.floor(Math.random() * validPairs.length)];
-            let startWall = chosenPair[0];
-            let endWall = chosenPair[1];
-
-            let startGroup = groups[startWall];
-            let endGroup = groups[endWall];
-
-            // Analizar coordenadas secundarias (X si estamos en Arriba/Abajo, Y si Izquierda/Derecha)
-            let isHorizontalAxis = (startWall === 0 || startWall === 2);
+            let startGroup = groups[chosenPair[0]], endGroup = groups[chosenPair[1]];
+            let isHorizontalAxis = (chosenPair[0] === 0 || chosenPair[0] === 2);
             
-            let minStart = Math.min(...startGroup.map(e => isHorizontalAxis ? e.x : e.y));
-            let maxStart = Math.max(...startGroup.map(e => isHorizontalAxis ? e.x : e.y));
-            let minEnd = Math.min(...endGroup.map(e => isHorizontalAxis ? e.x : e.y));
-            let maxEnd = Math.max(...endGroup.map(e => isHorizontalAxis ? e.x : e.y));
+            let minStart = Math.min(...startGroup.map(e => isHorizontalAxis ? e.x : e.y)), maxStart = Math.max(...startGroup.map(e => isHorizontalAxis ? e.x : e.y));
+            let minEnd = Math.min(...endGroup.map(e => isHorizontalAxis ? e.x : e.y)), maxEnd = Math.max(...endGroup.map(e => isHorizontalAxis ? e.x : e.y));
 
-            // Escoger entrada de Start al azar y calcular a qué TERCIO (zona) pertenece
             let startEntry = startGroup[Math.floor(Math.random() * startGroup.length)];
             let startVal = isHorizontalAxis ? startEntry.x : startEntry.y;
-            let startRange = maxStart - minStart;
-            
-            let startZone = 1; // 0 = Izquierda/Arriba, 1 = Centro, 2 = Derecha/Abajo
+            let startRange = maxStart - minStart, startZone = 1; 
             if (startRange > 0) {
                 let p = (startVal - minStart) / startRange;
-                if (p < 0.33) startZone = 0;
-                else if (p > 0.66) startZone = 2;
-                else startZone = 1;
+                if (p < 0.33) startZone = 0; else if (p > 0.66) startZone = 2; else startZone = 1;
             }
 
-            // Filtrar finales para que NO ESTÉN en la misma zona cruzada
             let endRange = maxEnd - minEnd;
             let validEnds = endGroup.filter(e => {
-                let endVal = isHorizontalAxis ? e.x : e.y;
-                let endZone = 1;
+                let endVal = isHorizontalAxis ? e.x : e.y, endZone = 1;
                 if (endRange > 0) {
                     let p = (endVal - minEnd) / endRange;
-                    if (p < 0.33) endZone = 0;
-                    else if (p > 0.66) endZone = 2;
-                    else endZone = 1;
+                    if (p < 0.33) endZone = 0; else if (p > 0.66) endZone = 2; else endZone = 1;
                 }
-                return endZone !== startZone; // Regla Maestra: Si es de una zona, acaba en cualquiera de las otras dos
+                return endZone !== startZone;
             });
-
-            // Si por tema de la forma geométrica la otra pared es tan pequeña que la excluye, relajar filtro
             if (validEnds.length === 0) validEnds = endGroup;
-
             let endEntry = validEnds[Math.floor(Math.random() * validEnds.length)];
-
             return { startEntry, endEntry };
         }
 
         function getMarkerSVG(entry, color) {
             let { cell, wall } = entry;
-            let cx = cell.i * w;
-            let cy = cell.j * w;
+            let cx = cell.i * w, cy = cell.j * w;
             let rx, ry, rw, rh;
 
-            if (wall === 0) {       // Top
-                rx = cx + w * 0.15; ry = cy - w * 0.25; rw = w * 0.7; rh = w * 0.4;
-            } else if (wall === 1) { // Right
-                rx = cx + w - w * 0.15; ry = cy + w * 0.15; rw = w * 0.4; rh = w * 0.7;
-            } else if (wall === 2) { // Bottom
-                rx = cx + w * 0.15; ry = cy + w - w * 0.15; rw = w * 0.7; rh = w * 0.4;
-            } else if (wall === 3) { // Left
-                rx = cx - w * 0.25; ry = cy + w * 0.15; rw = w * 0.4; rh = w * 0.7;
-            }
+            if (wall === 0) { rx = cx + w * 0.15; ry = cy - w * 0.25; rw = w * 0.7; rh = w * 0.4; }
+            else if (wall === 1) { rx = cx + w - w * 0.15; ry = cy + w * 0.15; rw = w * 0.4; rh = w * 0.7; }
+            else if (wall === 2) { rx = cx + w * 0.15; ry = cy + w - w * 0.15; rw = w * 0.7; rh = w * 0.4; }
+            else if (wall === 3) { rx = cx - w * 0.25; ry = cy + w * 0.15; rw = w * 0.4; rh = w * 0.7; }
+            
             return `<rect x="${rx}" y="${ry}" width="${rw}" height="${rh}" fill="${color}" rx="${w * 0.08}"/>\n`;
         }
 
-        function updateZoomDisplay() {
-            document.getElementById('zoomText').innerText = Math.round(zoomLevel * 100) + '%';
-            container.style.width = (totalWidth * zoomLevel) + 'px';
-            container.style.height = (totalHeight * zoomLevel) + 'px';
-        }
-
-        function setupDrawCanvas() {
-            const dpr = window.devicePixelRatio || 1;
-            drawCanvas.width = totalWidth * dpr;
-            drawCanvas.height = totalHeight * dpr;
-            ctxDraw.setTransform(1, 0, 0, 1, 0, 0); 
-            ctxDraw.scale(dpr, dpr);
-            ctxDraw.lineCap = 'round';
-            ctxDraw.lineJoin = 'round';
-        }
-
+        // ==========================================
+        // GENERACIÓN Y SOLUCIÓN DEL LABERINTO
+        // ==========================================
         function generateBatch() {
             const count = parseInt(document.getElementById('mazeCount').value) || 1;
             cols = parseInt(document.getElementById('cols').value);
@@ -437,7 +494,6 @@
             else if (shape === '16:9') rows = Math.round(cols * (9 / 16));
             else if (shape === '9:16') rows = Math.round(cols * (16 / 9));
             else rows = cols; 
-
             if(rows < 8) rows = 8;
 
             const padding = 20; 
@@ -450,15 +506,21 @@
             }
 
             currentMazeIndex = 0;
+            isSolutionVisible = false;
+            switchSolution.checked = false;
+
             zoomLevel = 1;
             updateZoomDisplay();
-            setupDrawCanvas();
             updateMazeView();
 
-            if (count > 1) {
-                paginationCtrl.style.display = 'flex';
-            } else {
-                paginationCtrl.style.display = 'none';
+            if (count > 1) paginationCtrl.style.display = 'flex';
+            else paginationCtrl.style.display = 'none';
+            
+            // Cerrar el panel móvil tras generar para ahorrar espacio
+            if (window.innerWidth < 768) {
+                tabsContainer.classList.add('hidden');
+                tabsContainer.classList.remove('flex');
+                iconToggleTabs.classList.remove('rotate-180');
             }
         }
 
@@ -471,20 +533,21 @@
                 }
             }
 
-            // Aplicar la lógica de entradas cruzadas
             let { startEntry, endEntry } = getOppositeCrossedEntries(grid, cols, rows);
-
-            // Si es un tablero vacío
-            if(!startEntry) return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth} ${totalHeight}"></svg>`;
+            if(!startEntry) {
+                return { 
+                    emptySVG: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth} ${totalHeight}"></svg>`,
+                    solvedSVG: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth} ${totalHeight}"></svg>`
+                };
+            }
 
             startEntry.cell.walls[startEntry.wall] = false;
             endEntry.cell.walls[endEntry.wall] = false;
 
-            // Backtracking Generation
+            // 1. Backtracking (Generación del Laberinto)
             let stack = [];
             let current = startEntry.cell;
             current.visited = true;
-
             while (true) {
                 let next = current.checkNeighbors(grid);
                 if (next) {
@@ -494,25 +557,67 @@
                     current = next;
                 } else if (stack.length > 0) {
                     current = stack.pop();
-                } else {
-                    break;
+                } else break;
+            }
+
+            // 2. Búsqueda de Solución (BFS)
+            let queue = [startEntry.cell];
+            let visitedPath = new Set();
+            visitedPath.add(startEntry.cell);
+            let parentMap = new Map();
+
+            while(queue.length > 0) {
+                let curr = queue.shift();
+                if(curr === endEntry.cell) break;
+
+                let neighbors = [];
+                let top = grid[index(curr.i, curr.j - 1)];
+                let right = grid[index(curr.i + 1, curr.j)];
+                let bottom = grid[index(curr.i, curr.j + 1)];
+                let left = grid[index(curr.i - 1, curr.j)];
+
+                if(!curr.walls[0] && top) neighbors.push(top);
+                if(!curr.walls[1] && right) neighbors.push(right);
+                if(!curr.walls[2] && bottom) neighbors.push(bottom);
+                if(!curr.walls[3] && left) neighbors.push(left);
+
+                for(let n of neighbors) {
+                    if(!visitedPath.has(n)) {
+                        visitedPath.add(n);
+                        parentMap.set(n, curr);
+                        queue.push(n);
+                    }
                 }
             }
 
-            // Render SVG
-            let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth} ${totalHeight}" width="100%" height="100%">\n`;
-            svg += `  <rect width="${totalWidth}" height="${totalHeight}" fill="#ffffff"/>\n`;
-            svg += `  <g transform="translate(${padding}, ${padding})">\n`;
-            
-            svg += `    ${getMarkerSVG(startEntry, "#10b981")}`; // Verde Inicio
-            svg += `    ${getMarkerSVG(endEntry, "#ef4444")}`;   // Rojo Fin
+            let pathNodes = [];
+            let pCurr = endEntry.cell;
+            while(pCurr) {
+                pathNodes.push(pCurr);
+                pCurr = parentMap.get(pCurr);
+            }
+            pathNodes.reverse();
+
+            // Dibujar ruta de la solución
+            let solD = "";
+            for(let k=0; k<pathNodes.length; k++){
+                let px = pathNodes[k].i * w + w/2;
+                let py = pathNodes[k].j * w + w/2;
+                if(k===0) solD += `M${px},${py} `;
+                else solD += `L${px},${py} `;
+            }
+
+            // 3. Renderizado de SVG
+            let content = `  <rect width="${totalWidth}" height="${totalHeight}" fill="#ffffff"/>\n`;
+            content += `  <g transform="translate(${padding}, ${padding})">\n`;
+            content += `    ${getMarkerSVG(startEntry, "#10b981")}`; 
+            content += `    ${getMarkerSVG(endEntry, "#ef4444")}`;   
             
             let pathData = "";
             for (let i = 0; i < grid.length; i++) {
                 let cell = grid[i];
                 if (!cell.active) continue;
-                let x = cell.i * w;
-                let y = cell.j * w;
+                let x = cell.i * w, y = cell.j * w;
                 
                 if (cell.walls[0]) pathData += `M${x},${y} L${x + w},${y} `;
                 if (cell.walls[1]) pathData += `M${x + w},${y} L${x + w},${y + w} `;
@@ -520,101 +625,83 @@
                 if (cell.walls[3]) pathData += `M${x},${y + w} L${x},${y} `;
             }
 
-            svg += `    <path d="${pathData.trim()}" stroke="#000000" stroke-width="4" stroke-linecap="square" fill="none"/>\n`;
-            svg += `  </g>\n</svg>`;
-            
-            return svg;
+            content += `    <path d="${pathData.trim()}" stroke="#000000" stroke-width="4" stroke-linecap="square" fill="none"/>\n`;
+            content += `  </g>\n`;
+
+            let solutionContent = `  <g transform="translate(${padding}, ${padding})">\n`;
+            solutionContent += `    <path d="${solD.trim()}" stroke="#10b981" stroke-width="${Math.max(2, w * 0.4)}" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.95"/>\n`;
+            solutionContent += `  </g>\n`;
+
+            return {
+                emptySVG: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth} ${totalHeight}" width="100%" height="100%">\n${content}</svg>`,
+                solvedSVG: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth} ${totalHeight}" width="100%" height="100%">\n${content}${solutionContent}</svg>`
+            };
         }
 
         function updateMazeView() {
             if(generatedMazes.length === 0) return;
-            mazeSvgContainer.innerHTML = generatedMazes[currentMazeIndex];
+            const maze = generatedMazes[currentMazeIndex];
+            mazeSvgContainer.innerHTML = isSolutionVisible ? maze.solvedSVG : maze.emptySVG;
             document.getElementById('mazeIndexText').innerText = `${currentMazeIndex + 1} / ${generatedMazes.length}`;
-            ctxDraw.clearRect(0, 0, totalWidth, totalHeight);
         }
 
+        // ==========================================
+        // EVENTOS INTERACTIVOS (PAGINACION Y TOGGLE SOLUCIÓN)
+        // ==========================================
         document.getElementById('btnPrevMaze').addEventListener('click', () => {
             if(currentMazeIndex > 0) { currentMazeIndex--; updateMazeView(); }
         });
         document.getElementById('btnNextMaze').addEventListener('click', () => {
             if(currentMazeIndex < generatedMazes.length - 1) { currentMazeIndex++; updateMazeView(); }
         });
+        
+        switchSolution.addEventListener('change', (e) => {
+            isSolutionVisible = e.target.checked;
+            updateMazeView();
+        });
 
         // ==========================================
-        // DIBUJO ESCALADO A HIGH-DPI & ZOOM
+        // FUNCIONES DE ZOOM Y CONTROLES VISUALES
         // ==========================================
-        let isDrawing = false;
-        function getPointerPos(e) {
-            const rect = drawCanvas.getBoundingClientRect();
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            const scaleX = totalWidth / rect.width, scaleY = totalHeight / rect.height;
-            return { x: (clientX - rect.left) * scaleX, y: (clientY - rect.top) * scaleY };
+        function updateZoomDisplay() {
+            document.getElementById('zoomText').innerText = Math.round(zoomLevel * 100) + '%';
+            container.style.width = (totalWidth * zoomLevel) + 'px';
+            container.style.height = (totalHeight * zoomLevel) + 'px';
         }
 
-        function startDraw(e) {
-            e.preventDefault(); isDrawing = true;
-            const pos = getPointerPos(e);
-            ctxDraw.beginPath(); ctxDraw.moveTo(pos.x, pos.y);
-        }
-
-        function draw(e) {
-            if (!isDrawing) return; e.preventDefault();
-            const pos = getPointerPos(e);
-            ctxDraw.lineTo(pos.x, pos.y);
-            ctxDraw.strokeStyle = 'rgba(239, 68, 68, 0.8)'; 
-            ctxDraw.lineWidth = w * 0.4; ctxDraw.stroke();
-        }
-
-        function stopDraw(e) {
-            if (e) e.preventDefault(); isDrawing = false; ctxDraw.closePath();
-        }
-
-        drawCanvas.addEventListener('mousedown', startDraw);
-        drawCanvas.addEventListener('mousemove', draw);
-        drawCanvas.addEventListener('mouseup', stopDraw);
-        drawCanvas.addEventListener('mouseout', stopDraw);
-        drawCanvas.addEventListener('touchstart', startDraw, { passive: false });
-        drawCanvas.addEventListener('touchmove', draw, { passive: false });
-        drawCanvas.addEventListener('touchend', stopDraw);
+        document.getElementById('btnZoomIn').addEventListener('click', () => { zoomLevel += 0.25; if(zoomLevel > 4) zoomLevel = 4; updateZoomDisplay(); });
+        document.getElementById('btnZoomOut').addEventListener('click', () => { zoomLevel -= 0.25; if(zoomLevel < 0.25) zoomLevel = 0.25; updateZoomDisplay(); });
+        document.getElementById('btnResetZoom').addEventListener('click', () => { zoomLevel = 1; updateZoomDisplay(); });
+        
+        document.getElementById('btnFullscreen').addEventListener('click', () => { 
+            if (!document.fullscreenElement) canvasWrapper.requestFullscreen().catch(err => alert(err.message)); 
+            else document.exitFullscreen(); 
+        });
+        
+        document.addEventListener('fullscreenchange', () => {
+            const icon = document.getElementById('iconFullscreen');
+            if (document.fullscreenElement) icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 3v3a2 2 0 01-2 2H3m18 0h-3a2 2 0 01-2-2V3m0 18v-3a2 2 0 012-2h3M3 16h3a2 2 0 012 2v3"></path>`;
+            else icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>`;
+        });
 
         // ==========================================
         // LÓGICA DEL PANEL FLOTANTE
         // ==========================================
         const panel = document.getElementById('floatingPanel'), dragHandle = document.getElementById('dragHandle'), panelContent = document.getElementById('panelContent'), btnCollapse = document.getElementById('btnCollapse'), iconCollapse = document.getElementById('iconCollapse');
         let isDraggingPanel = false, startMouseX, startMouseY, initialPanelX, initialPanelY;
-
+        
         dragHandle.addEventListener('mousedown', (e) => {
-            isDraggingPanel = true; 
-            startMouseX = e.clientX; 
-            startMouseY = e.clientY; 
-            initialPanelX = panel.offsetLeft; 
-            initialPanelY = panel.offsetTop; 
-            panel.style.right = 'auto'; 
-            // ELIMINA EL LAG: Desactiva la transición CSS mientras se arrastra
-            panel.style.transition = 'none'; 
+            isDraggingPanel = true; startMouseX = e.clientX; startMouseY = e.clientY; initialPanelX = panel.offsetLeft; initialPanelY = panel.offsetTop; panel.style.right = 'auto'; panel.style.transition = 'none'; 
         });
-
+        
         window.addEventListener('mousemove', (e) => {
-            if (!isDraggingPanel) return; 
-            e.preventDefault();
-            const dx = e.clientX - startMouseX, dy = e.clientY - startMouseY;
-            let newLeft = initialPanelX + dx, newTop = initialPanelY + dy;
-            const maxLeft = canvasWrapper.clientWidth - panel.clientWidth, maxTop = canvasWrapper.clientHeight - panel.clientHeight;
-            newLeft = Math.max(0, Math.min(newLeft, maxLeft)); 
-            newTop = Math.max(0, Math.min(newTop, maxTop));
-            panel.style.left = `${newLeft}px`; 
-            panel.style.top = `${newTop}px`;
+            if (!isDraggingPanel) return; e.preventDefault(); const dx = e.clientX - startMouseX, dy = e.clientY - startMouseY; let newLeft = initialPanelX + dx, newTop = initialPanelY + dy; const maxLeft = canvasWrapper.clientWidth - panel.clientWidth, maxTop = canvasWrapper.clientHeight - panel.clientHeight;
+            newLeft = Math.max(0, Math.min(newLeft, maxLeft)); newTop = Math.max(0, Math.min(newTop, maxTop));
+            panel.style.left = `${newLeft}px`; panel.style.top = `${newTop}px`;
         });
-
-        window.addEventListener('mouseup', () => { 
-            if (isDraggingPanel) {
-                isDraggingPanel = false; 
-                // RESTAURA LA TRANSICIÓN: Vuelve a activar las animaciones al soltar
-                panel.style.transition = ''; 
-            }
-        });
-
+        
+        window.addEventListener('mouseup', () => { if (isDraggingPanel) { isDraggingPanel = false; panel.style.transition = ''; } });
+        
         let isCollapsed = false;
         btnCollapse.addEventListener('click', () => {
             isCollapsed = !isCollapsed;
@@ -623,73 +710,81 @@
         });
 
         // ==========================================
-        // EXPORTACIÓN
+        // EXPORTACIÓN (SVG, PNG y ZIP 300DPI)
         // ==========================================
         document.getElementById('btnGenerate').addEventListener('click', generateBatch);
         
-        document.getElementById('btnDownloadSvg').addEventListener('click', () => {
+        function downloadSingleSVG(isSolution) {
             if(generatedMazes.length === 0) return;
-            const blob = new Blob([generatedMazes[currentMazeIndex]], { type: "image/svg+xml" });
+            const svgContent = isSolution ? generatedMazes[currentMazeIndex].solvedSVG : generatedMazes[currentMazeIndex].emptySVG;
+            const blob = new Blob([svgContent], { type: "image/svg+xml" });
             const url = URL.createObjectURL(blob), link = document.createElement('a');
-            link.download = `laberinto-${cols}x${rows}-n${currentMazeIndex + 1}.svg`;
+            const suf = isSolution ? '-solucion' : '';
+            link.download = `laberinto-${cols}x${rows}-n${currentMazeIndex + 1}${suf}.svg`;
             link.href = url; link.click(); URL.revokeObjectURL(url);
-        });
+        }
 
-        document.getElementById('btnDownloadPng').addEventListener('click', () => {
+        function downloadSinglePNG(isSolution) {
             if(generatedMazes.length === 0) return;
-            const blob = new Blob([generatedMazes[currentMazeIndex]], { type: "image/svg+xml;charset=utf-8" });
+            const svgContent = isSolution ? generatedMazes[currentMazeIndex].solvedSVG : generatedMazes[currentMazeIndex].emptySVG;
+            const blob = new Blob([svgContent], { type: "image/svg+xml;charset=utf-8" });
             const url = URL.createObjectURL(blob), img = new Image();
             img.onload = function() {
                 const scale300DPI = 300 / 72, highResWidth = Math.round(totalWidth * scale300DPI), highResHeight = Math.round(totalHeight * scale300DPI);
                 const canvas = document.createElement('canvas'); canvas.width = highResWidth; canvas.height = highResHeight;
                 const ctx = canvas.getContext('2d'); ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high'; ctx.drawImage(img, 0, 0, highResWidth, highResHeight);
-                const link = document.createElement('a'); link.download = `laberinto-${cols}x${rows}-n${currentMazeIndex + 1}-300dpi.png`;
+                const link = document.createElement('a'); 
+                const suf = isSolution ? '-solucion' : '';
+                link.download = `laberinto-${cols}x${rows}-n${currentMazeIndex + 1}${suf}-300dpi.png`;
                 link.href = canvas.toDataURL('image/png', 1.0); link.click(); URL.revokeObjectURL(url);
             };
             img.src = url;
-        });
+        }
 
-        document.getElementById('btnDownloadZipSvg').addEventListener('click', async () => {
+        async function downloadBatchZip(format, isSolution) {
             if (generatedMazes.length === 0) return;
-            const zip = new JSZip(), folder = zip.folder("laberintos_svg");
-            generatedMazes.forEach((svgStr, idx) => folder.file(`laberinto_${idx + 1}.svg`, svgStr));
-            const content = await zip.generateAsync({ type: "blob" }), url = URL.createObjectURL(content), link = document.createElement('a');
-            link.download = `laberintos-lote-svg.zip`; link.href = url; link.click(); URL.revokeObjectURL(url);
-        });
-
-        document.getElementById('btnDownloadZipPng').addEventListener('click', async () => {
-            if (generatedMazes.length === 0) return;
-            const zip = new JSZip(), folder = zip.folder("laberintos_png_300dpi"), scale300DPI = 300 / 72;
+            const zip = new JSZip();
+            const folderName = isSolution ? `soluciones_${format}` : `laberintos_${format}`;
+            const folder = zip.folder(folderName);
+            const scale300DPI = 300 / 72;
             const highResWidth = Math.round(totalWidth * scale300DPI), highResHeight = Math.round(totalHeight * scale300DPI);
+            const suf = isSolution ? '_solucion' : '';
+
             for (let i = 0; i < generatedMazes.length; i++) {
-                const url = URL.createObjectURL(new Blob([generatedMazes[i]], { type: "image/svg+xml;charset=utf-8" }));
-                const dataUrl = await new Promise(resolve => {
-                    const img = new Image();
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas'); canvas.width = highResWidth; canvas.height = highResHeight;
-                        const ctx = canvas.getContext('2d'); ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high'; ctx.drawImage(img, 0, 0, highResWidth, highResHeight);
-                        URL.revokeObjectURL(url); resolve(canvas.toDataURL('image/png', 1.0).split(',')[1]);
-                    }; img.src = url;
-                });
-                folder.file(`laberinto_${i + 1}_300dpi.png`, dataUrl, { base64: true });
+                const svgContent = isSolution ? generatedMazes[i].solvedSVG : generatedMazes[i].emptySVG;
+                
+                if (format === 'svg') {
+                    folder.file(`laberinto_${i + 1}${suf}.svg`, svgContent);
+                } else if (format === 'png') {
+                    const url = URL.createObjectURL(new Blob([svgContent], { type: "image/svg+xml;charset=utf-8" }));
+                    const dataUrl = await new Promise(resolve => {
+                        const img = new Image();
+                        img.onload = () => {
+                            const canvas = document.createElement('canvas'); canvas.width = highResWidth; canvas.height = highResHeight;
+                            const ctx = canvas.getContext('2d'); ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high'; ctx.drawImage(img, 0, 0, highResWidth, highResHeight);
+                            URL.revokeObjectURL(url); resolve(canvas.toDataURL('image/png', 1.0).split(',')[1]);
+                        }; img.src = url;
+                    });
+                    folder.file(`laberinto_${i + 1}${suf}_300dpi.png`, dataUrl, { base64: true });
+                }
             }
             const content = await zip.generateAsync({ type: "blob" }), url = URL.createObjectURL(content), link = document.createElement('a');
-            link.download = `laberintos-lote-png.zip`; link.href = url; link.click(); URL.revokeObjectURL(url);
-        });
+            link.download = `${folderName}-lote.zip`; link.href = url; link.click(); URL.revokeObjectURL(url);
+        }
 
-        document.getElementById('btnClearDraw').addEventListener('click', () => ctxDraw.clearRect(0, 0, totalWidth, totalHeight));
-        document.getElementById('btnZoomIn').addEventListener('click', () => { zoomLevel += 0.25; if(zoomLevel > 4) zoomLevel = 4; updateZoomDisplay(); });
-        document.getElementById('btnZoomOut').addEventListener('click', () => { zoomLevel -= 0.25; if(zoomLevel < 0.25) zoomLevel = 0.25; updateZoomDisplay(); });
-        document.getElementById('btnResetZoom').addEventListener('click', () => { zoomLevel = 1; updateZoomDisplay(); });
-        document.getElementById('btnFullscreen').addEventListener('click', () => { if (!document.fullscreenElement) canvasWrapper.requestFullscreen().catch(err => alert(err.message)); else document.exitFullscreen(); });
-        document.addEventListener('fullscreenchange', () => {
-            const icon = document.getElementById('iconFullscreen');
-            if (document.fullscreenElement) icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 3v3a2 2 0 01-2 2H3m18 0h-3a2 2 0 01-2-2V3m0 18v-3a2 2 0 012-2h3M3 16h3a2 2 0 012 2v3"></path>`;
-            else icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>`;
-        });
+        document.getElementById('btnDownloadSvg').addEventListener('click', () => downloadSingleSVG(false));
+        document.getElementById('btnDownloadPng').addEventListener('click', () => downloadSinglePNG(false));
+        document.getElementById('btnDownloadSolSvg').addEventListener('click', () => downloadSingleSVG(true));
+        document.getElementById('btnDownloadSolPng').addEventListener('click', () => downloadSinglePNG(true));
+
+        document.getElementById('btnDownloadZipSvg').addEventListener('click', () => downloadBatchZip('svg', false));
+        document.getElementById('btnDownloadZipPng').addEventListener('click', () => downloadBatchZip('png', false));
+        document.getElementById('btnDownloadZipSolSvg').addEventListener('click', () => downloadBatchZip('svg', true));
+        document.getElementById('btnDownloadZipSolPng').addEventListener('click', () => downloadBatchZip('png', true));
 
         window.onload = generateBatch;
     </script>
+
     <script>
     // Bloquear clic derecho (Anticlic)
     document.addEventListener('contextmenu', function(e) {
@@ -698,24 +793,16 @@
 
     // Bloquear atajos de teclado de desarrollador
     document.addEventListener('keydown', function(e) {
-        // Bloquear F12
         if (e.key === 'F12' || e.keyCode === 123) {
-            e.preventDefault();
-            return false;
+            e.preventDefault(); return false;
         }
-        
-        // Bloquear Ctrl+Shift+I (Inspeccionar), Ctrl+Shift+J (Consola), Ctrl+Shift+C (Seleccionar elemento)
         if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
-            e.preventDefault();
-            return false;
+            e.preventDefault(); return false;
         }
-        
-        // Bloquear Ctrl+U (Ver código fuente) y Ctrl+S (Guardar página)
         if (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's')) {
-            e.preventDefault();
-            return false;
+            e.preventDefault(); return false;
         }
     });
-</script>
+    </script>
 </body>
 </html>
