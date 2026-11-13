@@ -58,11 +58,5 @@
         "descripcion": "Materializa tus ideas con el poder de la Inteligencia Artificial de Microsoft. Transforma simples descripciones de texto en imágenes de alto impacto.",
         "imagen": "https://i.postimg.cc/bvNTLvtB/generador-ai.png",
         "url": "https://www.bing.com/images/create/ai-image-generator"
-    },
-    {
-        "titulo": "LEONARDO AI",
-        "descripcion": "Desata tu creatividad visual con arte digital de última generación. Genera ilustraciones de calidad premium y lleva tus proyectos gráficos a otra dimensión.",
-        "imagen": "https://i.postimg.cc/qvjkWmzY/LEONARDO-AI.png",
-        "url": "https://app.leonardo.ai/"
     }
 ]
