@@ -7,6 +7,23 @@
 <style>
 /* CSS Reset y Tema Oscuro */
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b; 
+        }
+
 body { background-color: #121212; color: #ffffff; display: flex; height: 100vh; overflow: hidden; }
 
 /* Layout Principal - Panel lateral redimensionable */
