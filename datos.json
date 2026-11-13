@@ -1,62 +1,74 @@
 [
     { 
         "titulo": "LABERINTO",
-        "descripcion": "Diseña laberintos únicos y desafiantes en segundos. Personaliza el nivel de dificultad y pon a prueba el ingenio de tus pequeños con este generador interactivo.",
+        "descripcion": "Ahorra horas de diseño generando laberintos únicos y a medida en segundos. Estimula la resolución de problemas, la motricidad fina y la concentración visual de tus estudiantes.",
         "imagen": "https://i.postimg.cc/NfJ3vL6Y/laberinto1.png",
         "url": "/juegos/src/laberinto.html"
     },
     {
         "titulo": "SOPA DE LETRA",
-        "descripcion": "Crea sopas de letras personalizadas de forma rápida y elegante. Ideal para educadores, creadores de contenido y amantes de los retos mentales.",
+        "descripcion": "Crea sopas de letras temáticas al instante. Una herramienta imprescindible para reforzar la ortografía, expandir el vocabulario y dinamizar las evaluaciones de forma lúdica.",
         "imagen": "https://i.postimg.cc/QdwZ4BdJ/sopadeletra.png",
         "url": "/juegos/src/sopadeletra.html"
     },
     {
         "titulo": "GENERADOR DE PALABRAS ALEATORIA",
-        "descripcion": "Optimiza tu tiempo creando listas dinámicas al instante. El complemento perfecto para generar vocabulario e importarlo directamente a tus juegos de palabras.",
+        "descripcion": "Optimiza tu flujo de trabajo generando listas dinámicas de términos al instante. El recurso de apoyo perfecto para alimentar tus juegos de vocabulario sin esfuerzo.",
         "imagen": "https://i.postimg.cc/X7yCgJcN/images.png",
         "url": "https://www.palabrasaleatorias.com/"
     },
     {
         "titulo": "CRUCIGRAMA",
-        "descripcion": "Diseña crucigramas con un acabado profesional. Agrega tus propias pistas y genera rompecabezas a medida para educar, desafiar o entretener.",
+        "descripcion": "Diseña crucigramas profesionales y personalizados con tus propias pistas. Ideal para fomentar la comprensión lectora, la memoria y el pensamiento analítico en clase.",
         "imagen": "https://i.postimg.cc/BnkfY8nc/crucigrama.png",
         "url": "/juegos/src/crucigrama.html"
     },
     {
         "titulo": "CRIPTOGRAMA",
-        "descripcion": "Genera enigmáticos criptogramas numéricos. Transforma cualquier mensaje secreto en un fascinante reto de lógica y decodificación visual.",
+        "descripcion": "Transforma cualquier mensaje secreto en un enigmático reto de lógica numérica. Potencia el razonamiento deductivo y la agilidad mental con un formato innovador.",
         "imagen": "https://i.postimg.cc/X7fhrT8X/criptograma.png",
         "url": "/juegos/src/criptograma.html"
     },
     {
         "titulo": "CONVERTIDOR DE IMAGEN",
-        "descripcion": "Transforma cualquier fotografía en un lienzo en blanco y negro listo para colorear. Crea plantillas artísticas y libros de actividades con un solo clic.",
+        "descripcion": "Convierte cualquier fotografía o ilustración en plantillas listas para colorear en blanco y negro. Diseña libros de actividades personalizados en un solo clic.",
         "imagen": "https://i.postimg.cc/jqZdprvj/image-(4).png",
         "url": "/juegos/src/pintar.html"
     },
     {
         "titulo": "ANAGRAMAS",
-        "descripcion": "Estimula la agilidad mental con nuestro generador de anagramas. Desordena palabras de forma inteligente y crea divertidos retos de vocabulario.",
+        "descripcion": "Estimula la agilidad mental y la flexibilidad cognitiva. Desordena palabras de forma inteligente para crear divertidos retos de ortografía y vocabulario adaptados a tu grupo.",
         "imagen": "https://i.postimg.cc/7LR62dYr/anagrama-portada.png",
         "url": "/juegos/src/anagrama.html"
     },
     {
         "titulo": "ANAGRAMAS POR FRASES",
-        "descripcion": "Lleva el desafío al siguiente nivel. Crea anagramas complejos a partir de frases completas para diseñar pruebas de ingenio mucho más exigentes.",
+        "descripcion": "Lleva el desafío al siguiente nivel con pruebas de ingenio basadas en frases completas. Estimula el razonamiento avanzado y la concentración profunda de los estudiantes.",
         "imagen": "https://i.postimg.cc/D0v8HdXz/anagrama-por-frase.png",
         "url": "/juegos/src/anagrama-frase.html"
     },
     {
         "titulo": "UNIR PARES",
-        "descripcion": "Crea dinámicas interactivas de asociación visual. Diseña juegos de emparejar conceptos o imágenes perfectos para el aprendizaje y la concentración.",
+        "descripcion": "Crea dinámicas de asociación visual de forma rápida. Diseña ejercicios ideales para conectar conceptos, reforzar conocimientos previos y evaluar la atención temprana.",
         "imagen": "https://i.postimg.cc/7ZGMKw4R/unir-pares.png",
         "url": "/juegos/src/unirpuntos.html"
     },
     {
         "titulo": "BING IMAGE CREATOR",
-        "descripcion": "Materializa tus ideas con el poder de la Inteligencia Artificial de Microsoft. Transforma simples descripciones de texto en imágenes de alto impacto.",
+        "descripcion": "Materializa tus ideas pedagógicas con inteligencia artificial. Transforma descripciones de texto en ilustraciones de alto impacto visual para enriquecer tus fichas.",
         "imagen": "https://i.postimg.cc/bvNTLvtB/generador-ai.png",
         "url": "https://www.bing.com/images/create/ai-image-generator"
+    },
+    {
+        "titulo": "VERDADERO O FALSO",
+        "descripcion": "Diseña evaluaciones rápidas y dinámicas. Configura tus propias premisas para comprobar la comprensión de conceptos clave y fomentar el pensamiento crítico al instante.",
+        "imagen": "https://i.postimg.cc/q7wnYSFZ/verda-falso.png",
+        "url": "/juegos/src/verdaderofalso.html"
+    },
+    {
+        "titulo": "COMPLETA LA FRASE",
+        "descripcion": "Potencia la retención de conocimientos creando ejercicios de completar espacios en blanco. Selecciona las palabras clave y genera dinámicas activas de lectura en segundos.",
+        "imagen": "https://i.postimg.cc/bvNTLvtB/generador-ai.png",
+        "url": "/juegos/src/completalafrase.html"
     }
 ]
