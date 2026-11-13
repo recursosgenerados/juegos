@@ -6,12 +6,16 @@
     <title>Generador de Laberintos Avanzado</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <!-- Opción 1: Redirección mediante etiqueta Meta de HTML -->
-    <meta http-equiv="refresh" content="0;url=https://recursosgenerados.github.io/juegos">
-    
-    <!-- Opción 2: Redirección inmediata mediante JavaScript -->
     <script>
-        window.location.replace("https://recursosgenerados.github.io/juegos");
+        // Definimos la URL de tu página principal
+        const sitioPrincipal = "recursosgenerados.github.io/juegos";
+        const deDondeViene = document.referrer;
+
+        // Si NO viene de tu propia página (ej. escribió la URL directo, marcador o enlace externo)
+        if (!deDondeViene.includes(sitioPrincipal)) {
+            // Lo redirigimos a la principal a la fuerza
+            window.location.replace("https://recursosgenerados.github.io/juegos");
+        }
     </script>
     <style>
         body {
