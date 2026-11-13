@@ -6,10 +6,10 @@
   <title>Generador de Sopa de Letras Pro (SVG & 300 DPI PNG)</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Inter y Montserrat -->
+  <!-- Google Fonts: Selección Diversa para Sopas de Letras -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Comic+Neue:wght@400;700&family=Fira+Code:wght@500;700&family=Fredoka:wght@500;700&family=Inter:wght@400;600;700;800&family=Lato:wght@400;700&family=Montserrat:wght@600;700;800&family=Nunito:wght@600;700;800&family=Open+Sans:wght@400;600;700&family=Pacifico&family=Playfair+Display:wght@600;700;800&family=Poppins:wght@500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -90,20 +90,38 @@
   <!-- Contenedor Principal -->
   <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-    <!-- PANEL DE CONFIGURACIÓN CON PESTAÑAS COLAPSABLES (COLUMNA IZQUIERDA) -->
+    <!-- PANEL DE CONFIGURACIÓN CON PESTAÑAS HORIZONTALES (COLUMNA IZQUIERDA) -->
     <section class="lg:col-span-5 xl:col-span-4 flex flex-col space-y-4">
       
-      <!-- Navegación por Pestañas Colapsables -->
-      <div class="flex flex-col gap-2">
+      <!-- BARRA DE PESTAÑAS NAVEGADOR (FILA HORIZONTAL) -->
+      <div class="grid grid-cols-3 gap-1.5 bg-slate-950/60 p-1.5 rounded-2xl border border-slate-700/80 shadow-lg">
         
         <!-- Botón Pestaña 1 -->
-        <button onclick="togglePestana(1)" id="tabBtn1" class="w-full py-2.5 px-4 text-xs font-semibold rounded-xl transition flex items-center justify-between bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700/60 shadow-md">
-          <span class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-            1. Estética y Datos
-          </span>
-          <svg id="tabArrow1" class="w-4 h-4 transition-transform duration-200 transform rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        <button onclick="togglePestana(1)" id="tabBtn1" class="py-2 px-2 text-[11px] sm:text-xs font-semibold rounded-xl transition-all flex items-center justify-center gap-1.5 bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700/60 shadow-sm truncate">
+          <svg class="w-3.5 h-3.5 text-cyan-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+          <span class="truncate">1. Estética</span>
+          <svg id="tabArrow1" class="w-3 h-3 transition-transform duration-200 transform rotate-0 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </button>
+
+        <!-- Botón Pestaña 2 -->
+        <button onclick="togglePestana(2)" id="tabBtn2" class="py-2 px-2 text-[11px] sm:text-xs font-semibold rounded-xl transition-all flex items-center justify-center gap-1.5 bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700/60 shadow-sm truncate">
+          <svg class="w-3.5 h-3.5 text-cyan-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+          <span class="truncate">2. Fuentes</span>
+          <svg id="tabArrow2" class="w-3 h-3 transition-transform duration-200 transform rotate-0 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </button>
+
+        <!-- Botón Pestaña 3 -->
+        <button onclick="togglePestana(3)" id="tabBtn3" class="py-2 px-2 text-[11px] sm:text-xs font-semibold rounded-xl transition-all flex items-center justify-center gap-1.5 bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700/60 shadow-sm truncate">
+          <svg class="w-3.5 h-3.5 text-cyan-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <span class="truncate">3. Historial</span>
+          <span id="badgeHistorial" class="text-[9px] bg-slate-700 text-cyan-300 font-semibold px-1.5 py-0.2 rounded-full shrink-0">0</span>
+          <svg id="tabArrow3" class="w-3 h-3 transition-transform duration-200 transform rotate-0 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </button>
+
+      </div>
+
+      <!-- CONTENEDORES DE CONTENIDO (ACORDEÓN EXCLUSIVO) -->
+      <div class="space-y-4">
 
         <!-- PESTAÑA 1 (Colapsada por defecto) -->
         <div id="pestana1" class="space-y-4 hidden">
@@ -139,14 +157,41 @@
                   <option value="25">25 x 25 (Gigante)</option>
                 </select>
               </div>
+
+              <!-- 30 ESTILOS DE COLOR -->
               <div>
-                <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Estilo de Color</label>
+                <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Estilo de Color (30)</label>
                 <select id="selectTema" onchange="actualizarOpcionesYRenderizar()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                  <option value="classic">Clásico (Negro/Blanco)</option>
-                  <option value="blue" selected>Azul Educativo</option>
-                  <option value="emerald">Verde Esmeralda</option>
-                  <option value="purple">Púrpura Creativo</option>
-                  <option value="warm">Cálido / Naranja</option>
+                  <option value="classic">1. Clásico (Negro/Blanco)</option>
+                  <option value="blue" selected>2. Azul Educativo</option>
+                  <option value="emerald">3. Verde Esmeralda</option>
+                  <option value="purple">4. Púrpura Creativo</option>
+                  <option value="warm">5. Cálido Naranja</option>
+                  <option value="rose">6. Rosa Mágico</option>
+                  <option value="amber">7. Ámbar Miel</option>
+                  <option value="indigo">8. Índigo Noche</option>
+                  <option value="teal">9. Turquesa Marino</option>
+                  <option value="violet">10. Violeta Místico</option>
+                  <option value="cyan">11. Cian Neón</option>
+                  <option value="lime">12. Verde Lima</option>
+                  <option value="fuchsia">13. Fucsia Elegante</option>
+                  <option value="sky">14. Celeste Pastel</option>
+                  <option value="stone">15. Piedra Mineral</option>
+                  <option value="slate">16. Pizarra Moderna</option>
+                  <option value="crimson">17. Carmesí Impresión</option>
+                  <option value="gold">18. Dorado Imperial</option>
+                  <option value="mint">19. Menta Fresca</option>
+                  <option value="lavender">20. Lavanda Suave</option>
+                  <option value="sunset">21. Atardecer Crepúsculo</option>
+                  <option value="forest">22. Bosque Profundo</option>
+                  <option value="ocean">23. Océano Abisal</option>
+                  <option value="coral">24. Coral Arrecife</option>
+                  <option value="berry">25. Frutos Rojos</option>
+                  <option value="coffee">26. Café Moka</option>
+                  <option value="neon">27. Ciber Neón</option>
+                  <option value="pastel">28. Arcoíris Pastel</option>
+                  <option value="monochrome_dark">29. Monocromo Inverso</option>
+                  <option value="vintage">30. Pergamino Retro</option>
                 </select>
               </div>
             </div>
@@ -175,19 +220,28 @@
           </div>
         </div>
 
-        <!-- Botón Pestaña 2 -->
-        <button onclick="togglePestana(2)" id="tabBtn2" class="w-full py-2.5 px-4 text-xs font-semibold rounded-xl transition flex items-center justify-between bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700/60 shadow-md">
-          <span class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-            2. Fuentes y Palabras
-          </span>
-          <svg id="tabArrow2" class="w-4 h-4 transition-transform duration-200 transform rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-        </button>
-
         <!-- PESTAÑA 2 (Colapsada por defecto) -->
         <div id="pestana2" class="space-y-4 hidden">
           <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-xl space-y-4">
-            <div class="space-y-3">
+            
+            <!-- SELECTOR DE FUENTES (ESTILO DE FUENTE) -->
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Estilo de Fuente Tipográfica</label>
+              <select id="selectFuente" onchange="actualizarOpcionesYRenderizar()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                <option value="inter" selected>Inter (Moderna y Limpia)</option>
+                <option value="montserrat">Montserrat (Geométrica Pro)</option>
+                <option value="fredoka">Fredoka (Redondeada / Infantil)</option>
+                <option value="comic">Comic Neue (Escolar / Cómics)</option>
+                <option value="caveat">Caveat (Manuscrito / Lápiz)</option>
+                <option value="firacode">Fira Code (Monospaciado Ciber)</option>
+                <option value="playfair">Playfair Display (Serif Elegante)</option>
+                <option value="poppins">Poppins (Diseño Editorial)</option>
+                <option value="nunito">Nunito (Suave / Educativo)</option>
+                <option value="roboto">Roboto (Estándar Impresión)</option>
+              </select>
+            </div>
+
+            <div class="space-y-3 pt-2 border-t border-slate-700/60">
               <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">Tamaño de Fuente Personalizado</label>
               
               <div>
@@ -262,6 +316,36 @@
           </div>
         </div>
 
+        <!-- PESTAÑA 3 (Colapsada por defecto) -->
+        <div id="pestana3" class="space-y-4 hidden">
+          <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-xl space-y-4">
+            
+            <div class="flex items-center justify-between border-b border-slate-700 pb-3">
+              <h2 class="text-sm font-bold text-slate-100 flex items-center gap-2">Gestión de Historial</h2>
+              <button onclick="guardarHistorial()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-md transition flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                <span id="btnGuardarTexto">Guardar Historial</span>
+              </button>
+            </div>
+
+            <!-- Indicador de Estado de Edición -->
+            <div id="indicadorEdicion" class="hidden bg-slate-900/90 border border-cyan-500/40 rounded-lg p-3 text-xs flex items-center justify-between">
+              <div class="flex items-center gap-2 overflow-hidden">
+                <span class="inline-block w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                <span class="text-slate-300 truncate">Modificando: <strong id="nombreEdicionActual" class="text-cyan-300 font-semibold">--</strong></span>
+              </div>
+              <button onclick="nuevoHistorialModo()" class="text-slate-400 hover:text-white underline text-[11px] shrink-0 ml-2">
+                Crear Nuevo
+              </button>
+            </div>
+
+            <!-- Lista de Historiales Guardados -->
+            <div id="contenedorListaHistorial" class="space-y-2 max-h-80 overflow-y-auto pr-1">
+              <p class="text-xs text-slate-400 text-center py-4">No hay historiales guardados aún.</p>
+            </div>
+          </div>
+        </div>
+
       </div>
 
     </section>
@@ -282,10 +366,16 @@
           <span id="textoIncompletas">Algunas palabras no cupieron.</span>
         </div>
 
-        <button onclick="abrirModalDescarga()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-md transition flex items-center gap-2">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-          Exportar y Descargar
-        </button>
+        <div class="flex items-center gap-2">
+          <button onclick="guardarHistorial()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-sm font-semibold px-3.5 py-2 rounded-lg border border-slate-600 transition flex items-center gap-2">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+            <span class="hidden sm:inline">Guardar Historial</span>
+          </button>
+          <button onclick="abrirModalDescarga()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-md transition flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            Exportar y Descargar
+          </button>
+        </div>
       </div>
 
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 sm:p-6 shadow-2xl flex flex-col items-center justify-center min-h-[500px]">
@@ -303,6 +393,29 @@
     </section>
 
   </main>
+
+  <!-- MODAL FLOTANTE RENOMBRAR HISTORIAL (REEMPLAZO DE PROMPT) -->
+  <div id="modalRenombrar" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in duration-200">
+      <div class="flex items-center justify-between border-b border-slate-700 pb-3">
+        <h3 class="text-base font-bold text-slate-100 flex items-center gap-2">
+          <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+          Editar Nombre del Historial
+        </h3>
+        <button onclick="cerrarModalRenombrar()" class="text-slate-400 hover:text-white p-1 rounded-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Nombre del Registro</label>
+        <input type="text" id="inputNuevoNombreHistorial" onkeydown="if(event.key==='Enter') confirmarRenombrarHistorial()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition" placeholder="Escribe el nombre...">
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="cerrarModalRenombrar()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold px-4 py-2 rounded-lg transition">Cancelar</button>
+        <button onclick="confirmarRenombrarHistorial()" class="bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold px-4 py-2 rounded-lg shadow-md transition">Guardar Nombre</button>
+      </div>
+    </div>
+  </div>
 
   <!-- MODAL FLOTANTE DE DESCARGA -->
   <div id="modalDescarga" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
@@ -363,6 +476,12 @@
     </div>
   </div>
 
+  <!-- TOAST / NOTIFICACIÓN DE SISTEMA -->
+  <div id="toastNotificacion" class="fixed bottom-5 right-5 bg-slate-800 border border-cyan-500/50 text-slate-100 text-xs px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2 translate-y-20 opacity-0 transition-all duration-300 z-50 pointer-events-none">
+    <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+    <span id="toastTexto">Mensaje</span>
+  </div>
+
   <footer class="bg-slate-950 border-t border-slate-800 py-4 text-center text-xs text-slate-500 mt-auto">
     <p>Generador de Sopa de Letras Vectorial • Alta Definición 300 DPI.</p>
   </footer>
@@ -391,38 +510,96 @@
       }
     };
 
+    // DICCIONARIO DE FUENTES (ESTILO TIPOGRÁFICO)
+    const FUENTES = {
+      inter: { family: "'Inter', sans-serif", label: "Inter (Moderna y Limpia)" },
+      montserrat: { family: "'Montserrat', sans-serif", label: "Montserrat (Geométrica Pro)" },
+      fredoka: { family: "'Fredoka', sans-serif", label: "Fredoka (Redondeada / Infantil)" },
+      comic: { family: "'Comic Neue', cursive", label: "Comic Neue (Escolar)" },
+      caveat: { family: "'Caveat', cursive", label: "Caveat (Manuscrito / Lápiz)" },
+      firacode: { family: "'Fira Code', monospace", label: "Fira Code (Monospaciado)" },
+      playfair: { family: "'Playfair Display', serif", label: "Playfair Display (Serif Elegante)" },
+      poppins: { family: "'Poppins', sans-serif", label: "Poppins (Diseño Editorial)" },
+      nunito: { family: "'Nunito', sans-serif", label: "Nunito (Suave Educativo)" },
+      roboto: { family: "'Roboto', sans-serif", label: "Roboto (Estándar Impresión)" }
+    };
+
+    // 30 TEMAS DE COLOR EXCLUSIVOS
     const TEMAS = {
       classic: { bg: "#FFFFFF", primary: "#1E293B", secondary: "#64748B", gridLine: "#E2E8F0", gridText: "#0F172A", cellBg: "#F8FAFC", highlight: "rgba(239, 68, 68, 0.25)", highlightStroke: "#EF4444" },
       blue: { bg: "#FFFFFF", primary: "#1E40AF", secondary: "#3B82F6", gridLine: "#BFDBFE", gridText: "#1E3A8A", cellBg: "#F0F9FF", highlight: "rgba(37, 99, 235, 0.25)", highlightStroke: "#2563EB" },
       emerald: { bg: "#FFFFFF", primary: "#065F46", secondary: "#059669", gridLine: "#A7F3D0", gridText: "#064E3B", cellBg: "#F0FDF4", highlight: "rgba(16, 185, 129, 0.25)", highlightStroke: "#10B981" },
       purple: { bg: "#FFFFFF", primary: "#581C87", secondary: "#7C3AED", gridLine: "#DDD6FE", gridText: "#3B0764", cellBg: "#FAF5FF", highlight: "rgba(124, 58, 237, 0.25)", highlightStroke: "#7C3AED" },
-      warm: { bg: "#FFFFFF", primary: "#9A3412", secondary: "#EA580C", gridLine: "#FFEDD5", gridText: "#7C2D12", cellBg: "#FFF7ED", highlight: "rgba(249, 115, 22, 0.25)", highlightStroke: "#F97316" }
+      warm: { bg: "#FFFFFF", primary: "#9A3412", secondary: "#EA580C", gridLine: "#FFEDD5", gridText: "#7C2D12", cellBg: "#FFF7ED", highlight: "rgba(249, 115, 22, 0.25)", highlightStroke: "#F97316" },
+      rose: { bg: "#FFFFFF", primary: "#9F1239", secondary: "#E11D48", gridLine: "#FECDD3", gridText: "#881337", cellBg: "#FFF1F2", highlight: "rgba(244, 63, 94, 0.25)", highlightStroke: "#F43F5E" },
+      amber: { bg: "#FFFFFF", primary: "#92400E", secondary: "#D97706", gridLine: "#FDE68A", gridText: "#78350F", cellBg: "#FFFBEB", highlight: "rgba(245, 158, 11, 0.25)", highlightStroke: "#F59E0B" },
+      indigo: { bg: "#FFFFFF", primary: "#3730A3", secondary: "#4F46E5", gridLine: "#C7D2FE", gridText: "#312E81", cellBg: "#EEF2FF", highlight: "rgba(99, 102, 241, 0.25)", highlightStroke: "#6366F1" },
+      teal: { bg: "#FFFFFF", primary: "#115E59", secondary: "#0D9488", gridLine: "#99F6E4", gridText: "#134E4A", cellBg: "#F0FDFA", highlight: "rgba(20, 184, 166, 0.25)", highlightStroke: "#14B8A6" },
+      violet: { bg: "#FFFFFF", primary: "#4C1D95", secondary: "#6D28D9", gridLine: "#DDD6FE", gridText: "#5B21B6", cellBg: "#F5F3FF", highlight: "rgba(139, 92, 246, 0.25)", highlightStroke: "#8B5CF6" },
+      cyan: { bg: "#FFFFFF", primary: "#155E75", secondary: "#0891B2", gridLine: "#A5F3FC", gridText: "#164E63", cellBg: "#ECFEFF", highlight: "rgba(6, 182, 212, 0.25)", highlightStroke: "#06B6D4" },
+      lime: { bg: "#FFFFFF", primary: "#3F6212", secondary: "#65A30D", gridLine: "#D9F99D", gridText: "#365314", cellBg: "#F7FEE7", highlight: "rgba(132, 204, 22, 0.25)", highlightStroke: "#84CC16" },
+      fuchsia: { bg: "#FFFFFF", primary: "#86198F", secondary: "#C026D3", gridLine: "#F5D0FE", gridText: "#701A75", cellBg: "#FDF4FF", highlight: "rgba(217, 70, 239, 0.25)", highlightStroke: "#D946EF" },
+      sky: { bg: "#FFFFFF", primary: "#075985", secondary: "#0284C7", gridLine: "#BAE6FD", gridText: "#0C4A6E", cellBg: "#F0F9FF", highlight: "rgba(56, 189, 248, 0.25)", highlightStroke: "#38BDF8" },
+      stone: { bg: "#FFFFFF", primary: "#292524", secondary: "#57534E", gridLine: "#E7E5E4", gridText: "#1C1917", cellBg: "#FAFAF9", highlight: "rgba(120, 113, 108, 0.25)", highlightStroke: "#78716C" },
+      slate: { bg: "#FFFFFF", primary: "#0F172A", secondary: "#334155", gridLine: "#CBD5E1", gridText: "#020617", cellBg: "#F1F5F9", highlight: "rgba(100, 116, 139, 0.25)", highlightStroke: "#64748B" },
+      crimson: { bg: "#FFFFFF", primary: "#881337", secondary: "#BE123C", gridLine: "#FECDD3", gridText: "#4C0519", cellBg: "#FFF1F2", highlight: "rgba(225, 29, 72, 0.25)", highlightStroke: "#E11D48" },
+      gold: { bg: "#FFFCF0", primary: "#713F12", secondary: "#A16207", gridLine: "#FEF08A", gridText: "#451A03", cellBg: "#FEF9C3", highlight: "rgba(234, 179, 8, 0.3)", highlightStroke: "#CA8A04" },
+      mint: { bg: "#F4FBF7", primary: "#047857", secondary: "#10B981", gridLine: "#A7F3D0", gridText: "#064E3B", cellBg: "#E6F4ED", highlight: "rgba(52, 211, 153, 0.3)", highlightStroke: "#059669" },
+      lavender: { bg: "#FAF8FF", primary: "#6B21A8", secondary: "#9333EA", gridLine: "#E9D5FF", gridText: "#581C87", cellBg: "#F3E8FF", highlight: "rgba(192, 132, 252, 0.3)", highlightStroke: "#A855F7" },
+      sunset: { bg: "#FFFBF7", primary: "#C2410C", secondary: "#F97316", gridLine: "#FFEDD5", gridText: "#7C2D12", cellBg: "#FFEDD5", highlight: "rgba(251, 146, 60, 0.3)", highlightStroke: "#EA580C" },
+      forest: { bg: "#FFFFFF", primary: "#14532D", secondary: "#166534", gridLine: "#BBF7D0", gridText: "#052E16", cellBg: "#F0FDF4", highlight: "rgba(34, 197, 94, 0.25)", highlightStroke: "#16A34A" },
+      ocean: { bg: "#F0F8FF", primary: "#1E3A8A", secondary: "#1D4ED8", gridLine: "#BFDBFE", gridText: "#172554", cellBg: "#DBEAFE", highlight: "rgba(96, 165, 250, 0.3)", highlightStroke: "#2563EB" },
+      coral: { bg: "#FFF8F6", primary: "#9A3412", secondary: "#F97316", gridLine: "#FFD8D0", gridText: "#431407", cellBg: "#FFEAE5", highlight: "rgba(251, 113, 133, 0.3)", highlightStroke: "#F43F5E" },
+      berry: { bg: "#FFF5F8", primary: "#831843", secondary: "#BE185D", gridLine: "#FBCFE8", gridText: "#500724", cellBg: "#FCE7F3", highlight: "rgba(244, 114, 182, 0.3)", highlightStroke: "#DB2777" },
+      coffee: { bg: "#FCF8F2", primary: "#4A2E16", secondary: "#78350F", gridLine: "#E7D7C8", gridText: "#291609", cellBg: "#F3E8DC", highlight: "rgba(180, 83, 9, 0.25)", highlightStroke: "#92400E" },
+      neon: { bg: "#0F172A", primary: "#38BDF8", secondary: "#818CF8", gridLine: "#1E293B", gridText: "#F8FAFC", cellBg: "#1E293B", highlight: "rgba(56, 189, 248, 0.4)", highlightStroke: "#38BDF8" },
+      pastel: { bg: "#FFFEFA", primary: "#475569", secondary: "#64748B", gridLine: "#E2E8F0", gridText: "#1E293B", cellBg: "#F8FAFC", highlight: "rgba(253, 164, 175, 0.4)", highlightStroke: "#FB7185" },
+      monochrome_dark: { bg: "#000000", primary: "#FFFFFF", secondary: "#A1A1AA", gridLine: "#27272A", gridText: "#FFFFFF", cellBg: "#18181B", highlight: "rgba(255, 255, 255, 0.35)", highlightStroke: "#FFFFFF" },
+      vintage: { bg: "#FDF6E3", primary: "#432818", secondary: "#99582A", gridLine: "#E6D5B8", gridText: "#2F1E14", cellBg: "#F5E6CC", highlight: "rgba(187, 62, 3, 0.3)", highlightStroke: "#BB3E03" }
     };
 
     let estadoGlobal = {
-      titulo: "", subtitulo: "", tamano: 15, temaKey: "blue",
+      titulo: "", subtitulo: "", tamano: 15, temaKey: "blue", fuenteKey: "inter",
       mostrarSolucion: false, mostrarTitulo: true, mostrarNombre: false,
       mostrarFecha: false, mostrarFooter: true, textoFooter: "Generado con SopaDeLetras 300 DPI Pro",
       fontSizeGrid: 0, fontSizeWords: 20, palabrasNormalizadas: [], grid: [], palabrasColocadas: [], palabrasNoColocadas: []
     };
 
-    window.addEventListener('DOMContentLoaded', () => { cargarPlantilla('frutas'); });
+    // SISTEMA DE HISTORIAL (localStorage)
+    let historialList = [];
+    let historialIdActual = null;
+    let idHistorialEnRenombre = null;
 
-    // Control de Pestañas Colapsables
+    window.addEventListener('DOMContentLoaded', () => { 
+      cargarPlantilla('frutas');
+      cargarHistorialDesdeStorage();
+    });
+
+    // Control de Pestañas Colapsables estilo Acordeón Exclusivo (Cierra las demás al abrir una)
     function togglePestana(num) {
-      const p = document.getElementById(`pestana${num}`);
-      const arrow = document.getElementById(`tabArrow${num}`);
-      const btn = document.getElementById(`tabBtn${num}`);
+      [1, 2, 3].forEach(i => {
+        const p = document.getElementById(`pestana${i}`);
+        const arrow = document.getElementById(`tabArrow${i}`);
+        const btn = document.getElementById(`tabBtn${i}`);
+        if (!p || !arrow || !btn) return;
 
-      if (p.classList.contains('hidden')) {
-        p.classList.remove('hidden');
-        arrow.classList.add('rotate-180');
-        btn.classList.add('bg-slate-700', 'border-cyan-500/50', 'text-cyan-400');
-      } else {
-        p.classList.add('hidden');
-        arrow.classList.remove('rotate-180');
-        btn.classList.remove('bg-slate-700', 'border-cyan-500/50', 'text-cyan-400');
-      }
+        if (i === num) {
+          const estaOculto = p.classList.contains('hidden');
+          if (estaOculto) {
+            p.classList.remove('hidden');
+            arrow.classList.add('rotate-180');
+            btn.classList.add('bg-slate-700', 'border-cyan-500/50', 'text-cyan-400');
+          } else {
+            p.classList.add('hidden');
+            arrow.classList.remove('rotate-180');
+            btn.classList.remove('bg-slate-700', 'border-cyan-500/50', 'text-cyan-400');
+          }
+        } else {
+          p.classList.add('hidden');
+          arrow.classList.remove('rotate-180');
+          btn.classList.remove('bg-slate-700', 'border-cyan-500/50', 'text-cyan-400');
+        }
+      });
     }
 
     // Modal de Descarga
@@ -433,6 +610,15 @@
       document.getElementById('modalDescarga').classList.add('hidden');
     }
 
+    function mostrarNotificacion(texto) {
+      const toast = document.getElementById('toastNotificacion');
+      document.getElementById('toastTexto').textContent = texto;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
+    }
+
     function cargarPlantilla(key) {
       const data = PLANTILLAS[key];
       if (!data) return;
@@ -441,8 +627,219 @@
       generarNuevaSopa();
     }
 
+    // ==========================================
+    // LÓGICA DE HISTORIAL (LOCALSTORAGE)
+    // ==========================================
+    function cargarHistorialDesdeStorage() {
+      const data = localStorage.getItem('sopadeletras_historial');
+      if (data) {
+        try {
+          historialList = JSON.parse(data);
+        } catch (e) {
+          historialList = [];
+        }
+      }
+      renderizarListaHistorial();
+    }
+
+    function guardarEnStorage() {
+      localStorage.setItem('sopadeletras_historial', JSON.stringify(historialList));
+      renderizarListaHistorial();
+    }
+
+    function obtenerEstadoFormulario() {
+      return {
+        titulo: document.getElementById('inputTitulo').value,
+        subtitulo: document.getElementById('inputSubtitulo').value,
+        textoFooter: document.getElementById('inputFooter').value,
+        tamano: document.getElementById('selectTamano').value,
+        temaKey: document.getElementById('selectTema').value,
+        fuenteKey: document.getElementById('selectFuente').value,
+        mostrarTitulo: document.getElementById('checkMostrarTitulo').checked,
+        mostrarNombre: document.getElementById('checkMostrarNombre').checked,
+        mostrarFecha: document.getElementById('checkMostrarFecha').checked,
+        mostrarFooter: document.getElementById('checkMostrarFooter').checked,
+        fontSizeGrid: document.getElementById('rangeFontGrid').value,
+        fontSizeWords: document.getElementById('rangeFontWords').value,
+        dirH: document.getElementById('dirH').checked,
+        dirV: document.getElementById('dirV').checked,
+        dirD: document.getElementById('dirD').checked,
+        dirRev: document.getElementById('dirRev').checked,
+        inputPalabras: document.getElementById('inputPalabras').value
+      };
+    }
+
+    function guardarHistorial() {
+      const config = obtenerEstadoFormulario();
+      const nombreGuardado = config.titulo.trim() || "Sopa de Letras sin título";
+      const fechaStr = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+
+      if (historialIdActual) {
+        // Actualizar el historial existente
+        const idx = historialList.findIndex(item => item.id === historialIdActual);
+        if (idx !== -1) {
+          historialList[idx].nombre = nombreGuardado;
+          historialList[idx].fecha = fechaStr;
+          historialList[idx].config = config;
+          mostrarNotificacion("Historial actualizado correctamente");
+        } else {
+          historialIdActual = Date.now().toString();
+          historialList.unshift({ id: historialIdActual, nombre: nombreGuardado, fecha: fechaStr, config });
+          mostrarNotificacion("Guardado como nuevo historial");
+        }
+      } else {
+        // Crear nuevo registro de historial
+        historialIdActual = Date.now().toString();
+        historialList.unshift({ id: historialIdActual, nombre: nombreGuardado, fecha: fechaStr, config });
+        mostrarNotificacion("Nuevo historial guardado");
+      }
+
+      guardarEnStorage();
+    }
+
+    function cargarHistorial(id) {
+      const item = historialList.find(i => i.id === id);
+      if (!item) return;
+
+      historialIdActual = item.id;
+      const cfg = item.config;
+
+      document.getElementById('inputTitulo').value = cfg.titulo || '';
+      document.getElementById('inputSubtitulo').value = cfg.subtitulo || '';
+      document.getElementById('inputFooter').value = cfg.textoFooter || '';
+      document.getElementById('selectTamano').value = cfg.tamano || '15';
+      document.getElementById('selectTema').value = cfg.temaKey || 'blue';
+      document.getElementById('selectFuente').value = cfg.fuenteKey || 'inter';
+      document.getElementById('checkMostrarTitulo').checked = !!cfg.mostrarTitulo;
+      document.getElementById('checkMostrarNombre').checked = !!cfg.mostrarNombre;
+      document.getElementById('checkMostrarFecha').checked = !!cfg.mostrarFecha;
+      document.getElementById('checkMostrarFooter').checked = !!cfg.mostrarFooter;
+      document.getElementById('rangeFontGrid').value = cfg.fontSizeGrid || 0;
+      document.getElementById('rangeFontWords').value = cfg.fontSizeWords || 20;
+      document.getElementById('dirH').checked = !!cfg.dirH;
+      document.getElementById('dirV').checked = !!cfg.dirV;
+      document.getElementById('dirD').checked = !!cfg.dirD;
+      document.getElementById('dirRev').checked = !!cfg.dirRev;
+      document.getElementById('inputPalabras').value = cfg.inputPalabras || '';
+
+      generarNuevaSopa();
+      renderizarListaHistorial();
+      mostrarNotificacion(`Cargado: "${item.nombre}"`);
+    }
+
+    // ==========================================
+    // MODAL FLOTANTE DE RENOMBRAR HISTORIAL
+    // ==========================================
+    function renombrarHistorial(id, event) {
+      if (event) event.stopPropagation();
+      const item = historialList.find(i => i.id === id);
+      if (!item) return;
+      idHistorialEnRenombre = id;
+      document.getElementById('inputNuevoNombreHistorial').value = item.nombre;
+      document.getElementById('modalRenombrar').classList.remove('hidden');
+      setTimeout(() => document.getElementById('inputNuevoNombreHistorial').focus(), 100);
+    }
+
+    function cerrarModalRenombrar() {
+      idHistorialEnRenombre = null;
+      document.getElementById('modalRenombrar').classList.add('hidden');
+    }
+
+    function confirmarRenombrarHistorial() {
+      if (!idHistorialEnRenombre) return;
+      const item = historialList.find(i => i.id === idHistorialEnRenombre);
+      const nuevoNombre = document.getElementById('inputNuevoNombreHistorial').value.trim();
+      if (item && nuevoNombre !== "") {
+        item.nombre = nuevoNombre;
+        guardarEnStorage();
+        mostrarNotificacion("Nombre de historial actualizado");
+      }
+      cerrarModalRenombrar();
+    }
+
+    function eliminarHistorial(id, event) {
+      if (event) event.stopPropagation();
+      if (!confirm("¿Estás seguro de que deseas eliminar este historial?")) return;
+
+      historialList = historialList.filter(i => i.id !== id);
+      if (historialIdActual === id) {
+        historialIdActual = null;
+      }
+      guardarEnStorage();
+      mostrarNotificacion("Historial eliminado");
+    }
+
+    function nuevoHistorialModo() {
+      historialIdActual = null;
+      renderizarListaHistorial();
+      mostrarNotificacion("Modo de edición desvinculado (Nuevo Historial)");
+    }
+
+    function renderizarListaHistorial() {
+      const contenedor = document.getElementById('contenedorListaHistorial');
+      const badge = document.getElementById('badgeHistorial');
+      const indicador = document.getElementById('indicadorEdicion');
+      const btnTexto = document.getElementById('btnGuardarTexto');
+
+      badge.textContent = historialList.length;
+
+      // Actualizar el estado del botón e indicador
+      if (historialIdActual) {
+        const itemActual = historialList.find(i => i.id === historialIdActual);
+        if (itemActual) {
+          indicador.classList.remove('hidden');
+          document.getElementById('nombreEdicionActual').textContent = itemActual.nombre;
+          btnTexto.textContent = "Actualizar Historial";
+        } else {
+          historialIdActual = null;
+          indicador.classList.add('hidden');
+          btnTexto.textContent = "Guardar Historial";
+        }
+      } else {
+        indicador.classList.add('hidden');
+        btnTexto.textContent = "Guardar Historial";
+      }
+
+      if (historialList.length === 0) {
+        contenedor.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">No hay historiales guardados aún.</p>`;
+        return;
+      }
+
+      contenedor.innerHTML = historialList.map(item => {
+        const esSeleccionado = item.id === historialIdActual;
+        return `
+          <div class="group flex items-center justify-between p-2.5 rounded-lg border transition ${
+            esSeleccionado 
+              ? 'bg-slate-700/80 border-cyan-500/60 text-slate-100 shadow-md' 
+              : 'bg-slate-900/60 border-slate-700/70 hover:bg-slate-700/40 text-slate-300'
+          }">
+            <div class="flex-1 min-w-0 cursor-pointer mr-2" onclick="cargarHistorial('${item.id}')">
+              <div class="flex items-center gap-1.5">
+                <span class="text-xs font-semibold truncate ${esSeleccionado ? 'text-cyan-300' : 'text-slate-200'}">${escapeXml(item.nombre)}</span>
+                ${esSeleccionado ? '<span class="text-[9px] bg-cyan-900/80 text-cyan-300 px-1.5 py-0.2 rounded border border-cyan-700 shrink-0">Editando</span>' : ''}
+              </div>
+              <span class="text-[10px] text-slate-400 block mt-0.5">${item.fecha}</span>
+            </div>
+
+            <div class="flex items-center space-x-1 shrink-0">
+              <!-- Botón Renombrar (Editar Nombre con Modal Flotante) -->
+              <button onclick="renombrarHistorial('${item.id}', event)" title="Renombrar Historial" class="p-1.5 text-slate-400 hover:text-cyan-300 hover:bg-slate-800 rounded-md transition">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+              </button>
+              
+              <!-- Botón Eliminar -->
+              <button onclick="eliminarHistorial('${item.id}', event)" title="Eliminar Historial" class="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-slate-800 rounded-md transition">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
     function actualizarOpcionesYRenderizar() {
       estadoGlobal.temaKey = document.getElementById('selectTema').value;
+      estadoGlobal.fuenteKey = document.getElementById('selectFuente').value;
       estadoGlobal.mostrarTitulo = document.getElementById('checkMostrarTitulo').checked;
       estadoGlobal.mostrarNombre = document.getElementById('checkMostrarNombre').checked;
       estadoGlobal.mostrarFecha = document.getElementById('checkMostrarFecha').checked;
@@ -479,6 +876,7 @@
       estadoGlobal.subtitulo = document.getElementById('inputSubtitulo').value.trim() || "";
       estadoGlobal.tamano = parseInt(document.getElementById('selectTamano').value, 10);
       estadoGlobal.temaKey = document.getElementById('selectTema').value;
+      estadoGlobal.fuenteKey = document.getElementById('selectFuente').value;
       estadoGlobal.mostrarTitulo = document.getElementById('checkMostrarTitulo').checked;
       estadoGlobal.mostrarNombre = document.getElementById('checkMostrarNombre').checked;
       estadoGlobal.mostrarFecha = document.getElementById('checkMostrarFecha').checked;
@@ -581,6 +979,7 @@
     function generarStringSVG(forzarSolucion = null) {
       const mostrarSol = (forzarSolucion !== null) ? forzarSolucion : estadoGlobal.mostrarSolucion;
       const tema = TEMAS[estadoGlobal.temaKey] || TEMAS.blue;
+      const fuenteObj = FUENTES[estadoGlobal.fuenteKey] || FUENTES.inter;
       const size = estadoGlobal.tamano;
       const grid = estadoGlobal.grid;
 
@@ -606,10 +1005,10 @@
       if (estadoGlobal.mostrarTitulo) {
         hasHeaderContent = true;
         currentY += 50 * scaleFactor;
-        headerSvg += `<text x="${width / 2}" y="${currentY}" text-anchor="middle" fill="${tema.primary}" font-size="${42 * scaleFactor}" font-weight="800" font-family="'Montserrat', sans-serif" letter-spacing="${1 * scaleFactor}">${escapeXml(estadoGlobal.titulo)}</text>`;
+        headerSvg += `<text x="${width / 2}" y="${currentY}" text-anchor="middle" fill="${tema.primary}" font-size="${42 * scaleFactor}" font-weight="800" font-family="${fuenteObj.family}" letter-spacing="${1 * scaleFactor}">${escapeXml(estadoGlobal.titulo)}</text>`;
         if (estadoGlobal.subtitulo) {
           currentY += 35 * scaleFactor;
-          headerSvg += `<text x="${width / 2}" y="${currentY}" text-anchor="middle" fill="${tema.secondary}" font-size="${20 * scaleFactor}" font-weight="500">${escapeXml(estadoGlobal.subtitulo)}</text>`;
+          headerSvg += `<text x="${width / 2}" y="${currentY}" text-anchor="middle" fill="${tema.secondary}" font-size="${20 * scaleFactor}" font-family="${fuenteObj.family}" font-weight="500">${escapeXml(estadoGlobal.subtitulo)}</text>`;
         }
       }
 
@@ -622,11 +1021,11 @@
         const split1 = width * 0.45, split2 = width * 0.55;
 
         if (estadoGlobal.mostrarNombre && estadoGlobal.mostrarFecha) {
-          headerSvg += `<line x1="${mLeft}" y1="${currentY}" x2="${split1}" y2="${currentY}" /><text x="${mLeft}" y="${currentY - (8 * scaleFactor)}" fill="${tema.secondary}" font-size="${labelSize}">Nombre: </text><line x1="${split2}" y1="${currentY}" x2="${mRight}" y2="${currentY}" /><text x="${split2}" y="${currentY - (8 * scaleFactor)}" fill="${tema.secondary}" font-size="${labelSize}">Fecha: </text>`;
+          headerSvg += `<line x1="${mLeft}" y1="${currentY}" x2="${split1}" y2="${currentY}" /><text x="${mLeft}" y="${currentY - (8 * scaleFactor)}" fill="${tema.secondary}" font-size="${labelSize}" font-family="${fuenteObj.family}">Nombre: </text><line x1="${split2}" y1="${currentY}" x2="${mRight}" y2="${currentY}" /><text x="${split2}" y="${currentY - (8 * scaleFactor)}" fill="${tema.secondary}" font-size="${labelSize}" font-family="${fuenteObj.family}">Fecha: </text>`;
         } else if (estadoGlobal.mostrarNombre) {
-          headerSvg += `<line x1="${mLeft}" y1="${currentY}" x2="${mRight}" y2="${currentY}" /><text x="${mLeft}" y="${currentY - (8 * scaleFactor)}" fill="${tema.secondary}" font-size="${labelSize}">Nombre: </text>`;
+          headerSvg += `<line x1="${mLeft}" y1="${currentY}" x2="${mRight}" y2="${currentY}" /><text x="${mLeft}" y="${currentY - (8 * scaleFactor)}" fill="${tema.secondary}" font-size="${labelSize}" font-family="${fuenteObj.family}">Nombre: </text>`;
         } else if (estadoGlobal.mostrarFecha) {
-          headerSvg += `<line x1="${mLeft}" y1="${currentY}" x2="${split1}" y2="${currentY}" /><text x="${mLeft}" y="${currentY - (8 * scaleFactor)}" fill="${tema.secondary}" font-size="${labelSize}">Fecha: </text>`;
+          headerSvg += `<line x1="${mLeft}" y1="${currentY}" x2="${split1}" y2="${currentY}" /><text x="${mLeft}" y="${currentY - (8 * scaleFactor)}" fill="${tema.secondary}" font-size="${labelSize}" font-family="${fuenteObj.family}">Fecha: </text>`;
         }
         headerSvg += `</g>`;
       }
@@ -647,14 +1046,14 @@
       let footerSvg = "";
       if (estadoGlobal.mostrarFooter && estadoGlobal.textoFooter.trim() !== "") {
         finalY += (20 * scaleFactor);
-        footerSvg = `<text x="${width / 2}" y="${finalY}" text-anchor="middle" fill="${tema.secondary}" font-size="${14 * scaleFactor}">${escapeXml(estadoGlobal.textoFooter)}</text>`;
+        footerSvg = `<text x="${width / 2}" y="${finalY}" text-anchor="middle" fill="${tema.secondary}" font-size="${14 * scaleFactor}" font-family="${fuenteObj.family}">${escapeXml(estadoGlobal.textoFooter)}</text>`;
         finalY += (30 * scaleFactor);
       } else {
         finalY += (20 * scaleFactor); 
       }
 
       const height = Math.round(finalY);
-      let svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background-color: ${tema.bg}; font-family: 'Inter', system-ui, -apple-system, sans-serif;">`;
+      let svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background-color: ${tema.bg}; font-family: ${fuenteObj.family};">`;
 
       svgContent += `<rect width="${width}" height="${height}" fill="${tema.bg}" />${headerSvg}`;
 
@@ -685,18 +1084,18 @@
         for (let c = 0; c < size; c++) {
           const cx = startX + c * cellSize + cellSize / 2;
           const cy = startY + r * cellSize + cellSize / 2 + (actualFontSizeGrid * 0.35);
-          svgContent += `<text x="${cx}" y="${cy}" text-anchor="middle" fill="${tema.gridText}" font-size="${actualFontSizeGrid}" font-weight="700">${grid[r][c]}</text>`;
+          svgContent += `<text x="${cx}" y="${cy}" text-anchor="middle" fill="${tema.gridText}" font-size="${actualFontSizeGrid}" font-family="${fuenteObj.family}" font-weight="700">${grid[r][c]}</text>`;
         }
       }
       svgContent += `</g>`;
 
-      svgContent += `<g id="seccion-palabras"><text x="${startX}" y="${listStartY}" fill="${tema.primary}" font-size="${Math.max(18 * scaleFactor, actualFontSizeWords + (2 * scaleFactor))}" font-weight="700" font-family="'Montserrat', sans-serif">PALABRAS A BUSCAR (${palabras.length}): </text>`;
+      svgContent += `<g id="seccion-palabras"><text x="${startX}" y="${listStartY}" fill="${tema.primary}" font-size="${Math.max(18 * scaleFactor, actualFontSizeWords + (2 * scaleFactor))}" font-weight="700" font-family="${fuenteObj.family}">PALABRAS A BUSCAR (${palabras.length}): </text>`;
 
       const checkboxSize = Math.max(14 * scaleFactor, Math.min(20 * scaleFactor, actualFontSizeWords * 0.8));
       palabras.forEach((pal, idx) => {
         const col = idx % numCols, row = Math.floor(idx / numCols);
         const itemX = startX + col * colWidth, itemY = listItemsStartY + row * lineHeight;
-        svgContent += `<rect x="${itemX}" y="${itemY - checkboxSize + (3 * scaleFactor)}" width="${checkboxSize}" height="${checkboxSize}" fill="none" stroke="${tema.secondary}" stroke-width="${1.5 * scaleFactor}" rx="${2 * scaleFactor}" /><text x="${itemX + checkboxSize + (10 * scaleFactor)}" y="${itemY}" fill="${tema.gridText}" font-size="${actualFontSizeWords}" font-weight="500">${escapeXml(pal)}</text>`;
+        svgContent += `<rect x="${itemX}" y="${itemY - checkboxSize + (3 * scaleFactor)}" width="${checkboxSize}" height="${checkboxSize}" fill="none" stroke="${tema.secondary}" stroke-width="${1.5 * scaleFactor}" rx="${2 * scaleFactor}" /><text x="${itemX + checkboxSize + (10 * scaleFactor)}" y="${itemY}" fill="${tema.gridText}" font-size="${actualFontSizeWords}" font-family="${fuenteObj.family}" font-weight="500">${escapeXml(pal)}</text>`;
       });
       svgContent += `</g>${footerSvg}</svg>`;
 
@@ -761,19 +1160,24 @@
 
     // Bloquear atajos de teclado de desarrollador
     document.addEventListener('keydown', function(e) {
+        // Bloquear F12
         if (e.key === 'F12' || e.keyCode === 123) {
             e.preventDefault();
             return false;
         }
+        
+        // Bloquear Ctrl+Shift+I (Inspeccionar), Ctrl+Shift+J (Consola), Ctrl+Shift+C (Seleccionar elemento)
         if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
             e.preventDefault();
             return false;
         }
+        
+        // Bloquear Ctrl+U (Ver código fuente) y Ctrl+S (Guardar página)
         if (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's')) {
             e.preventDefault();
             return false;
         }
     });
-  </script>
+</script>
 </body>
 </html>
