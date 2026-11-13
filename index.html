@@ -302,6 +302,13 @@
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Clase para expandir la descripción cuando se active */
+        .card.expanded .card-desc {
+            -webkit-line-clamp: unset;
+            display: block;
         }
 
         /* Botón sutil "Ver más" dentro de la card */
@@ -323,13 +330,15 @@
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            padding: 2px 0;
-            transition: opacity 0.2s ease, transform 0.2s ease;
+            padding: 4px 6px;
+            border-radius: 4px;
+            transition: background 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
             opacity: 0.85;
         }
 
         .read-more-btn:hover {
             opacity: 1;
+            background: rgba(255, 255, 255, 0.06);
             transform: translateX(2px);
         }
 
@@ -337,6 +346,12 @@
             width: 14px;
             height: 14px;
             fill: currentColor;
+            transition: transform 0.3s ease;
+        }
+
+        /* Rotar la flecha cuando la tarjeta esté expandida */
+        .card.expanded .read-more-btn svg {
+            transform: rotate(180deg);
         }
 
         /* Panel Lateral - Material Acrílico Opaco */
@@ -462,7 +477,6 @@
             .sidebar-header { padding: 10px 5px; }
             .resizer { display: none; }
             
-            /* El header-actions abarca todo el ancho, posicionando select y botón de limpiar en la misma fila */
             .header-actions { 
                 width: 100%; 
                 display: flex;
@@ -598,15 +612,28 @@
                     </div>
                     <div class="card-footer">
                         <button class="read-more-btn" type="button">
-                            Ver más
+                            <span>Ver más</span>
                             <svg viewBox="0 0 24 24">
-                                <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
                             </svg>
                         </button>
                     </div>
                 `;
 
+                // Evento para abrir el reproductor lateral al hacer clic en cualquier parte de la tarjeta
                 tarjeta.addEventListener('click', () => openPlayer(item.url));
+
+                // Evento específico para el botón "Ver más" (evita que abra el reproductor y expande/contrae el texto)
+                const readMoreBtn = tarjeta.querySelector('.read-more-btn');
+                const btnTextSpan = readMoreBtn.querySelector('span');
+
+                readMoreBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Evita que se dispare el evento click de la tarjeta principal
+                    
+                    const isExpanded = tarjeta.classList.toggle('expanded');
+                    btnTextSpan.textContent = isExpanded ? 'Ver menos' : 'Ver más';
+                });
+
                 contenedorTarjetas.appendChild(tarjeta);
             });
         }
