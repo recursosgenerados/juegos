@@ -214,7 +214,7 @@
                                     <span>Tamaño de Texto</span>
                                     <span id="textSizeVal" class="text-blue-400 font-mono">18px</span>
                                 </label>
-                                <input type="range" id="textSizeSlider" min="14" max="40" value="18" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500" oninput="updateSettings()">
+                                <input type="range" id="textSizeSlider" min="14" max="100" value="18" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500" oninput="updateSettings()">
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-slate-400 mb-2 flex justify-between">
@@ -952,26 +952,31 @@
         updateMobilePreviewVisibility();
     </script>
     <script>
-        // Bloquear clic derecho (Anticlic)
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
+    // Bloquear clic derecho (Anticlic)
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
 
-        // Bloquear atajos de teclado de desarrollador
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'F12' || e.keyCode === 123) {
-                e.preventDefault();
-                return false;
-            }
-            if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
-                e.preventDefault();
-                return false;
-            }
-            if (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's')) {
-                e.preventDefault();
-                return false;
-            }
-        });
-    </script>
+    // Bloquear atajos de teclado de desarrollador
+    document.addEventListener('keydown', function(e) {
+        // Bloquear F12
+        if (e.key === 'F12' || e.keyCode === 123) {
+            e.preventDefault();
+            return false;
+        }
+        
+        // Bloquear Ctrl+Shift+I (Inspeccionar), Ctrl+Shift+J (Consola), Ctrl+Shift+C (Seleccionar elemento)
+        if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
+            e.preventDefault();
+            return false;
+        }
+        
+        // Bloquear Ctrl+U (Ver código fuente) y Ctrl+S (Guardar página)
+        if (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's')) {
+            e.preventDefault();
+            return false;
+        }
+    });
+</script>
 </body>
 </html>
