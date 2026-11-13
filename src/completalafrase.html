@@ -76,6 +76,10 @@
             </h1>
             <p class="text-slate-400 mt-1 text-sm md:text-base">Generador de hojas de trabajo interactivas.</p>
         </div>
+        <button onclick="openModal('historyModal')" class="bg-[#1e1e1e] hover:bg-[#252525] border border-slate-700 text-slate-300 hover:text-white px-4 py-2.5 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-colors shadow-lg">
+            <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+            Historial / Guardados (<span id="historyCount">0</span>)
+        </button>
     </header>
 
     <main class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 max-w-[1400px] mx-auto w-full">
@@ -192,7 +196,6 @@
                         </div>
                     </div>
                     
-                    <!-- Botón exclusivo para móvil para minimizar y ver preview -->
                     <button onclick="handleTabClick('config')" class="block lg:hidden w-full bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-600/30 py-3 rounded-lg font-medium text-sm transition-colors flex items-center justify-center gap-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                         Ver Vista Previa
@@ -233,7 +236,7 @@
                         <div class="flex gap-2">
                             <input type="text" id="phraseInput" 
                                 class="flex-1 bg-[#121212] border border-slate-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-slate-500" 
-                                placeholder="Ej: La fotosíntesis produce oxígeno."
+                                placeholder="Ej: La fotosíntesis produce oxígeno." 
                                 onkeypress="handleKeyPress(event)">
                             <button onclick="addPhrase()" class="bg-blue-600 hover:bg-blue-700 text-white p-2.5 rounded-lg shadow-md flex items-center justify-center transition-colors" title="Agregar Frase">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
@@ -251,7 +254,6 @@
                         </div>
                     </div>
 
-                    <!-- Botón exclusivo para móvil para minimizar y ver preview -->
                     <button onclick="handleTabClick('frases')" class="block lg:hidden w-full bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-600/30 py-3 rounded-lg font-medium text-sm transition-colors flex items-center justify-center gap-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                         Ver Vista Previa
@@ -260,21 +262,25 @@
             </div>
         </section>
 
-        <!-- Right Panel: Preview Area (Hidden en móvil si un panel está expandido) -->
+        <!-- Right Panel: Preview Area -->
         <section id="preview-section" class="lg:col-span-8 hidden lg:flex flex-col gap-4">
-            <!-- Toolbar -->
             <div class="bg-[#1e1e1e] p-3 rounded-xl border border-slate-700 shadow-lg flex justify-between items-center">
                 <span class="text-slate-300 font-medium px-2 hidden sm:block">Vista Previa del Documento</span>
-                <div class="flex items-center gap-3 bg-[#121212] px-4 py-2 rounded-lg border border-slate-700 ml-auto w-full sm:w-auto justify-between sm:justify-end">
-                    <span class="text-sm font-medium text-slate-300">Mostrar Solución</span>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" id="solutionsToggle" class="sr-only peer" onchange="updateSettings()">
-                      <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
-                    </label>
+                <div class="flex items-center gap-3">
+                    <button onclick="saveCurrentToHistory()" class="bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600/30 px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                        Guardar en Historial
+                    </button>
+                    <div class="flex items-center gap-3 bg-[#121212] px-4 py-2 rounded-lg border border-slate-700">
+                        <span class="text-sm font-medium text-slate-300">Mostrar Solución</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                          <input type="checkbox" id="solutionsToggle" class="sr-only peer" onchange="updateSettings()">
+                          <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                        </label>
+                    </div>
                 </div>
             </div>
 
-            <!-- Canvas/Preview Area -->
             <div class="bg-[#1e1e1e] p-4 sm:p-8 rounded-xl border border-slate-700 shadow-lg flex-1 overflow-x-auto flex justify-center items-start">
                 <div id="svg-container" class="flex justify-center w-full">
                     <!-- SVG gets injected here -->
@@ -286,7 +292,6 @@
     <!-- Modal Editar Frase -->
     <div id="editModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden opacity-0 transition-opacity duration-300 px-4">
         <div class="bg-[#1e1e1e] border border-slate-600 rounded-xl shadow-2xl p-6 w-full max-w-md transform scale-95 transition-transform duration-300" id="editModalContent">
-            
             <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-3">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
                     <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
@@ -296,7 +301,6 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
-
             <div class="space-y-4">
                 <p class="text-sm text-slate-400">Modifica el texto. Las palabras entre <b>[corchetes]</b> se ocultarán automáticamente.</p>
                 <input type="text" id="editPhraseInput" class="bg-[#121212] border border-slate-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" onkeypress="handleEditKeyPress(event)">
@@ -311,7 +315,6 @@
     <!-- Download Modal -->
     <div id="downloadModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden opacity-0 transition-opacity duration-300 px-4">
         <div class="bg-[#1e1e1e] border border-slate-600 rounded-xl shadow-2xl p-6 w-full max-w-md transform scale-95 transition-transform duration-300" id="downloadModalContent">
-            
             <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-3">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
                     <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
@@ -321,7 +324,6 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
-
             <div class="space-y-4">
                 <div class="bg-[#121212] p-4 rounded-lg border border-slate-700">
                     <h4 class="text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">Alta Calidad (PNG 300 DPI)</h4>
@@ -336,7 +338,6 @@
                         </button>
                     </div>
                 </div>
-
                 <div class="bg-[#121212] p-4 rounded-lg border border-slate-700">
                     <h4 class="text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">Vector Escalar (SVG)</h4>
                     <div class="grid grid-cols-2 gap-3">
@@ -349,6 +350,30 @@
                             Solución
                         </button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- History / Saved Projects Modal -->
+    <div id="historyModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden opacity-0 transition-opacity duration-300 px-4">
+        <div class="bg-[#1e1e1e] border border-slate-600 rounded-xl shadow-2xl p-6 w-full max-w-xl transform scale-95 transition-transform duration-300" id="historyModalContent">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-3">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    Historial de Fichas Guardadas
+                </h3>
+                <button onclick="closeModal('historyModal')" class="text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg p-1.5 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div class="flex gap-2">
+                    <input type="text" id="saveNameInput" placeholder="Nombre para identificar esta ficha..." class="flex-1 bg-[#121212] border border-slate-600 text-white text-sm rounded-lg px-3 py-2">
+                    <button onclick="saveCurrentToHistory()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">Guardar Actual</button>
+                </div>
+                <div id="historyListContainer" class="max-h-[300px] overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+                    <!-- Historial items injected here -->
                 </div>
             </div>
         </div>
@@ -386,12 +411,137 @@
             '1_1': { w: 1000, h: 1000 }
         };
 
+        // LocalStorage Management
+        function saveToLocalStorage() {
+            const dataToSave = {
+                appState,
+                phrasesData
+            };
+            localStorage.setItem('completa_frase_current', JSON.stringify(dataToSave));
+        }
+
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('completa_frase_current');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.appState) appState = { ...appState, ...parsed.appState };
+                    if (parsed.phrasesData) phrasesData = parsed.phrasesData;
+                    applyStateToDOM();
+                } catch (e) {
+                    console.error("Error al cargar localStorage", e);
+                }
+            }
+        }
+
+        function applyStateToDOM() {
+            document.getElementById('titleInput').value = appState.titleText;
+            document.getElementById('titleToggle').checked = appState.showTitle;
+            document.getElementById('titleSizeSlider').value = appState.titleSize;
+
+            document.getElementById('subtitleInput').value = appState.subtitleText;
+            document.getElementById('subtitleToggle').checked = appState.showSubtitle;
+            document.getElementById('subtitleSizeSlider').value = appState.subtitleSize;
+
+            document.getElementById('nameToggle').checked = appState.showName;
+            document.getElementById('dateToggle').checked = appState.showDate;
+            document.getElementById('roomToggle').checked = appState.showRoom;
+            document.getElementById('headerSizeSlider').value = appState.headerSize;
+
+            document.getElementById('solutionsToggle').checked = appState.showSolutions;
+            document.getElementById('textSizeSlider').value = appState.textSize;
+            document.getElementById('spacingSlider').value = appState.lineSpacing;
+
+            document.getElementById('docWidth').value = appState.docWidth;
+            document.getElementById('docHeight').value = appState.docHeight;
+
+            document.getElementById('textSizeVal').innerText = `${appState.textSize}px`;
+            document.getElementById('spacingVal').innerText = `${appState.lineSpacing}px`;
+        }
+
+        // History Management (Storage History List)
+        function getHistoryList() {
+            try {
+                return JSON.parse(localStorage.getItem('completa_frase_history')) || [];
+            } catch(e) {
+                return [];
+            }
+        }
+
+        function saveCurrentToHistory() {
+            const nameInput = document.getElementById('saveNameInput');
+            const customName = nameInput.value.trim() || appState.titleText || `Ficha del ${new Date().toLocaleDateString()}`;
+            
+            const history = getHistoryList();
+            const newItem = {
+                id: Date.now().toString(),
+                name: customName,
+                date: new Date().toLocaleString(),
+                appState: { ...appState },
+                phrasesData: JSON.parse(JSON.stringify(phrasesData))
+            };
+
+            history.unshift(newItem);
+            localStorage.setItem('completa_frase_history', JSON.stringify(history));
+            nameInput.value = '';
+            renderHistoryList();
+            alert("¡Ficha guardada en el historial con éxito!");
+        }
+
+        function loadFromHistory(id) {
+            const history = getHistoryList();
+            const item = history.find(h => h.id === id);
+            if (item) {
+                appState = { ...item.appState };
+                phrasesData = JSON.parse(JSON.stringify(item.phrasesData));
+                applyStateToDOM();
+                updateUI();
+                closeModal('historyModal');
+            }
+        }
+
+        function deleteFromHistory(id) {
+            let history = getHistoryList();
+            history = history.filter(h => h.id !== id);
+            localStorage.setItem('completa_frase_history', JSON.stringify(history));
+            renderHistoryList();
+        }
+
+        function renderHistoryList() {
+            const history = getHistoryList();
+            document.getElementById('historyCount').innerText = history.length;
+            const container = document.getElementById('historyListContainer');
+
+            if (history.length === 0) {
+                container.innerHTML = `<div class="text-slate-500 text-center py-6 text-sm italic border-2 border-dashed border-slate-700 rounded-lg">No hay fichas guardadas en el historial.</div>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            history.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'flex justify-between items-center p-3 bg-[#121212] rounded-lg border border-slate-700 hover:border-slate-500 transition-colors';
+                div.innerHTML = `
+                    <div class="flex-1 cursor-pointer" onclick="loadFromHistory('${item.id}')">
+                        <h4 class="text-sm font-semibold text-white">${item.name}</h4>
+                        <p class="text-xs text-slate-400">${item.date} • ${item.phrasesData.length} frases</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="loadFromHistory('${item.id}')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded transition-colors">Cargar</button>
+                        <button onclick="deleteFromHistory('${item.id}')" class="p-1.5 text-slate-500 hover:text-red-400 hover:bg-slate-800 rounded transition-colors" title="Eliminar">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
         // UI Tabs & Mobile Management
         function handleTabClick(tabName) {
             const container = document.getElementById('main-panel-container');
             
             if (activeTab === tabName) {
-                // Toggling current tab (collapsing/expanding)
                 isPanelCollapsed = !isPanelCollapsed;
                 if (isPanelCollapsed) {
                     container.classList.remove('expanded');
@@ -401,7 +551,6 @@
                     container.classList.remove('collapsed');
                 }
             } else {
-                // Switching tabs
                 activeTab = tabName;
                 isPanelCollapsed = false;
                 container.classList.add('expanded');
@@ -420,23 +569,21 @@
         function updateMobilePreviewVisibility() {
             const previewSec = document.getElementById('preview-section');
             if (isPanelCollapsed) {
-                // When config panel collapses, SHOW preview on mobile
                 previewSec.classList.remove('hidden', 'lg:flex');
                 previewSec.classList.add('flex');
             } else {
-                // When config panel is expanded, HIDE preview on mobile to give space
                 previewSec.classList.remove('flex');
                 previewSec.classList.add('hidden', 'lg:flex'); 
             }
         }
 
-        // Generic Modal Logic (Reused for both Edit and Download)
         function openModal(modalId) {
             const modal = document.getElementById(modalId);
-            const contentId = modalId === 'editModal' ? 'editModalContent' : 'downloadModalContent';
+            const contentId = modalId === 'editModal' ? 'editModalContent' : modalId === 'downloadModal' ? 'downloadModalContent' : 'historyModalContent';
             const content = document.getElementById(contentId);
             
             modal.classList.remove('hidden');
+            if(modalId === 'historyModal') renderHistoryList();
             setTimeout(() => {
                 modal.classList.remove('opacity-0');
                 content.classList.remove('scale-95');
@@ -448,7 +595,7 @@
 
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
-            const contentId = modalId === 'editModal' ? 'editModalContent' : 'downloadModalContent';
+            const contentId = modalId === 'editModal' ? 'editModalContent' : modalId === 'downloadModal' ? 'downloadModalContent' : 'historyModalContent';
             const content = document.getElementById(contentId);
             
             modal.classList.add('opacity-0');
@@ -461,7 +608,6 @@
             }, 300);
         }
 
-        // Settings updates
         function handleDimChange() {
             const selectVal = document.getElementById('dimSelect').value;
             const customGroup = document.getElementById('customDimGroup');
@@ -500,10 +646,10 @@
             document.getElementById('textSizeVal').innerText = `${appState.textSize}px`;
             document.getElementById('spacingVal').innerText = `${appState.lineSpacing}px`;
             
+            saveToLocalStorage();
             renderPreview();
         }
 
-        // Phrase Handling
         function handleKeyPress(e) {
             if (e.key === 'Enter') addPhrase();
         }
@@ -532,7 +678,6 @@
             updateUI();
         }
 
-        // Open Modal and load text
         function editPhrase(id) {
             const phrase = phrasesData.find(p => p.id === id);
             if (!phrase) return;
@@ -544,7 +689,6 @@
             openModal('editModal');
         }
 
-        // Save logic from modal
         function saveEditedPhrase() {
             if (!editingPhraseId) return;
             const phrase = phrasesData.find(p => p.id === editingPhraseId);
@@ -581,6 +725,7 @@
 
         function updateUI() {
             document.getElementById('phraseCount').innerText = phrasesData.length;
+            saveToLocalStorage();
             renderList();
             renderPreview();
         }
@@ -662,7 +807,7 @@
             if (appState.showDate || appState.showRoom) {
                 let text = "";
                 if (appState.showDate) text += `Fecha: _________________`;
-                if (appState.showDate && appState.showRoom) text += `          `;
+                if (appState.showDate && appState.showRoom) text += `         `;
                 if (appState.showRoom) text += `Aula: _________`;
                 svgContent += `<text x="60" y="${headerY}" font-family="Inter, sans-serif" font-size="${appState.headerSize}" fill="#000000" font-weight="bold">${text}</text>`;
                 headerY += appState.headerSize + 20;
@@ -767,17 +912,24 @@
             if (phrasesData.length === 0) return alert("Agrega al menos una frase.");
             closeModal('downloadModal');
 
-            const svgString = generateSVGString(isSolution);
+            // Generamos el SVG sin restricciones de visualización en pantalla
+            const width = appState.docWidth;
+            const height = appState.docHeight;
+            let rawSvg = generateSVGString(isSolution);
+            
+            // Reemplazamos los estilos responsivos del SVG para asegurar que renderice exactamente a su resolución nativa
+            rawSvg = rawSvg.replace(/style="[^"]*"/, `width="${width}" height="${height}"`);
+
             const img = new Image();
-            const b64 = btoa(unescape(encodeURIComponent(svgString)));
+            const b64 = btoa(unescape(encodeURIComponent(rawSvg)));
             const url = 'data:image/svg+xml;base64,' + b64;
 
             img.onload = function() {
                 const canvas = document.createElement('canvas');
-                const scale = 3.125;
+                const scale = 3.125; // Escala 300 DPI
                 
-                canvas.width = appState.docWidth * scale;
-                canvas.height = appState.docHeight * scale;
+                canvas.width = width * scale;
+                canvas.height = height * scale;
                 
                 const ctx = canvas.getContext('2d');
                 ctx.fillStyle = "#ffffff";
@@ -790,40 +942,36 @@
                 link.href = canvas.toDataURL('image/png', 1.0);
                 link.click();
             };
-            img.onerror = function() { alert("Hubo un error al generar la imagen."); };
+            img.onerror = function() { alert("Hubo un error al generar la imagen PNG."); };
             img.src = url;
         }
 
-        // Initialize state
+        // Initialize state on load
+        loadFromLocalStorage();
         updateUI();
-        updateMobilePreviewVisibility(); // Ensure initial mobile view hides preview
+        updateMobilePreviewVisibility();
     </script>
     <script>
-    // Bloquear clic derecho (Anticlic)
-    document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-    });
+        // Bloquear clic derecho (Anticlic)
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
 
-    // Bloquear atajos de teclado de desarrollador
-    document.addEventListener('keydown', function(e) {
-        // Bloquear F12
-        if (e.key === 'F12' || e.keyCode === 123) {
-            e.preventDefault();
-            return false;
-        }
-        
-        // Bloquear Ctrl+Shift+I (Inspeccionar), Ctrl+Shift+J (Consola), Ctrl+Shift+C (Seleccionar elemento)
-        if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
-            e.preventDefault();
-            return false;
-        }
-        
-        // Bloquear Ctrl+U (Ver código fuente) y Ctrl+S (Guardar página)
-        if (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's')) {
-            e.preventDefault();
-            return false;
-        }
-    });
-</script>
+        // Bloquear atajos de teclado de desarrollador
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
+                e.preventDefault();
+                return false;
+            }
+            if (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's')) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
 </body>
 </html>
