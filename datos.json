@@ -52,5 +52,17 @@
         "descripcion": "Cambia una imagen a Blanco y Negro para Colorear",
         "imagen": "https://i.postimg.cc/7ZGMKw4R/unir-pares.png",
         "url": "/juegos/src/unirpuntos.html"
+    },
+    {
+        "titulo": "BING IMAGE CREATOR",
+        "descripcion": "Genera Imagenes con IA y Bing (Microsoft)",
+        "imagen": "https://i.postimg.cc/bvNTLvtB/generador-ai.png",
+        "url": "https://www.bing.com/images/create/ai-image-generator"
+    },
+    {
+        "titulo": "LEONARDO AI",
+        "descripcion": "Genera Imagenes con IA (uso limitado de la misma pagina)",
+        "imagen": "https://i.postimg.cc/qvjkWmzY/LEONARDO-AI.png",
+        "url": "https://app.leonardo.ai/"
     }
 ]
