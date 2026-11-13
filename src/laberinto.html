@@ -35,6 +35,11 @@
                 display: flex !important;
             }
         }
+
+        /* Clase para mostrar el texto de los colores en móvil al hacer clic */
+        #colorLegend.show-labels .legend-text {
+            display: inline !important;
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center justify-center p-4">
@@ -46,7 +51,7 @@
             
             <div class="hidden md:block">
                 <h1 class="text-3xl font-bold text-white mb-1">Generador de Laberintos</h1>
-                <p class="text-gray-400 text-sm">Entradas y salidas siempre en lados opuestos cruzados.</p>
+                <p class="text-gray-400 text-sm">El inicio (Rojo) siempre estará Arriba o a la Izquierda.</p>
             </div>
 
             <!-- Botón Toggle Móvil -->
@@ -128,16 +133,20 @@
         <!-- Área del Canvas y Controles de Vista -->
         <div id="canvasWrapper" class="relative w-full md:w-2/3 bg-gray-900 rounded-xl border border-gray-700 flex flex-col overflow-hidden min-h-[520px]">
             
-            <!-- Switch Solución Flotante (Arriba Izquierda) -->
-            <div class="absolute top-4 left-4 z-20 bg-gray-800/90 backdrop-blur border border-gray-600 shadow-[0_0_15px_rgba(0,0,0,0.5)] px-3 py-2 rounded-full flex items-center gap-3">
-                <span class="text-xs font-bold text-gray-200 uppercase tracking-wider">Solución</span>
-                <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" id="switchSolution" class="sr-only peer">
-                    <div class="w-10 h-5 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500 shadow-inner"></div>
-                </label>
+            <!-- Etiqueta Flotante de Leyenda de Colores (Clickeable en móvil) -->
+            <div id="colorLegend" class="absolute top-4 left-4 z-20 bg-gray-800/90 backdrop-blur border border-gray-600 shadow-[0_0_15px_rgba(0,0,0,0.5)] px-3 py-1.5 rounded-full flex items-center gap-3 md:gap-4 transition-all cursor-pointer select-none" title="Toca para ver etiquetas">
+                <div class="flex items-center gap-1.5">
+                    <svg class="w-3 h-3 text-red-500" fill="currentColor" viewBox="0 0 24 24"><rect width="24" height="24" rx="4"/></svg>
+                    <span class="legend-text text-[10px] md:text-xs font-bold text-gray-200 uppercase tracking-wider hidden md:inline transition-all">Inicio</span>
+                </div>
+                <div class="h-3 w-px bg-gray-600"></div>
+                <div class="flex items-center gap-1.5">
+                    <svg class="w-3 h-3 text-emerald-500" fill="currentColor" viewBox="0 0 24 24"><rect width="24" height="24" rx="4"/></svg>
+                    <span class="legend-text text-[10px] md:text-xs font-bold text-gray-200 uppercase tracking-wider hidden md:inline transition-all">Final</span>
+                </div>
             </div>
 
-            <!-- Panel Flotante Draggable & Collapsible (Zoom/Fullscreen) -->
+            <!-- Panel Flotante Draggable & Collapsible (Zoom/Fullscreen + SWITCH SOLUCIÓN) -->
             <div id="floatingPanel" class="absolute top-4 right-4 z-10 flex flex-col bg-gray-800/95 backdrop-blur border border-gray-600 rounded-xl shadow-[0_0_15px_rgba(0,0,0,0.5)] overflow-hidden w-[60px] transition-all duration-300">
                 <div id="dragHandle" class="w-full h-6 bg-gray-700 cursor-grab active:cursor-grabbing flex items-center justify-center border-b border-gray-600" title="Arrastrar panel">
                     <div class="flex gap-1">
@@ -147,6 +156,18 @@
                     </div>
                 </div>
                 <div id="panelContent" class="flex flex-col items-center p-2 gap-2">
+                    
+                    <!-- Switch de Solución Movido Aquí -->
+                    <div class="flex flex-col items-center gap-1 mb-1 w-full" title="Mostrar Solución">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="switchSolution" class="sr-only peer">
+                            <div class="w-10 h-5 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500 shadow-inner"></div>
+                        </label>
+                        <span class="text-[9px] font-bold text-gray-200 uppercase tracking-wider">Sol</span>
+                    </div>
+                    
+                    <div class="h-px w-full bg-gray-600"></div>
+
                     <button id="btnFullscreen" class="p-2 text-gray-300 hover:text-white hover:bg-gray-600 rounded-lg transition-colors" title="Pantalla Completa">
                         <svg id="iconFullscreen" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
                     </button>
@@ -247,6 +268,14 @@
     </div>
 
     <script>
+        // ==========================================
+        // GESTIÓN DE LA LEYENDA EN MÓVILES
+        // ==========================================
+        const colorLegend = document.getElementById('colorLegend');
+        colorLegend.addEventListener('click', () => {
+            colorLegend.classList.toggle('show-labels');
+        });
+
         // ==========================================
         // GESTIÓN DEL PANEL MÓVIL (ACORDEÓN)
         // ==========================================
@@ -429,13 +458,16 @@
             for (let e of edges) groups[e.wall].push(e);
 
             let validPairs = [];
-            if (groups[0].length > 0 && groups[2].length > 0) { validPairs.push([0, 2]); validPairs.push([2, 0]); }
-            if (groups[1].length > 0 && groups[3].length > 0) { validPairs.push([1, 3]); validPairs.push([3, 1]); }
+            
+            // FUERZA AL INICIO A SER ARRIBA (0) O IZQUIERDA (3), FINAL A SER ABAJO (2) O DERECHA (1)
+            if (groups[0].length > 0 && groups[2].length > 0) { validPairs.push([0, 2]); } // Arriba -> Abajo
+            if (groups[3].length > 0 && groups[1].length > 0) { validPairs.push([3, 1]); } // Izquierda -> Derecha
 
             if (validPairs.length === 0) {
                 let start = edges[0];
                 return { startEntry: start, endEntry: edges[edges.length - 1] || start };
             }
+            
             let chosenPair = validPairs[Math.floor(Math.random() * validPairs.length)];
             let startGroup = groups[chosenPair[0]], endGroup = groups[chosenPair[1]];
             let isHorizontalAxis = (chosenPair[0] === 0 || chosenPair[0] === 2);
@@ -462,6 +494,7 @@
             });
             if (validEnds.length === 0) validEnds = endGroup;
             let endEntry = validEnds[Math.floor(Math.random() * validEnds.length)];
+            
             return { startEntry, endEntry };
         }
 
@@ -610,8 +643,8 @@
             // 3. Renderizado de SVG
             let content = `  <rect width="${totalWidth}" height="${totalHeight}" fill="#ffffff"/>\n`;
             content += `  <g transform="translate(${padding}, ${padding})">\n`;
-            content += `    ${getMarkerSVG(startEntry, "#10b981")}`; 
-            content += `    ${getMarkerSVG(endEntry, "#ef4444")}`;   
+            content += `    ${getMarkerSVG(startEntry, "#ef4444")}`; // Rojo para Inicio
+            content += `    ${getMarkerSVG(endEntry, "#10b981")}`;   // Verde para Final
             
             let pathData = "";
             for (let i = 0; i < grid.length; i++) {
@@ -793,16 +826,24 @@
 
     // Bloquear atajos de teclado de desarrollador
     document.addEventListener('keydown', function(e) {
+        // Bloquear F12
         if (e.key === 'F12' || e.keyCode === 123) {
-            e.preventDefault(); return false;
+            e.preventDefault();
+            return false;
         }
+        
+        // Bloquear Ctrl+Shift+I (Inspeccionar), Ctrl+Shift+J (Consola), Ctrl+Shift+C (Seleccionar elemento)
         if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
-            e.preventDefault(); return false;
+            e.preventDefault();
+            return false;
         }
+        
+        // Bloquear Ctrl+U (Ver código fuente) y Ctrl+S (Guardar página)
         if (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's')) {
-            e.preventDefault(); return false;
+            e.preventDefault();
+            return false;
         }
     });
-    </script>
+</script>
 </body>
 </html>
