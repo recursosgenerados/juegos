@@ -621,7 +621,8 @@
                 `;
 
                 // Evento para abrir el reproductor lateral al hacer clic en cualquier parte de la tarjeta
-                tarjeta.addEventListener('click', () => openPlayer(item.url));
+                // Dentro de la función renderizarTarjetas(datos), busca donde agregas el evento click:
+                tarjeta.addEventListener('click', () => openPlayer(item.url, item.titulo));
 
                 // Evento específico para el botón "Ver más" (evita que abra el reproductor y expande/contrae el texto)
                 const readMoreBtn = tarjeta.querySelector('.read-more-btn');
@@ -667,8 +668,16 @@
             window.location.reload(true);
         });
 
-        function openPlayer(url) {
+        // Reemplaza tu función openPlayer actual por esta:
+        function openPlayer(url, titulo) {
             playerFrame.src = url;
+            
+            // Cambia dinámicamente el título del aside
+            const sidebarTitle = sidebar.querySelector('.sidebar-header h3');
+            if (sidebarTitle) {
+                sidebarTitle.textContent = titulo || 'Sistema';
+            }
+        
             sidebar.classList.add('active');
             overlay.classList.add('active');
             document.body.style.overflow = 'hidden'; 
@@ -678,7 +687,11 @@
             sidebar.classList.remove('active');
             overlay.classList.remove('active');
             document.body.style.overflow = 'auto'; 
-            setTimeout(() => { playerFrame.src = ''; }, 400);
+            setTimeout(() => { 
+                playerFrame.src = ''; 
+                const sidebarTitle = sidebar.querySelector('.sidebar-header h3');
+                if (sidebarTitle) sidebarTitle.textContent = 'Sistema';
+            }, 400);
         }
 
         closeBtn.addEventListener('click', closePlayer);
