@@ -37,6 +37,21 @@
         .custom-slider::-webkit-slider-thumb:hover {
             transform: scale(1.15);
         }
+        /* Custom scrollbar for presets list */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #6366f1;
+        }
     </style>
 </head>
 <body class="bg-darkBg text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
@@ -90,17 +105,29 @@
         <!-- Editor Workspace -->
         <div id="editor-workspace" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
-            <!-- Controls Sidebar (Collapsible) -->
+            <!-- Controls Sidebar (Collapsible with Browser-style Tabs) -->
             <div class="lg:col-span-5 bg-cardBg rounded-2xl border border-slate-700/60 p-6 shadow-xl transition-all duration-300">
-                <!-- Panel Header -->
-                <div class="flex items-center justify-between border-b border-slate-700/50 pb-4">
-                    <div class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
-                        </svg>
-                        <h2 class="text-base font-semibold text-slate-200">Ajustes de Líneas</h2>
+                
+                <!-- Panel Header Tabs & Controls -->
+                <div class="flex items-center justify-between border-b border-slate-700/50 pb-3 mb-4">
+                    <!-- Browser Style Navigation Tabs -->
+                    <div class="flex items-center space-x-1.5 bg-slate-900/60 p-1 rounded-xl border border-slate-800">
+                        <button id="tab-btn-settings" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-indigo-600 text-white shadow flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                            </svg>
+                            <span>Ajustes</span>
+                        </button>
+                        <button id="tab-btn-presets" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+                            </svg>
+                            <span>Historial</span>
+                            <span id="presets-count-badge" class="px-1.5 py-0.2 rounded-full bg-slate-800 text-[10px] text-indigo-300 font-mono">0</span>
+                        </button>
                     </div>
-                    <div class="flex items-center space-x-3">
+
+                    <div class="flex items-center space-x-2">
                         <button id="reset-btn" class="text-xs text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
                             Restaurar
                         </button>
@@ -113,63 +140,88 @@
                 </div>
 
                 <!-- Collapsible Settings Body -->
-                <div id="settings-body" class="space-y-6 pt-4 transition-all duration-300 overflow-hidden">
-                    <!-- Sliders -->
-                    <div class="space-y-4">
-                        <!-- Threshold -->
-                        <div class="space-y-1.5">
-                            <div class="flex justify-between text-xs">
-                                <span class="text-slate-300 font-medium">Umbral de Detalle (Threshold)</span>
-                                <span id="threshold-val" class="text-indigo-400 font-mono">200</span>
+                <div id="settings-body" class="transition-all duration-300">
+                    
+                    <!-- Tab Content 1: Sliders & Adjustments -->
+                    <div id="tab-content-settings" class="space-y-6">
+                        <!-- Sliders -->
+                        <div class="space-y-4">
+                            <!-- Threshold -->
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between text-xs">
+                                    <span class="text-slate-300 font-medium">Umbral de Detalle (Threshold)</span>
+                                    <span id="threshold-val" class="text-indigo-400 font-mono">200</span>
+                                </div>
+                                <input type="range" id="threshold-slider" min="100" max="250" value="200" class="custom-slider w-full h-2 bg-slate-900 rounded-lg appearance-none cursor-pointer">
                             </div>
-                            <input type="range" id="threshold-slider" min="100" max="250" value="200" class="custom-slider w-full h-2 bg-slate-900 rounded-lg appearance-none cursor-pointer">
+
+                            <!-- Stroke Weight -->
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between text-xs">
+                                    <span class="text-slate-300 font-medium">Grosor de Trazos</span>
+                                    <span id="weight-val" class="text-indigo-400 font-mono">50</span>
+                                </div>
+                                <input type="range" id="weight-slider" min="10" max="100" value="50" class="custom-slider w-full h-2 bg-slate-900 rounded-lg appearance-none cursor-pointer">
+                            </div>
+
+                            <!-- Smoothing -->
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between text-xs">
+                                    <span class="text-slate-300 font-medium">Suavizado / Desenfoque</span>
+                                    <span id="smooth-val" class="text-indigo-400 font-mono">3</span>
+                                </div>
+                                <input type="range" id="smooth-slider" min="0" max="8" value="3" class="custom-slider w-full h-2 bg-slate-900 rounded-lg appearance-none cursor-pointer">
+                            </div>
+
+                            <!-- Contrast -->
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between text-xs">
+                                    <span class="text-slate-300 font-medium">Contraste de Fondo Blanco</span>
+                                    <span id="contrast-val" class="text-indigo-400 font-mono">20</span>
+                                </div>
+                                <input type="range" id="contrast-slider" min="-50" max="100" value="20" class="custom-slider w-full h-2 bg-slate-900 rounded-lg appearance-none cursor-pointer">
+                            </div>
                         </div>
 
-                        <!-- Stroke Weight -->
-                        <div class="space-y-1.5">
-                            <div class="flex justify-between text-xs">
-                                <span class="text-slate-300 font-medium">Grosor de Trazos</span>
-                                <span id="weight-val" class="text-indigo-400 font-mono">50</span>
+                        <!-- Clean Noise Toggle -->
+                        <div class="pt-3 border-t border-slate-700/50 flex items-center justify-between">
+                            <div>
+                                <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 block">Limpieza de Píxeles Sueltos</span>
+                                <span class="text-[10px] text-slate-500">Elimina puntos y ruido aislado</span>
                             </div>
-                            <input type="range" id="weight-slider" min="10" max="100" value="50" class="custom-slider w-full h-2 bg-slate-900 rounded-lg appearance-none cursor-pointer">
+                            <input type="checkbox" id="clean-noise-toggle" checked class="w-4 h-4 accent-indigo-600 rounded cursor-pointer">
                         </div>
 
-                        <!-- Smoothing -->
-                        <div class="space-y-1.5">
-                            <div class="flex justify-between text-xs">
-                                <span class="text-slate-300 font-medium">Suavizado / Desenfoque</span>
-                                <span id="smooth-val" class="text-indigo-400 font-mono">3</span>
-                            </div>
-                            <input type="range" id="smooth-slider" min="0" max="8" value="3" class="custom-slider w-full h-2 bg-slate-900 rounded-lg appearance-none cursor-pointer">
-                        </div>
-
-                        <!-- Contrast -->
-                        <div class="space-y-1.5">
-                            <div class="flex justify-between text-xs">
-                                <span class="text-slate-300 font-medium">Contraste de Fondo Blanco</span>
-                                <span id="contrast-val" class="text-indigo-400 font-mono">20</span>
-                            </div>
-                            <input type="range" id="contrast-slider" min="-50" max="100" value="20" class="custom-slider w-full h-2 bg-slate-900 rounded-lg appearance-none cursor-pointer">
+                        <!-- Invert option -->
+                        <div class="pt-3 border-t border-slate-700/50 flex items-center justify-between">
+                            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Invertir Trazos (Líneas blancas)</span>
+                            <input type="checkbox" id="invert-toggle" class="w-4 h-4 accent-indigo-600 rounded cursor-pointer">
                         </div>
                     </div>
 
-                    <!-- Clean Noise Toggle -->
-                    <div class="pt-3 border-t border-slate-700/50 flex items-center justify-between">
-                        <div>
-                            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 block">Limpieza de Píxeles Sueltos</span>
-                            <span class="text-[10px] text-slate-500">Elimina puntos y ruido aislado</span>
+                    <!-- Tab Content 2: Presets History -->
+                    <div id="tab-content-presets" class="space-y-4 hidden">
+                        <div class="flex items-center justify-between pb-2 border-b border-slate-700/40">
+                            <div>
+                                <h3 class="text-xs font-semibold text-slate-200">Configuraciones Guardadas</h3>
+                                <p class="text-[10px] text-slate-400">Guarda combinaciones ideales de trazos</p>
+                            </div>
+                            <button id="open-save-preset-modal-btn" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-lg shadow-indigo-600/25 transition-all flex items-center gap-1.5">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                </svg>
+                                <span>Guardar Actual</span>
+                            </button>
                         </div>
-                        <input type="checkbox" id="clean-noise-toggle" checked class="w-4 h-4 accent-indigo-600 rounded cursor-pointer">
-                    </div>
-
-                    <!-- Invert option -->
-                    <div class="pt-3 border-t border-slate-700/50 flex items-center justify-between">
-                        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Invertir Trazos (Líneas blancas)</span>
-                        <input type="checkbox" id="invert-toggle" class="w-4 h-4 accent-indigo-600 rounded cursor-pointer">
+                        
+                        <!-- List of Saved Presets -->
+                        <div id="presets-list" class="space-y-2 max-h-64 overflow-y-auto pr-1 custom-scrollbar">
+                            <!-- Preset items generated dynamically via JS -->
+                        </div>
                     </div>
 
                     <!-- Actions -->
-                    <div class="pt-4 border-t border-slate-700/50">
+                    <div class="pt-4 mt-6 border-t border-slate-700/50">
                         <button id="change-image-btn" class="w-full py-2.5 px-4 rounded-xl border border-slate-700 hover:border-slate-500 text-slate-300 text-sm font-medium transition-colors flex items-center justify-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
@@ -229,6 +281,37 @@
 
         </div>
     </main>
+
+    <!-- Custom Preset Name Floating Modal -->
+    <div id="preset-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm hidden opacity-0 transition-all duration-300">
+        <div id="preset-modal-card" class="bg-cardBg border border-slate-700/80 rounded-2xl p-6 max-w-sm w-full shadow-2xl transform scale-95 transition-all duration-300 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-700/50 pb-3">
+                <h3 id="preset-modal-title" class="text-base font-bold text-slate-100 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+                    </svg>
+                    <span>Guardar Configuración</span>
+                </h3>
+                <button id="close-preset-modal-btn" class="text-slate-400 hover:text-slate-200 p-1 rounded-lg hover:bg-slate-800 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="space-y-2">
+                <label class="text-xs text-slate-300 font-medium block">Nombre de la configuración:</label>
+                <input type="text" id="preset-name-input" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-indigo-500 transition-colors" placeholder="Ej: Trazo Grueso Limpio">
+            </div>
+            <div class="flex items-center justify-end space-x-2 pt-2">
+                <button id="cancel-preset-modal-btn" class="px-4 py-2 rounded-xl border border-slate-700 text-slate-300 hover:bg-slate-800 text-xs font-semibold transition-colors">
+                    Cancelar
+                </button>
+                <button id="confirm-preset-modal-btn" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-lg shadow-indigo-600/30 transition-all">
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Download Options Modal -->
     <div id="download-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm hidden opacity-0 transition-all duration-300">
@@ -323,6 +406,24 @@
         const toggleSettingsIcon = document.getElementById('toggle-settings-icon');
         const settingsBody = document.getElementById('settings-body');
 
+        // Side-by-side Tabs Elements
+        const tabBtnSettings = document.getElementById('tab-btn-settings');
+        const tabBtnPresets = document.getElementById('tab-btn-presets');
+        const tabContentSettings = document.getElementById('tab-content-settings');
+        const tabContentPresets = document.getElementById('tab-content-presets');
+        const presetsCountBadge = document.getElementById('presets-count-badge');
+
+        // Custom Preset Name Modal Elements
+        const presetModal = document.getElementById('preset-modal');
+        const presetModalCard = document.getElementById('preset-modal-card');
+        const presetModalTitle = document.getElementById('preset-modal-title');
+        const presetNameInput = document.getElementById('preset-name-input');
+        const openSavePresetModalBtn = document.getElementById('open-save-preset-modal-btn');
+        const closePresetModalBtn = document.getElementById('close-preset-modal-btn');
+        const cancelPresetModalBtn = document.getElementById('cancel-preset-modal-btn');
+        const confirmPresetModalBtn = document.getElementById('confirm-preset-modal-btn');
+
+        // Download Modal Elements
         const downloadModal = document.getElementById('download-modal');
         const downloadModalCard = document.getElementById('download-modal-card');
         const openDownloadModalBtn = document.getElementById('open-download-modal-btn');
@@ -348,11 +449,216 @@
         const cleanNoiseToggle = document.getElementById('clean-noise-toggle');
         const invertToggle = document.getElementById('invert-toggle');
 
+        const presetsList = document.getElementById('presets-list');
+
         const exportPngBtn = document.getElementById('export-png-btn');
         const exportSvgBtn = document.getElementById('export-svg-btn');
         const toast = document.getElementById('toast');
         const toastTitle = document.getElementById('toast-title');
         const toastDesc = document.getElementById('toast-desc');
+
+        // Tab Navigation Logic
+        function switchTab(activeTab) {
+            if (activeTab === 'settings') {
+                tabBtnSettings.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-indigo-600 text-white shadow flex items-center gap-1.5';
+                tabBtnPresets.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 flex items-center gap-1.5';
+                tabContentSettings.classList.remove('hidden');
+                tabContentPresets.classList.add('hidden');
+            } else {
+                tabBtnPresets.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-indigo-600 text-white shadow flex items-center gap-1.5';
+                tabBtnSettings.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 flex items-center gap-1.5';
+                tabContentPresets.classList.remove('hidden');
+                tabContentSettings.classList.add('hidden');
+            }
+        }
+
+        tabBtnSettings.addEventListener('click', () => switchTab('settings'));
+        tabBtnPresets.addEventListener('click', () => switchTab('presets'));
+
+        // Preset History System
+        let savedPresets = JSON.parse(localStorage.getItem('pixelmono_presets') || '[]');
+        let currentEditingPresetIndex = null; // null = saving new, number = editing name
+
+        function savePresetsToStorage() {
+            localStorage.setItem('pixelmono_presets', JSON.stringify(savedPresets));
+            renderPresets();
+        }
+
+        function renderPresets() {
+            presetsList.innerHTML = '';
+            presetsCountBadge.textContent = savedPresets.length;
+
+            if (savedPresets.length === 0) {
+                presetsList.innerHTML = `<p class="text-[11px] text-slate-500 italic text-center py-4">No hay configuraciones guardadas aún.</p>`;
+                return;
+            }
+
+            savedPresets.forEach((preset, index) => {
+                const item = document.createElement('div');
+                item.className = 'bg-slate-900/60 border border-slate-700/60 hover:border-slate-600 rounded-xl p-2.5 flex flex-col space-y-1.5 transition-all';
+                item.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-medium text-indigo-300 truncate max-w-[130px]" title="${preset.name}">${preset.name}</span>
+                        <div class="flex items-center space-x-1">
+                            <button onclick="applyPreset(${index})" title="Aplicar configuración" class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 text-[10px] font-semibold transition-colors">
+                                Aplicar
+                            </button>
+                            <button onclick="updatePreset(${index})" title="Sobrescribir con valores actuales" class="p-1 rounded text-slate-400 hover:text-amber-400 hover:bg-slate-800 transition-colors">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                            </button>
+                            <button onclick="openEditPresetNameModal(${index})" title="Editar nombre" class="p-1 rounded text-slate-400 hover:text-indigo-400 hover:bg-slate-800 transition-colors">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                            </button>
+                            <button onclick="deletePreset(${index})" title="Eliminar" class="p-1 rounded text-slate-400 hover:text-red-400 hover:bg-slate-800 transition-colors">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="text-[10px] text-slate-400 font-mono flex flex-wrap gap-x-2 gap-y-0.5">
+                        <span>U: ${preset.threshold}</span>
+                        <span>G: ${preset.weight}</span>
+                        <span>S: ${preset.smooth}</span>
+                        <span>C: ${preset.contrast}</span>
+                        <span>${preset.cleanNoise ? '✓Limpio' : '✗Limpio'}</span>
+                    </div>
+                `;
+                presetsList.appendChild(item);
+            });
+        }
+
+        // Custom Floating Modal Logic for Presets
+        function openPresetModal(mode = 'create', index = null) {
+            currentEditingPresetIndex = index;
+            if (mode === 'create') {
+                presetModalTitle.querySelector('span').textContent = 'Guardar Configuración';
+                presetNameInput.value = `Config ${savedPresets.length + 1}`;
+                confirmPresetModalBtn.textContent = 'Guardar';
+            } else {
+                presetModalTitle.querySelector('span').textContent = 'Editar Nombre';
+                presetNameInput.value = savedPresets[index].name;
+                confirmPresetModalBtn.textContent = 'Actualizar';
+            }
+
+            presetModal.classList.remove('hidden');
+            setTimeout(() => {
+                presetModal.classList.remove('opacity-0');
+                presetModalCard.classList.remove('scale-95');
+                presetModalCard.classList.add('scale-100');
+                presetNameInput.focus();
+                presetNameInput.select();
+            }, 10);
+        }
+
+        function closePresetModal() {
+            presetModal.classList.add('opacity-0');
+            presetModalCard.classList.remove('scale-100');
+            presetModalCard.classList.add('scale-95');
+            setTimeout(() => {
+                presetModal.classList.add('hidden');
+            }, 300);
+        }
+
+        openSavePresetModalBtn.addEventListener('click', () => openPresetModal('create'));
+        closePresetModalBtn.addEventListener('click', closePresetModal);
+        cancelPresetModalBtn.addEventListener('click', closePresetModal);
+        
+        presetModal.addEventListener('click', (e) => {
+            if (e.target === presetModal) closePresetModal();
+        });
+
+        presetNameInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleConfirmPresetModal();
+        });
+
+        confirmPresetModalBtn.addEventListener('click', handleConfirmPresetModal);
+
+        function handleConfirmPresetModal() {
+            const name = presetNameInput.value.trim();
+            if (!name) {
+                showToast('Nombre Requerido', 'Ingresa un nombre para la configuración.', true);
+                return;
+            }
+
+            if (currentEditingPresetIndex === null) {
+                // Save new preset
+                const newPreset = {
+                    id: Date.now(),
+                    name: name,
+                    threshold: parseInt(thresholdSlider.value),
+                    weight: parseInt(weightSlider.value),
+                    smooth: parseInt(smoothSlider.value),
+                    contrast: parseInt(contrastSlider.value),
+                    cleanNoise: cleanNoiseToggle.checked,
+                    invert: invertToggle.checked
+                };
+                savedPresets.push(newPreset);
+                savePresetsToStorage();
+                showToast('Configuración Guardada', `Se guardó "${newPreset.name}".`);
+            } else {
+                // Edit existing preset name
+                const p = savedPresets[currentEditingPresetIndex];
+                if (p) {
+                    p.name = name;
+                    savePresetsToStorage();
+                    showToast('Nombre Modificado', `Renombrado a "${p.name}".`);
+                }
+            }
+            closePresetModal();
+        }
+
+        window.openEditPresetNameModal = function(index) {
+            openPresetModal('edit', index);
+        };
+
+        window.applyPreset = function(index) {
+            const p = savedPresets[index];
+            if (!p) return;
+
+            thresholdSlider.value = p.threshold;
+            thresholdVal.textContent = p.threshold;
+
+            weightSlider.value = p.weight;
+            weightVal.textContent = p.weight;
+
+            smoothSlider.value = p.smooth;
+            smoothVal.textContent = p.smooth;
+
+            contrastSlider.value = p.contrast;
+            contrastVal.textContent = p.contrast;
+
+            cleanNoiseToggle.checked = p.cleanNoise;
+            invertToggle.checked = p.invert;
+
+            processImage();
+            showToast('Configuración Aplicada', `Cargado "${p.name}".`);
+        };
+
+        window.updatePreset = function(index) {
+            const p = savedPresets[index];
+            if (!p) return;
+
+            p.threshold = parseInt(thresholdSlider.value);
+            p.weight = parseInt(weightSlider.value);
+            p.smooth = parseInt(smoothSlider.value);
+            p.contrast = parseInt(contrastSlider.value);
+            p.cleanNoise = cleanNoiseToggle.checked;
+            p.invert = invertToggle.checked;
+
+            savePresetsToStorage();
+            showToast('Valores Actualizados', `Se sobrescribió "${p.name}" con los ajustes actuales.`);
+        };
+
+        window.deletePreset = function(index) {
+            const p = savedPresets[index];
+            if (!p) return;
+
+            savedPresets.splice(index, 1);
+            savePresetsToStorage();
+            showToast('Configuración Eliminada', `Se borró la configuración.`);
+        };
+
+        // Initial Presets Render
+        renderPresets();
 
         // Toggle Collapsible Settings Panel
         let isSettingsCollapsed = false;
@@ -367,7 +673,7 @@
             }
         });
 
-        // Modal Controls
+        // Download Modal Controls
         function openModal() {
             downloadModal.classList.remove('hidden');
             setTimeout(() => {
@@ -392,7 +698,10 @@
             if (e.target === downloadModal) closeModal();
         });
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && !downloadModal.classList.contains('hidden')) closeModal();
+            if (e.key === 'Escape') {
+                if (!downloadModal.classList.contains('hidden')) closeModal();
+                if (!presetModal.classList.contains('hidden')) closePresetModal();
+            }
         });
 
         function showToast(title, desc, isError = false) {
@@ -562,7 +871,7 @@
             }
         }
 
-        // Advanced Connected-Component Noise Removal (Elimina cuadritos y bloques de ruido)
+        // Advanced Connected-Component Noise Removal
         function removeStrayPixels(arr, w, h, maxNoiseSize = 35) {
             const visited = new Uint8Array(w * h);
             const stack = new Int32Array(w * h);
@@ -598,7 +907,6 @@
                             }
                         }
 
-                        // Si el área del componente negro es pequeña (ruido o cuadrito), lo borramos (blanco)
                         if (stackPtr <= maxNoiseSize) {
                             for (let i = 0; i < stackPtr; i++) {
                                 arr[stack[i]] = 255;
@@ -646,7 +954,6 @@
             const baseRefWidth = 600;
             const scaleFactor = w / baseRefWidth;
 
-            // Renderizar imagen sobre fondo blanco limpio para evitar transparencia negra
             const offCanvas = document.createElement('canvas');
             offCanvas.width = w;
             offCanvas.height = h;
@@ -702,7 +1009,6 @@
                 lineValues[j] = finalVal;
             }
 
-            // Limpieza profunda de cuadritos y motas negras
             if (isCleanNoise) {
                 const noiseSize = Math.max(12, Math.round(35 * scaleFactor));
                 removeStrayPixels(lineValues, w, h, noiseSize);
