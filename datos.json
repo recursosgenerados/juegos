@@ -68,7 +68,7 @@
     {
         "titulo": "COMPLETA LA FRASE",
         "descripcion": "Potencia la retención de conocimientos creando ejercicios de completar espacios en blanco. Selecciona las palabras clave y genera dinámicas activas de lectura en segundos.",
-        "imagen": "https://i.postimg.cc/bvNTLvtB/generador-ai.png",
+        "imagen": "https://i.postimg.cc/T2yrtRV1/completa-frase.png",
         "url": "/juegos/src/completalafrase.html"
     }
 ]
