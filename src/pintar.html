@@ -42,7 +42,7 @@
 <body class="bg-darkBg text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
     <!-- Header -->
-    <header class="w-full border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50">
+    <header class="w-full border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center shadow-lg shadow-indigo-500/30">
@@ -90,82 +90,93 @@
         <!-- Editor Workspace -->
         <div id="editor-workspace" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
-            <!-- Controls Sidebar -->
-            <div class="lg:col-span-5 bg-cardBg rounded-2xl border border-slate-700/60 p-6 shadow-xl space-y-6">
+            <!-- Controls Sidebar (Collapsible) -->
+            <div class="lg:col-span-5 bg-cardBg rounded-2xl border border-slate-700/60 p-6 shadow-xl transition-all duration-300">
+                <!-- Panel Header -->
                 <div class="flex items-center justify-between border-b border-slate-700/50 pb-4">
-                    <h2 class="text-base font-semibold text-slate-200 flex items-center gap-2">
+                    <div class="flex items-center gap-2">
                         <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
                         </svg>
-                        Ajustes de Líneas
-                    </h2>
-                    <button id="reset-btn" class="text-xs text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
-                        Restaurar
-                    </button>
-                </div>
-
-                <!-- Sliders -->
-                <div class="space-y-4">
-                    <!-- Threshold -->
-                    <div class="space-y-1.5">
-                        <div class="flex justify-between text-xs">
-                            <span class="text-slate-300 font-medium">Umbral de Detalle (Threshold)</span>
-                            <span id="threshold-val" class="text-indigo-400 font-mono">200</span>
-                        </div>
-                        <input type="range" id="threshold-slider" min="100" max="250" value="200" class="custom-slider w-full h-2 bg-slate-900 rounded-lg appearance-none cursor-pointer">
+                        <h2 class="text-base font-semibold text-slate-200">Ajustes de Líneas</h2>
                     </div>
-
-                    <!-- Stroke Weight -->
-                    <div class="space-y-1.5">
-                        <div class="flex justify-between text-xs">
-                            <span class="text-slate-300 font-medium">Grosor de Trazos</span>
-                            <span id="weight-val" class="text-indigo-400 font-mono">50</span>
-                        </div>
-                        <input type="range" id="weight-slider" min="10" max="100" value="50" class="custom-slider w-full h-2 bg-slate-900 rounded-lg appearance-none cursor-pointer">
-                    </div>
-
-                    <!-- Smoothing -->
-                    <div class="space-y-1.5">
-                        <div class="flex justify-between text-xs">
-                            <span class="text-slate-300 font-medium">Suavizado / Desenfoque</span>
-                            <span id="smooth-val" class="text-indigo-400 font-mono">3</span>
-                        </div>
-                        <input type="range" id="smooth-slider" min="0" max="8" value="3" class="custom-slider w-full h-2 bg-slate-900 rounded-lg appearance-none cursor-pointer">
-                    </div>
-
-                    <!-- Contrast -->
-                    <div class="space-y-1.5">
-                        <div class="flex justify-between text-xs">
-                            <span class="text-slate-300 font-medium">Contraste de Fondo Blanco</span>
-                            <span id="contrast-val" class="text-indigo-400 font-mono">20</span>
-                        </div>
-                        <input type="range" id="contrast-slider" min="-50" max="100" value="20" class="custom-slider w-full h-2 bg-slate-900 rounded-lg appearance-none cursor-pointer">
+                    <div class="flex items-center space-x-3">
+                        <button id="reset-btn" class="text-xs text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
+                            Restaurar
+                        </button>
+                        <button id="toggle-settings-btn" class="p-1 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors" title="Colapsar / Desplegar">
+                            <svg id="toggle-settings-icon" class="w-5 h-5 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
                     </div>
                 </div>
 
-                <!-- Clean Noise Toggle -->
-                <div class="pt-3 border-t border-slate-700/50 flex items-center justify-between">
-                    <div>
-                        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 block">Limpieza de Píxeles Sueltos</span>
-                        <span class="text-[10px] text-slate-500">Elimina puntos y ruido aislado</span>
+                <!-- Collapsible Settings Body -->
+                <div id="settings-body" class="space-y-6 pt-4 transition-all duration-300 overflow-hidden">
+                    <!-- Sliders -->
+                    <div class="space-y-4">
+                        <!-- Threshold -->
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between text-xs">
+                                <span class="text-slate-300 font-medium">Umbral de Detalle (Threshold)</span>
+                                <span id="threshold-val" class="text-indigo-400 font-mono">200</span>
+                            </div>
+                            <input type="range" id="threshold-slider" min="100" max="250" value="200" class="custom-slider w-full h-2 bg-slate-900 rounded-lg appearance-none cursor-pointer">
+                        </div>
+
+                        <!-- Stroke Weight -->
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between text-xs">
+                                <span class="text-slate-300 font-medium">Grosor de Trazos</span>
+                                <span id="weight-val" class="text-indigo-400 font-mono">50</span>
+                            </div>
+                            <input type="range" id="weight-slider" min="10" max="100" value="50" class="custom-slider w-full h-2 bg-slate-900 rounded-lg appearance-none cursor-pointer">
+                        </div>
+
+                        <!-- Smoothing -->
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between text-xs">
+                                <span class="text-slate-300 font-medium">Suavizado / Desenfoque</span>
+                                <span id="smooth-val" class="text-indigo-400 font-mono">3</span>
+                            </div>
+                            <input type="range" id="smooth-slider" min="0" max="8" value="3" class="custom-slider w-full h-2 bg-slate-900 rounded-lg appearance-none cursor-pointer">
+                        </div>
+
+                        <!-- Contrast -->
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between text-xs">
+                                <span class="text-slate-300 font-medium">Contraste de Fondo Blanco</span>
+                                <span id="contrast-val" class="text-indigo-400 font-mono">20</span>
+                            </div>
+                            <input type="range" id="contrast-slider" min="-50" max="100" value="20" class="custom-slider w-full h-2 bg-slate-900 rounded-lg appearance-none cursor-pointer">
+                        </div>
                     </div>
-                    <input type="checkbox" id="clean-noise-toggle" checked class="w-4 h-4 accent-indigo-600 rounded cursor-pointer">
-                </div>
 
-                <!-- Invert option -->
-                <div class="pt-3 border-t border-slate-700/50 flex items-center justify-between">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Invertir Trazos (Líneas blancas)</span>
-                    <input type="checkbox" id="invert-toggle" class="w-4 h-4 accent-indigo-600 rounded cursor-pointer">
-                </div>
+                    <!-- Clean Noise Toggle -->
+                    <div class="pt-3 border-t border-slate-700/50 flex items-center justify-between">
+                        <div>
+                            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 block">Limpieza de Píxeles Sueltos</span>
+                            <span class="text-[10px] text-slate-500">Elimina puntos y ruido aislado</span>
+                        </div>
+                        <input type="checkbox" id="clean-noise-toggle" checked class="w-4 h-4 accent-indigo-600 rounded cursor-pointer">
+                    </div>
 
-                <!-- Actions -->
-                <div class="pt-4 border-t border-slate-700/50">
-                    <button id="change-image-btn" class="w-full py-2.5 px-4 rounded-xl border border-slate-700 hover:border-slate-500 text-slate-300 text-sm font-medium transition-colors flex items-center justify-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
-                        </svg>
-                        Subir otra imagen
-                    </button>
+                    <!-- Invert option -->
+                    <div class="pt-3 border-t border-slate-700/50 flex items-center justify-between">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Invertir Trazos (Líneas blancas)</span>
+                        <input type="checkbox" id="invert-toggle" class="w-4 h-4 accent-indigo-600 rounded cursor-pointer">
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="pt-4 border-t border-slate-700/50">
+                        <button id="change-image-btn" class="w-full py-2.5 px-4 rounded-xl border border-slate-700 hover:border-slate-500 text-slate-300 text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                            </svg>
+                            Subir otra imagen
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -186,7 +197,7 @@
                             <!-- Bottom Canvas: Result (Line Art) -->
                             <canvas id="preview-canvas" class="block max-w-full max-h-[440px] object-contain rounded"></canvas>
                             
-                            <!-- Top Layer: Original Image (Clipped dynamically by width) -->
+                            <!-- Top Layer: Original Image -->
                             <div id="original-layer" class="absolute inset-y-0 left-0 overflow-hidden pointer-events-none" style="width: 50%;">
                                 <canvas id="original-canvas" class="block max-w-none max-h-[440px] object-contain"></canvas>
                             </div>
@@ -207,35 +218,74 @@
                     </div>
                 </div>
 
-                <!-- Export Panel -->
-                <div class="bg-cardBg rounded-2xl border border-slate-700/60 p-6 shadow-xl space-y-4">
-                    <h2 class="text-base font-semibold text-slate-200">Exportar Trazos Listos para Colorear</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <button id="export-png-btn" class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-medium text-sm transition-all shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-3 group">
-                            <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                            </svg>
-                            <div class="text-left">
-                                <div>Descargar PNG (500 DPI)</div>
-                                <div class="text-[10px] text-indigo-200 font-normal">Alta resolución idéntica al preview</div>
-                            </div>
-                        </button>
-
-                        <button id="export-svg-btn" class="w-full py-3.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white font-medium text-sm transition-all shadow-lg flex items-center justify-center gap-3 group">
-                            <svg class="w-5 h-5 text-purple-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
-                            </svg>
-                            <div class="text-left">
-                                <div>Descargar Vector SVG</div>
-                                <div class="text-[10px] text-slate-400 font-normal">Formato vectorial escalable</div>
-                            </div>
-                        </button>
-                    </div>
-                </div>
+                <!-- Main Download Trigger Button -->
+                <button id="open-download-modal-btn" class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold text-base transition-all shadow-xl shadow-indigo-600/25 flex items-center justify-center gap-3 group">
+                    <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
+                    <span>Descargar Imagen</span>
+                </button>
             </div>
 
         </div>
     </main>
+
+    <!-- Download Options Modal -->
+    <div id="download-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm hidden opacity-0 transition-all duration-300">
+        <div id="download-modal-card" class="bg-cardBg border border-slate-700/80 rounded-2xl p-6 max-w-md w-full shadow-2xl transform scale-95 transition-all duration-300 relative space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-700/50 pb-4">
+                <h3 class="text-lg font-bold text-slate-100 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
+                    Opciones de Descarga
+                </h3>
+                <button id="close-modal-btn" class="text-slate-400 hover:text-slate-200 p-1.5 rounded-lg hover:bg-slate-800 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <p class="text-xs text-slate-400">Selecciona el formato deseado para exportar los trazos:</p>
+            
+            <div class="space-y-3">
+                <button id="export-png-btn" class="w-full p-4 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-medium text-sm transition-all shadow-lg shadow-indigo-600/30 flex items-center justify-between group">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <div class="font-semibold">Descargar PNG (500 DPI)</div>
+                            <div class="text-xs text-indigo-200">Alta resolución ideal para imprimir</div>
+                        </div>
+                    </div>
+                    <svg class="w-5 h-5 text-indigo-200 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+
+                <button id="export-svg-btn" class="w-full p-4 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white font-medium text-sm transition-all shadow-lg flex items-center justify-between group">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <div class="font-semibold">Descargar Vector SVG</div>
+                            <div class="text-xs text-slate-400">Formato vectorial escalable</div>
+                        </div>
+                    </div>
+                    <svg class="w-5 h-5 text-slate-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Toast -->
     <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
@@ -269,6 +319,15 @@
         const changeImageBtn = document.getElementById('change-image-btn');
         const resetBtn = document.getElementById('reset-btn');
         
+        const toggleSettingsBtn = document.getElementById('toggle-settings-btn');
+        const toggleSettingsIcon = document.getElementById('toggle-settings-icon');
+        const settingsBody = document.getElementById('settings-body');
+
+        const downloadModal = document.getElementById('download-modal');
+        const downloadModalCard = document.getElementById('download-modal-card');
+        const openDownloadModalBtn = document.getElementById('open-download-modal-btn');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+
         const previewCanvas = document.getElementById('preview-canvas');
         const originalCanvas = document.getElementById('original-canvas');
         const compareWrapper = document.getElementById('compare-wrapper');
@@ -294,6 +353,47 @@
         const toast = document.getElementById('toast');
         const toastTitle = document.getElementById('toast-title');
         const toastDesc = document.getElementById('toast-desc');
+
+        // Toggle Collapsible Settings Panel
+        let isSettingsCollapsed = false;
+        toggleSettingsBtn.addEventListener('click', () => {
+            isSettingsCollapsed = !isSettingsCollapsed;
+            if (isSettingsCollapsed) {
+                settingsBody.classList.add('hidden');
+                toggleSettingsIcon.classList.add('rotate-180');
+            } else {
+                settingsBody.classList.remove('hidden');
+                toggleSettingsIcon.classList.remove('rotate-180');
+            }
+        });
+
+        // Modal Controls
+        function openModal() {
+            downloadModal.classList.remove('hidden');
+            setTimeout(() => {
+                downloadModal.classList.remove('opacity-0');
+                downloadModalCard.classList.remove('scale-95');
+                downloadModalCard.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            downloadModal.classList.add('opacity-0');
+            downloadModalCard.classList.remove('scale-100');
+            downloadModalCard.classList.add('scale-95');
+            setTimeout(() => {
+                downloadModal.classList.add('hidden');
+            }, 300);
+        }
+
+        openDownloadModalBtn.addEventListener('click', openModal);
+        closeModalBtn.addEventListener('click', closeModal);
+        downloadModal.addEventListener('click', (e) => {
+            if (e.target === downloadModal) closeModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !downloadModal.classList.contains('hidden')) closeModal();
+        });
 
         function showToast(title, desc, isError = false) {
             toastTitle.textContent = title;
@@ -392,7 +492,7 @@
         cleanNoiseToggle.addEventListener('change', processImage);
         invertToggle.addEventListener('change', processImage);
 
-        // Interactive Split Slider Logic (Mouse & Touch Support)
+        // Interactive Split Slider Logic
         let isDragging = false;
 
         function updateSplitPosition(clientX) {
@@ -462,31 +562,54 @@
             }
         }
 
-        // Noise removal filter
-        function removeStrayPixels(arr, w, h) {
-            const copy = new Float32Array(arr);
-            for (let y = 1; y < h - 1; y++) {
-                for (let x = 1; x < w - 1; x++) {
-                    const idx = y * w + x;
-                    if (copy[idx] === 0) {
-                        let blackNeighbors = 0;
-                        for (let dy = -1; dy <= 1; dy++) {
-                            for (let dx = -1; dx <= 1; dx++) {
-                                if (dx === 0 && dy === 0) continue;
-                                if (copy[(y + dy) * w + (x + dx)] === 0) {
-                                    blackNeighbors++;
+        // Advanced Connected-Component Noise Removal (Elimina cuadritos y bloques de ruido)
+        function removeStrayPixels(arr, w, h, maxNoiseSize = 35) {
+            const visited = new Uint8Array(w * h);
+            const stack = new Int32Array(w * h);
+
+            for (let y = 0; y < h; y++) {
+                for (let x = 0; x < w; x++) {
+                    const index = y * w + x;
+                    if (arr[index] === 0 && visited[index] === 0) {
+                        let stackPtr = 0;
+                        stack[stackPtr++] = index;
+                        visited[index] = 1;
+
+                        let head = 0;
+                        while (head < stackPtr) {
+                            const currentIdx = stack[head++];
+                            const cx = currentIdx % w;
+                            const cy = (currentIdx / w) | 0;
+
+                            for (let dy = -1; dy <= 1; dy++) {
+                                for (let dx = -1; dx <= 1; dx++) {
+                                    if (dx === 0 && dy === 0) continue;
+                                    const nx = cx + dx;
+                                    const ny = cy + dy;
+
+                                    if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
+                                        const nIdx = ny * w + nx;
+                                        if (arr[nIdx] === 0 && visited[nIdx] === 0) {
+                                            visited[nIdx] = 1;
+                                            stack[stackPtr++] = nIdx;
+                                        }
+                                    }
                                 }
                             }
                         }
-                        if (blackNeighbors < 2) {
-                            arr[idx] = 255;
+
+                        // Si el área del componente negro es pequeña (ruido o cuadrito), lo borramos (blanco)
+                        if (stackPtr <= maxNoiseSize) {
+                            for (let i = 0; i < stackPtr; i++) {
+                                arr[stack[i]] = 255;
+                            }
                         }
                     }
                 }
             }
         }
 
-        // Core Algorithm
+        // Core Image Processing Engine
         function processImage(targetCanvas = previewCanvas, customWidth = null, customHeight = null) {
             if (!originalImage) return;
 
@@ -510,10 +633,11 @@
                 targetCanvas.width = w;
                 targetCanvas.height = h;
                 
-                // Also update original canvas dimensions for split view
                 originalCanvas.width = w;
                 originalCanvas.height = h;
                 const origCtx = originalCanvas.getContext('2d');
+                origCtx.fillStyle = '#ffffff';
+                origCtx.fillRect(0, 0, w, h);
                 origCtx.drawImage(originalImage, 0, 0, w, h);
 
                 imageInfo.textContent = `${originalImage.width} × ${originalImage.height} px`;
@@ -522,10 +646,13 @@
             const baseRefWidth = 600;
             const scaleFactor = w / baseRefWidth;
 
+            // Renderizar imagen sobre fondo blanco limpio para evitar transparencia negra
             const offCanvas = document.createElement('canvas');
             offCanvas.width = w;
             offCanvas.height = h;
             const offCtx = offCanvas.getContext('2d');
+            offCtx.fillStyle = '#ffffff';
+            offCtx.fillRect(0, 0, w, h);
             offCtx.drawImage(originalImage, 0, 0, w, h);
 
             const imgData = offCtx.getImageData(0, 0, w, h);
@@ -575,8 +702,10 @@
                 lineValues[j] = finalVal;
             }
 
+            // Limpieza profunda de cuadritos y motas negras
             if (isCleanNoise) {
-                removeStrayPixels(lineValues, w, h);
+                const noiseSize = Math.max(12, Math.round(35 * scaleFactor));
+                removeStrayPixels(lineValues, w, h, noiseSize);
             }
 
             for (let j = 0, i = 0; j < lineValues.length; j++, i += 4) {
@@ -596,6 +725,7 @@
         // Export PNG 500 DPI
         exportPngBtn.addEventListener('click', () => {
             if (!originalImage) return;
+            closeModal();
             processingLoader.classList.remove('hidden');
             setTimeout(() => {
                 try {
@@ -627,9 +757,10 @@
             }, 100);
         });
 
-        // Export SVG
+        // Export Vector SVG
         exportSvgBtn.addEventListener('click', () => {
             if (!originalImage) return;
+            closeModal();
             processingLoader.classList.remove('hidden');
             setTimeout(() => {
                 try {
@@ -665,5 +796,32 @@
             }, 100);
         });
     </script>
+    <script>
+    // Bloquear clic derecho (Anticlic)
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+
+    // Bloquear atajos de teclado de desarrollador
+    document.addEventListener('keydown', function(e) {
+        // Bloquear F12
+        if (e.key === 'F12' || e.keyCode === 123) {
+            e.preventDefault();
+            return false;
+        }
+        
+        // Bloquear Ctrl+Shift+I (Inspeccionar), Ctrl+Shift+J (Consola), Ctrl+Shift+C (Seleccionar elemento)
+        if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
+            e.preventDefault();
+            return false;
+        }
+        
+        // Bloquear Ctrl+U (Ver código fuente) y Ctrl+S (Guardar página)
+        if (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's')) {
+            e.preventDefault();
+            return false;
+        }
+    });
+</script>
 </body>
 </html>
